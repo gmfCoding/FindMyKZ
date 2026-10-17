@@ -30,6 +30,7 @@ import {
   PATHS,
   PORTS,
   SCENERY,
+  SCENERY_GROUPS,
   SPECIALS,
   TIMES_OF_DAY,
   TRI_OPTIONS,
@@ -319,6 +320,37 @@ function chipRow(field: string, label: string, values: readonly string[], mode: 
   </div>`;
 }
 
+function groupedChipRow(
+  field: string,
+  label: string,
+  groups: readonly { label: string; tags: readonly string[] }[],
+  hint = '',
+): string {
+  const record = current();
+  if (!record) return '';
+  const active = getArrayField(record, field);
+  return `<div class="form-group span-2">
+    <div class="form-label-row"><span class="form-label">${escapeHtml(label)}</span>${hint ? `<span class="form-hint">${escapeHtml(hint)}</span>` : ''}</div>
+    ${groups
+      .map(
+        (group) => `<div class="sub-group">
+          <span class="field-label">${escapeHtml(group.label)}</span>
+          <div class="chip-row" data-entry-group="${escapeHtml(field)}">
+            ${group.tags
+              .map((value) => {
+                const isActive = active.includes(value);
+                return `<button type="button" class="chip${isActive ? ' active' : ''}" data-entry-array="${escapeHtml(
+                  field,
+                )}" data-value="${escapeHtml(value)}" aria-pressed="${isActive}">${escapeHtml(value)}</button>`;
+              })
+              .join('')}
+          </div>
+        </div>`,
+      )
+      .join('')}
+  </div>`;
+}
+
 function textField(
   field: string,
   label: string,
@@ -492,8 +524,10 @@ function renderForm(): void {
     ${panel(
       'Scenery, weather & time',
       'What the map looks like and when it takes place.',
-      `<div class="form-grid three">
-        ${chipRow('scenery', 'Scenery', SCENERY, 'array')}
+      `<div class="form-grid">
+        ${groupedChipRow('scenery', 'Scenery', SCENERY_GROUPS, 'Match any selected scenery tag.')}
+      </div>
+      <div class="form-grid two">
         ${chipRow('weather', 'Weather', WEATHER, 'array')}
         ${chipRow('timeOfDay', 'Time of day', TIMES_OF_DAY, 'array')}
       </div>`,
@@ -1367,9 +1401,27 @@ function buildEntryCommands(): PaletteCommand[] {
     {
       id: 'entry-scenery',
       label: 'Scenery',
-      hint: 'Toggle scenery',
+      hint: 'Setting, biomes, style, hazards…',
       keywords: ['scene', 'scen'],
-      children: SCENERY.map((value) => ({ id: `entry-scenery:${value}`, label: value, run: () => addEntryArray('scenery', value, 'Scenery') })),
+      children: [
+        ...SCENERY_GROUPS.map((group) => ({
+          id: `entry-scenery-group:${group.label}`,
+          label: group.label,
+          hint: `${group.tags.length} tags`,
+          keywords: [group.label.toLowerCase(), 'scenery'],
+          children: group.tags.map((value) => ({
+            id: `entry-scenery-group:${group.label}:${value}`,
+            label: value,
+            run: () => addEntryArray('scenery', value, 'Scenery'),
+          })),
+        })),
+        // Flat tags keep shortcuts like Scen > Water working.
+        ...SCENERY.map((value) => ({
+          id: `entry-scenery:${value}`,
+          label: value,
+          run: () => addEntryArray('scenery', value, 'Scenery'),
+        })),
+      ],
     },
     {
       id: 'entry-time',

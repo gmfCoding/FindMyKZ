@@ -1,7 +1,7 @@
 import { loadServedDataset } from './data.js';
 import { activeFilterChips, clearFilters, countActiveFilters, filterMaps, hasManualProperties, removeFilterChip, sortMaps, } from './filters.js';
 import { CommandPalette } from './palette.js';
-import { AMOUNTS, COLOURS, DEFAULT_FILTERS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SORT_OPTIONS, SPECIALS, TIMES_OF_DAY, TOP_TIME_PRESETS, TRI_OPTIONS, WEATHER, } from './types.js';
+import { AMOUNTS, COLOURS, DEFAULT_FILTERS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SCENERY_GROUPS, SORT_OPTIONS, SPECIALS, TIMES_OF_DAY, TOP_TIME_PRESETS, TRI_OPTIONS, WEATHER, } from './types.js';
 import { $, $$, decodeState, encodeState, escapeHtml, formatRange, formatTopTime, mapInitials, required, slugify, thumbStyle, } from './util.js';
 const PAGE_SIZE = 24;
 const TOP_RANGE_MAX = 30;
@@ -109,7 +109,7 @@ function buildSidebar() {
        <div class="sub-group"><span class="field-label">Material</span>${chipGroup('surfMaterials', MATERIALS)}</div>`, 'Surf ramps and their surface material.')}
     ${section('Port', chipGroup('ports', PORTS), 'Ported from an older game? Unknown is a real value here.')}
     ${section('Based on', `<input type="text" class="text-input" data-text="basedOn" maxlength="255" placeholder="Minecraft, Mirror's Edge…" />`, 'Inspired by another game or scenery?')}
-    ${section('Scenery', chipGroup('scenery', SCENERY), 'Match any selected scenery tag.', true)}
+    ${section('Scenery', SCENERY_GROUPS.map((group) => `<div class="sub-group"><span class="field-label">${escapeHtml(group.label)}</span>${chipGroup('scenery', group.tags)}</div>`).join(''), 'Match any selected scenery tag.', true)}
     ${section('Weather', chipGroup('weather', WEATHER), 'Match any selected weather.')}
     ${section('Time of day', chipGroup('timeOfDay', TIMES_OF_DAY), 'Match any selected time of day.')}
     ${section('Tech', chipGroup('tech', ['Box Tech']))}
@@ -988,16 +988,33 @@ function buildPaletteCommands() {
         {
             id: 'scenery',
             label: 'Scenery',
-            hint: 'Indoors, Water, Lava…',
+            hint: 'Setting, biomes, style, hazards…',
             keywords: ['scenery', 'scene', 'scen'],
-            children: SCENERY.map((value) => ({
-                id: `scenery:${value}`,
-                label: value,
-                run: () => {
-                    toggleValue('scenery', value);
-                    onFiltersChanged();
-                },
-            })),
+            children: [
+                ...SCENERY_GROUPS.map((group) => ({
+                    id: `scenery-group:${group.label}`,
+                    label: group.label,
+                    hint: `${group.tags.length} tags`,
+                    keywords: [group.label.toLowerCase(), 'scenery'],
+                    children: group.tags.map((value) => ({
+                        id: `scenery-group:${group.label}:${value}`,
+                        label: value,
+                        run: () => {
+                            toggleValue('scenery', value);
+                            onFiltersChanged();
+                        },
+                    })),
+                })),
+                // Flat tags keep shortcuts like Scen > Water working.
+                ...SCENERY.map((value) => ({
+                    id: `scenery:${value}`,
+                    label: value,
+                    run: () => {
+                        toggleValue('scenery', value);
+                        onFiltersChanged();
+                    },
+                })),
+            ],
         },
         {
             id: 'time-of-day',

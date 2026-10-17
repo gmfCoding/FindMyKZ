@@ -1,7 +1,7 @@
 import { clearWorkingDataset, datasetToJson, loadServedDataset, loadWorkingDataset, normalizeDataset, readJsonFile, toDataset, } from './data.js';
 import { applyDelta, buildDelta, clearDelta, deltaCount, deltaRecordIds, emptyDelta, isDeltaSet, loadDelta, normalizeDelta, saveDelta, } from './delta.js';
 import { CommandPalette } from './palette.js';
-import { AMOUNTS, COLOURS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SPECIALS, TIMES_OF_DAY, TRI_OPTIONS, WEATHER, defaultMapRecord, } from './types.js';
+import { AMOUNTS, COLOURS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SCENERY_GROUPS, SPECIALS, TIMES_OF_DAY, TRI_OPTIONS, WEATHER, defaultMapRecord, } from './types.js';
 import { $, $$, escapeHtml, formatTopTime, mapInitials, matchesAllTokens, parseTopTimeInput, required, slugify, thumbStyle, } from './util.js';
 import { createZip } from './zip.js';
 // ---------------------------------------------------------------------------
@@ -242,6 +242,28 @@ function chipRow(field, label, values, mode, hint = '') {
     </div>
   </div>`;
 }
+function groupedChipRow(field, label, groups, hint = '') {
+    const record = current();
+    if (!record)
+        return '';
+    const active = getArrayField(record, field);
+    return `<div class="form-group span-2">
+    <div class="form-label-row"><span class="form-label">${escapeHtml(label)}</span>${hint ? `<span class="form-hint">${escapeHtml(hint)}</span>` : ''}</div>
+    ${groups
+        .map((group) => `<div class="sub-group">
+          <span class="field-label">${escapeHtml(group.label)}</span>
+          <div class="chip-row" data-entry-group="${escapeHtml(field)}">
+            ${group.tags
+        .map((value) => {
+        const isActive = active.includes(value);
+        return `<button type="button" class="chip${isActive ? ' active' : ''}" data-entry-array="${escapeHtml(field)}" data-value="${escapeHtml(value)}" aria-pressed="${isActive}">${escapeHtml(value)}</button>`;
+    })
+        .join('')}
+          </div>
+        </div>`)
+        .join('')}
+  </div>`;
+}
 function textField(field, label, placeholder = '', options = {}) {
     const record = current();
     if (!record)
@@ -373,8 +395,10 @@ function renderForm() {
         ${chipRow('tech', 'Tech', ['Box Tech'], 'array')}
       </div>`)}
 
-    ${panel('Scenery, weather & time', 'What the map looks like and when it takes place.', `<div class="form-grid three">
-        ${chipRow('scenery', 'Scenery', SCENERY, 'array')}
+    ${panel('Scenery, weather & time', 'What the map looks like and when it takes place.', `<div class="form-grid">
+        ${groupedChipRow('scenery', 'Scenery', SCENERY_GROUPS, 'Match any selected scenery tag.')}
+      </div>
+      <div class="form-grid two">
         ${chipRow('weather', 'Weather', WEATHER, 'array')}
         ${chipRow('timeOfDay', 'Time of day', TIMES_OF_DAY, 'array')}
       </div>`)}
@@ -1210,9 +1234,27 @@ function buildEntryCommands() {
         {
             id: 'entry-scenery',
             label: 'Scenery',
-            hint: 'Toggle scenery',
+            hint: 'Setting, biomes, style, hazards…',
             keywords: ['scene', 'scen'],
-            children: SCENERY.map((value) => ({ id: `entry-scenery:${value}`, label: value, run: () => addEntryArray('scenery', value, 'Scenery') })),
+            children: [
+                ...SCENERY_GROUPS.map((group) => ({
+                    id: `entry-scenery-group:${group.label}`,
+                    label: group.label,
+                    hint: `${group.tags.length} tags`,
+                    keywords: [group.label.toLowerCase(), 'scenery'],
+                    children: group.tags.map((value) => ({
+                        id: `entry-scenery-group:${group.label}:${value}`,
+                        label: value,
+                        run: () => addEntryArray('scenery', value, 'Scenery'),
+                    })),
+                })),
+                // Flat tags keep shortcuts like Scen > Water working.
+                ...SCENERY.map((value) => ({
+                    id: `entry-scenery:${value}`,
+                    label: value,
+                    run: () => addEntryArray('scenery', value, 'Scenery'),
+                })),
+            ],
         },
         {
             id: 'entry-time',

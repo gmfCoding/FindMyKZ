@@ -11,6 +11,7 @@ export const COLOURS = [
     'White',
     'Black',
     'Rainbow',
+    'Multi-Colour',
 ];
 export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow'];
 export const AMOUNTS = ['None', 'Some', 'Lots', 'All'];
@@ -28,17 +29,61 @@ export const WEATHER = [
     'Snow',
     'Windy',
 ];
-export const SCENERY = [
-    'Confined',
-    'Indoors',
-    'Outdoors',
-    'Beach',
-    'Industrial',
-    'Water',
-    'Lava',
-    'Acid',
-    'Trees',
+export const SCENERY_GROUPS = [
+    {
+        label: 'Setting',
+        tags: ['Confined', 'Indoors', 'Outdoors', 'Outerspace'],
+    },
+    {
+        label: 'Biomes & Nature',
+        tags: [
+            'Beach',
+            'Water',
+            'Lava',
+            'Acid',
+            'Trees',
+            'Desert',
+            'Forest',
+            'Mountain',
+            'Snowy',
+            'Swamp',
+            'Cave',
+            'Jungle',
+            'Tundra',
+        ],
+    },
+    {
+        label: 'Urban & Architecture',
+        tags: [
+            'Industrial',
+            'Cityscape',
+            'Ruins',
+            'Cyberpunk',
+            'Medieval',
+            'Post-Apocalyptic',
+            'Suburban',
+            'Underground',
+            'Abstract',
+        ],
+    },
+    {
+        label: 'Art Style',
+        tags: ['Realistic', 'Low Poly', 'Futuristic'],
+    },
+    {
+        label: 'Climate & Tone',
+        tags: ['Warm', 'Neutral', 'Cold'],
+    },
+    {
+        label: 'Atmosphere & Lighting',
+        tags: ['Daytime', 'Nighttime', 'Sunset', 'Foggy', 'Spooky', 'Surreal', 'Neon', 'Monochrome'],
+    },
+    {
+        label: 'Gameplay & Hazards',
+        tags: ['Toxic', 'Void', 'Ice', 'Floating Islands'],
+    },
 ];
+export const SCENERY = SCENERY_GROUPS.flatMap((group) => [...group.tags]);
 export const TIMES_OF_DAY = ['Dawn', 'Dusk', 'Day', 'Night'];
 export const PATHS = ['Linear', 'Circular', 'Spiral', 'Staged', 'Locked'];
 export const SPECIALS = [

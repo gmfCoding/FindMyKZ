@@ -2,7 +2,7 @@ Each property can also has an "Unknown" (not included in search)
 
 Colours:
 Red/Orange/Yellow/Green/Blue/Purple-Pink/
-Brown/Gray/White/Black/Rainbow/Unknown
+Brown/Gray/White/Black/Rainbow/Multi-Colour/Unknown
 
 StringType: Arbituary datam, can be CSV list, max length 255
 
@@ -52,16 +52,33 @@ Based On: StringType Minecraft?
 
 Weather:  Winter | Summer | Spring | Autumn | Cloudy | Sunny | Raining | Snowing | Snow | Windy
 
-Scenary <Confined | Indoors | Outdoors | Beach | Industrial | Water | Lava | Acid | Trees >
-	- Confined, not much space in the map.
-	- Does the scenary have a reachable indoor section?
-	- Does the scenary have a reachable outdoor section?
-	- Does the scenary have a Industrial look?
-	- Does the scenary have a beach?
-	- Does the scenary have water?
-	- Does the scenary have lava?
-	- Does the scenary have acid/goo/or other liquid?
-	- Does the scenary feature trees?
+Scenary tags (multi-select, grouped):
+	Setting: Confined | Indoors | Outdoors | Outerspace
+	Biomes & Nature: Beach | Water | Lava | Acid | Trees | Desert | Forest | Mountain | Snowy | Swamp | Cave | Jungle | Tundra
+	Urban & Architecture: Industrial | Cityscape | Ruins | Cyberpunk | Medieval | Post-Apocalyptic | Suburban | Underground | Abstract
+	Art Style: Realistic | Low Poly | Futuristic
+	Climate & Tone: Warm | Neutral | Cold
+	Atmosphere & Lighting: Daytime | Nighttime | Sunset | Foggy | Spooky | Surreal | Neon | Monochrome
+	Gameplay & Hazards: Toxic | Void | Ice | Floating Islands
+	- Setting: how enclosed/open the playable space is, and whether it is on another world.
+	- Biomes & Nature: natural environment, terrain and liquids present.
+	- Urban & Architecture: built environment, era and architectural style.
+	- Art Style: how realistic or stylised the visuals are.
+	- Climate & Tone: overall warm/cold/neutral mood or climate.
+	- Atmosphere & Lighting: time-of-day lighting, weather mood and colour treatment.
+	- Gameplay & Hazards: hazardous or unusual environment elements.
+	- Confined: not much space in the map.
+	- Indoors: has a reachable indoor section.
+	- Outdoors: has a reachable outdoor section.
+	- Industrial: has an industrial look.
+	- Beach: features a beach.
+	- Water/Lava/Acid: features that liquid.
+	- Trees: features trees.
+	- Realistic: photorealistic or grounded art style.
+	- Low Poly: deliberately simple/faceted geometry.
+	- Outerspace: set in space or on another world.
+	- Futuristic: sci-fi architecture/technology.
+	- Warm/Neutral/Cold: colour palette or climate.
 	
 Time: Dawn/Dusk/Day/Night
 
