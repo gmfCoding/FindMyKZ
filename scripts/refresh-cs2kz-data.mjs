@@ -52,6 +52,7 @@ function emptyRecord() {
     materials: [],
     props: [],
     topTime: null,
+    vnlTopTime: null,
     tpTier: null,
     proTier: null,
     headbangers: 'Unknown',

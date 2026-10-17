@@ -58,6 +58,7 @@ export function normalizeRecord(raw) {
         materials: enumArray(source.materials, MATERIALS),
         props: enumArray(source.props, AMOUNTS),
         topTime: asTopTime(source.topTime),
+        vnlTopTime: asTopTime(source.vnlTopTime),
         tpTier: asTier(source.tpTier),
         proTier: asTier(source.proTier),
         headbangers: asTri(source.headbangers),

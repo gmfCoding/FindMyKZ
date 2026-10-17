@@ -1296,6 +1296,18 @@ details[open] > summary .summary-mark::after {
   color: #c7c7cf;
 }
 
+.stat-vnl {
+  margin-left: 0;
+}
+
+.stat-key {
+  margin-right: 4px;
+  color: #6f6f78;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
 .stat-empty {
   color: #4c4c54;
 }
@@ -1742,7 +1754,7 @@ body.palette-open {
 
 .modal-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid #28282e;
   border-bottom: 1px solid #28282e;
   background: #131316;
@@ -2608,6 +2620,10 @@ body.palette-open {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.form-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .form-grid.two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -3024,17 +3040,18 @@ body.palette-open {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .modal-stats > div:nth-child(2) {
+  .modal-stats > div:nth-child(2n) {
     border-right: 0;
   }
 
-  .modal-stats > div:nth-child(-n + 2) {
+  .modal-stats > div:nth-child(-n + 4) {
     border-bottom: 1px solid #24242a;
   }
 
   .form-grid,
   .form-grid.three,
-  .form-grid.two {
+  .form-grid.two,
+  .form-grid.four {
     grid-template-columns: minmax(0, 1fr);
   }
 

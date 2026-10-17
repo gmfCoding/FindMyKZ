@@ -133,6 +133,7 @@ function completeness(record: MapRecord): number {
     record.materials.length > 0,
     record.props.length > 0,
     record.topTime != null,
+    record.vnlTopTime != null,
     record.tpTier != null,
     record.proTier != null,
     record.headbangers !== 'Unknown',
@@ -158,7 +159,7 @@ function completeness(record: MapRecord): number {
   return checks.filter(Boolean).length;
 }
 
-const COMPLETENESS_TOTAL = 26;
+const COMPLETENESS_TOTAL = 27;
 
 function renderRecordList(): void {
   const scroll = recordListEl.scrollTop;
@@ -329,11 +330,15 @@ function renderForm(): void {
 
     ${panel(
       'Ranking & top time',
-      'Top time is stored for the main course. Tiers run from 1 (easiest) to 9.',
-      `<div class="form-grid three">
-        <label class="form-field"><span>Top time</span>
+      'Top times are stored for the main course. CKZ = classic, VNL = vanilla. Tiers run from 1 (easiest) to 9.',
+      `<div class="form-grid four">
+        <label class="form-field"><span>CKZ top time</span>
           <input type="text" data-entry-top-time value="${record.topTime == null ? '' : escapeHtml(formatTopTime(record.topTime))}" placeholder="1:23.45 or 1.5 (minutes)" autocomplete="off" spellcheck="false" />
           <span class="form-hint" data-top-time-hint>${record.topTime == null ? 'Unknown — leave blank' : formatTopTime(record.topTime)}</span>
+        </label>
+        <label class="form-field"><span>VNL top time</span>
+          <input type="text" data-entry-vnl-top-time value="${record.vnlTopTime == null ? '' : escapeHtml(formatTopTime(record.vnlTopTime))}" placeholder="1:23.45 or 1.5 (minutes)" autocomplete="off" spellcheck="false" />
+          <span class="form-hint" data-vnl-top-time-hint>${record.vnlTopTime == null ? 'Unknown — leave blank' : formatTopTime(record.vnlTopTime)}</span>
         </label>
         ${tierSelect('tpTier', 'TP tier (nub)')}
         ${tierSelect('proTier', 'Pro tier')}
@@ -506,10 +511,16 @@ function syncEditorControls(): void {
     input.value = value == null ? '' : String(value);
   });
 
-  const topTimeInput = $<HTMLInputElement>('[data-entry-top-time]', formEl);
-  if (topTimeInput && document.activeElement !== topTimeInput) {
-    topTimeInput.value = record.topTime == null ? '' : formatTopTime(record.topTime);
-    topTimeInput.classList.remove('invalid');
+  const timeInputs: { selector: string; field: 'topTime' | 'vnlTopTime' }[] = [
+    { selector: '[data-entry-top-time]', field: 'topTime' },
+    { selector: '[data-entry-vnl-top-time]', field: 'vnlTopTime' },
+  ];
+  for (const { selector, field } of timeInputs) {
+    const input = $<HTMLInputElement>(selector, formEl);
+    if (input && document.activeElement !== input) {
+      input.value = record[field] == null ? '' : formatTopTime(record[field]);
+      input.classList.remove('invalid');
+    }
   }
 
   editorHeadingEl.textContent = record.name || 'Untitled map';
@@ -1081,11 +1092,19 @@ function buildEntryCommands(): PaletteCommand[] {
     },
     {
       id: 'entry-top-time',
-      label: 'Top time',
-      hint: 'Focus the time field',
-      keywords: ['top', 'time'],
+      label: 'CKZ top time',
+      hint: 'Focus the CKZ time field',
+      keywords: ['top', 'time', 'ckz', 'classic'],
       keepOpen: false,
       run: () => focusEntryField('[data-entry-top-time]'),
+    },
+    {
+      id: 'entry-vnl-top-time',
+      label: 'VNL top time',
+      hint: 'Focus the VNL time field',
+      keywords: ['top', 'time', 'vnl', 'vanilla'],
+      keepOpen: false,
+      run: () => focusEntryField('[data-entry-vnl-top-time]'),
     },
     {
       id: 'entry-tp-tier',
@@ -1385,16 +1404,18 @@ function bindEvents(): void {
     const record = current();
     if (!record) return;
 
-    if (target.matches('[data-entry-top-time]')) {
-      const input = target as HTMLInputElement;
-      const parsed = parseTopTimeInput(input.value);
-      const hint = $<HTMLElement>('[data-top-time-hint]', formEl);
+    const timeInput = target.closest<HTMLInputElement>('[data-entry-top-time], [data-entry-vnl-top-time]');
+    if (timeInput) {
+      const isVnl = timeInput.matches('[data-entry-vnl-top-time]');
+      const field = isVnl ? 'vnlTopTime' : 'topTime';
+      const hint = $<HTMLElement>(isVnl ? '[data-vnl-top-time-hint]' : '[data-top-time-hint]', formEl);
+      const parsed = parseTopTimeInput(timeInput.value);
       if (!parsed.valid) {
-        input.classList.add('invalid');
-        if (hint) hint.textContent = 'Use m:ss.xx or decimal minutes';
+        timeInput.classList.add('invalid');
+        if (hint) hint.textContent = 'Use m:ss.xx, h:mm:ss or decimal minutes';
       } else {
-        input.classList.remove('invalid');
-        record.topTime = parsed.seconds;
+        timeInput.classList.remove('invalid');
+        record[field] = parsed.seconds;
         if (hint) hint.textContent = parsed.seconds == null ? 'Unknown — leave blank' : formatTopTime(parsed.seconds);
         saveSoon();
       }
@@ -1431,7 +1452,7 @@ function bindEvents(): void {
 
   formEl.addEventListener('focusout', (event) => {
     const target = event.target as HTMLElement;
-    if (target.matches('[data-entry-top-time]')) {
+    if (target.matches('[data-entry-top-time], [data-entry-vnl-top-time]')) {
       syncEditorControls();
     }
     if (target.matches('[data-entry-text="name"]')) {

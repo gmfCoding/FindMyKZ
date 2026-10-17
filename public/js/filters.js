@@ -60,6 +60,8 @@ export function filterMaps(maps, filters) {
     const tokens = q.split(/\s+/).filter(Boolean);
     const topMinSeconds = filters.topMin == null ? null : filters.topMin * 60;
     const topMaxSeconds = filters.topMax == null ? null : filters.topMax * 60;
+    const vnlMinSeconds = filters.vnlTopMin == null ? null : filters.vnlTopMin * 60;
+    const vnlMaxSeconds = filters.vnlTopMax == null ? null : filters.vnlTopMax * 60;
     return maps.filter((map) => {
         if (tokens.length > 0) {
             const haystack = [map.name, map.mappers, map.basedOn, map.description, ...map.tech]
@@ -82,6 +84,8 @@ export function filterMaps(maps, filters) {
         if (!intersects(filters.props, map.props))
             return false;
         if (!inRange(map.topTime, topMinSeconds, topMaxSeconds))
+            return false;
+        if (!inRange(map.vnlTopTime, vnlMinSeconds, vnlMaxSeconds))
             return false;
         if (!inRange(map.tpTier, filters.tpMin, filters.tpMax))
             return false;
@@ -165,6 +169,8 @@ export function countActiveFilters(filters) {
     if (filters.props.length)
         count++;
     if (filters.topMin != null || filters.topMax != null)
+        count++;
+    if (filters.vnlTopMin != null || filters.vnlTopMax != null)
         count++;
     if (filters.tpMin != null || filters.tpMax != null)
         count++;
@@ -271,7 +277,11 @@ export function activeFilterChips(filters) {
     }
     if (filters.topMin != null || filters.topMax != null) {
         const range = formatRange(filters.topMin, filters.topMax, 'm');
-        chips.push({ id: 'top', key: 'topMin', label: `Top time: ${range}` });
+        chips.push({ id: 'top', key: 'topMin', label: `CKZ top time: ${range}` });
+    }
+    if (filters.vnlTopMin != null || filters.vnlTopMax != null) {
+        const range = formatRange(filters.vnlTopMin, filters.vnlTopMax, 'm');
+        chips.push({ id: 'vnlTop', key: 'vnlTopMin', label: `VNL top time: ${range}` });
     }
     if (filters.tpMin != null || filters.tpMax != null) {
         const range = formatRange(filters.tpMin, filters.tpMax);
@@ -297,6 +307,10 @@ export function removeFilterChip(filters, chip) {
         case 'top':
             filters.topMin = null;
             filters.topMax = null;
+            return;
+        case 'vnlTop':
+            filters.vnlTopMin = null;
+            filters.vnlTopMax = null;
             return;
         case 'tp':
             filters.tpMin = null;

@@ -25,6 +25,8 @@ Other scripts:
 | `npm run pack` | Rebuild only `public/data/maps.zip` |
 | `npm run serve` | Serve `public/` at port 5173 |
 | `npm run refresh:data` | Rebuild `public/data/maps.json` from the live cs2kz.org API (real maps only) |
+| `npm run top-times` | Fill CKZ and VNL top times in `maps.json` from cs2kz.org records |
+| `npm run steam:data` | Pull `kz_*` / `bkz_*` maps from the Steam Workshop into `public/data/maps_steam.json` |
 
 > The shipped dataset is generated from cs2kz.org's public API. It contains only approved maps and
 > only values cs2kz actually provides; every other property is intentionally `Unknown` / empty until
@@ -48,7 +50,8 @@ through property → value chains, with fuzzy matching on every level.
 | `Bh > Yes` | Bhop = Yes |
 | `Mat > Con` | Add Concrete to materials (search defaults to **All of**) |
 | `Mat > Grass` | Also add Grass |
-| `Top > 1 > 2` | Top time between 1 and 2 minutes |
+| `Top > 1 > 2` | CKZ / classic top time between 1 and 2 minutes |
+| `VNL > 1 > 2` | VNL / vanilla top time between 1 and 2 minutes |
 | `TP > 3 > 6` | TP tier range 3–6 |
 | `Lad > Type > Rope` | Ladder construction = Rope |
 | `Scen > Water` | Scenery includes Water |
@@ -106,7 +109,8 @@ JSON file (`maps.json` is what the export creates). Load is client-side via `Dec
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 71.71875,
+      "vnlTopTime": 100.3125,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -146,7 +150,9 @@ JSON file (`maps.json` is what the export creates). Load is client-side via `Dec
 
 Notes:
 
-- `topTime` is stored in **seconds**; the UI displays `m:ss.xx` and filters in minutes.
+- `topTime` is stored in **seconds** for classic / **CKZ** mode; `vnlTopTime` is stored in seconds
+  for vanilla / **VNL** mode. The UI displays `m:ss.xx` (or `h:mm:ss.xx` for long runs) and filters
+  in minutes.
 - Multi-value fields are arrays. `ladderAmount`, `props`, and `surfAmounts` may contain several amounts.
 - `global`, `headbangers`, `bhop`, `multi`, `prekeep`, `ljRoom`, `ladderRoom`, `bonus` are stored as
   `"Yes" | "No" | "Unknown"`, but the UI only offers Yes/No. No selection means Unknown.
@@ -169,12 +175,35 @@ Notes:
 - `tpTier` / `proTier` come from the **classic** mode filter of the primary course (the course named
   `Main`, otherwise the first course listed by cs2kz). Classic tiers are the numbers shown on the
   cs2kz.org map list. The course used is recorded in `notes`.
+- `topTime` and `vnlTopTime` are the #1 records for that same primary course in **classic / CKZ** and
+  **vanilla / VNL** mode, fetched from `/records?top=true&mode=…&map=…&course=…`. They are stored in
+  seconds. `npm run top-times` refreshes them without touching any other field.
+- When rebuilding from scratch, run `npm run refresh:data` first and then `npm run top-times`; the
+  former resets the time fields to `null`.
 - Thumbnails are resolved from Steam's public `GetPublishedFileDetails` API using the real Workshop ID.
 - **Every other property is left `Unknown` or empty.** Nothing is inferred from descriptions,
   screenshots, map names or personal knowledge. Fill those in through the data entry page.
 
 The 94-map dataset shipped in this repository was generated this way. The previous demo/fake dataset
 is preserved as `public/data/maps_fake.json` and is excluded from the packaged site.
+
+## Steam Workshop data
+
+`npm run steam:data` crawls the public Counter-Strike 2 Workshop search
+(`appid=730`, text search for `kz_` and `bkz_`) and writes **`public/data/maps_steam.json`**.
+
+- Only items whose trimmed title starts with `kz_` or `bkz_` (case-insensitive) are kept.
+- Only items tagged **Map** by Steam are included, so menus/configs that happen to use a `kz_` prefix
+  are excluded.
+- The full Workshop search is paginated using Steam’s reported `total_pages` — currently the `kz_`
+  search returns 820 raw results across 28 pages.
+- Each entry stores the real Workshop data: ID, title, URL, preview URL, description, creator Steam
+  ID, created/updated timestamps, file size, tags, subscriptions, favourites, views, rating/votes and
+  whether the item is Workshop-accepted.
+- Duplicate map titles are kept when they are separate Workshop items (for example reuploads or
+  versions), because they have distinct Workshop IDs and metadata.
+- Nothing is inferred or generated. This file is a raw Workshop index and is not yet merged into the
+  search dataset (`maps.json`).
 
 ## How search matching works
 
@@ -191,7 +220,7 @@ Every selected category is ANDed together.
   match **any** selected value.
 - Amount filters match a map whose amount list contains any selected amount.
 - Tier and top-time filters are inclusive ranges; records with unknown values are excluded when a
-  range is active.
+  range is active. CKZ and VNL top-time ranges are independent filters.
 - Text search matches name, mappers, description, `basedOn` and tech tags.
 - Filters are stored in the URL (`?f=…`), so filtered result pages are shareable.
 
@@ -214,9 +243,12 @@ public/
   js/                     Compiled TypeScript (do not edit by hand)
   data/maps.json          Real cs2kz dataset (editable master)
   data/maps.zip           Generated compressed dataset
+  data/maps_steam.json    Raw Steam Workshop kz_/bkz_ map metadata
   data/maps_fake.json     Preserved backup of the original fake demo data
 scripts/
   refresh-cs2kz-data.mjs  Fetch approved maps + thumbnails from cs2kz.org/Steam
+  update-top-times.mjs    Fill CKZ/VNL top times from cs2kz.org records
+  fetch-steam-maps.mjs    Crawl Steam Workshop for kz_/bkz_ maps
   pack-data.mjs           maps.json → maps.zip
   package-site.mjs        public/ → dist/ + findmykz-static.zip
 ```

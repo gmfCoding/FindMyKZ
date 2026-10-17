@@ -87,6 +87,7 @@ export function normalizeRecord(raw: unknown): MapRecord {
     materials: enumArray<Material>(source.materials, MATERIALS),
     props: enumArray<Amount>(source.props, AMOUNTS),
     topTime: asTopTime(source.topTime),
+    vnlTopTime: asTopTime(source.vnlTopTime),
     tpTier: asTier(source.tpTier),
     proTier: asTier(source.proTier),
     headbangers: asTri(source.headbangers),

@@ -12,6 +12,8 @@
     "serve": "python3 -m http.server 5173 --directory public",
     "dev": "npm run build && npm run serve",
     "refresh:data": "node scripts/refresh-cs2kz-data.mjs",
+    "top-times": "node scripts/update-top-times.mjs",
+    "steam:data": "node scripts/fetch-steam-maps.mjs",
     "seed": "node scripts/refresh-cs2kz-data.mjs"
   },
   "devDependencies": {

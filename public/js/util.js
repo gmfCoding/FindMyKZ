@@ -33,8 +33,13 @@ export function formatTopTime(seconds) {
         return '—';
     const total = Math.max(0, seconds);
     const rounded = Math.round(total * 100) / 100;
-    const mins = Math.floor(rounded / 60);
-    const secs = rounded - mins * 60;
+    const hours = Math.floor(rounded / 3600);
+    const afterHours = rounded - hours * 3600;
+    const mins = Math.floor(afterHours / 60);
+    const secs = afterHours - mins * 60;
+    if (hours > 0) {
+        return `${hours}:${String(mins).padStart(2, '0')}:${secs.toFixed(2).padStart(5, '0')}`;
+    }
     return `${mins}:${secs.toFixed(2).padStart(5, '0')}`;
 }
 /** Accepts `1:23.45`, `1:23`, or a decimal number of minutes (`1.5`). */

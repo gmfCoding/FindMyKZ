@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "updatedAt": "2026-10-17T08:42:45.921Z",
+  "version": 3,
+  "updatedAt": "2026-10-17T09:57:06.836Z",
   "source": "https://cs2kz.org",
   "maps": [
     {
@@ -9,7 +9,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 71.71875,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -41,7 +41,8 @@
       "workshopId": "3121168339",
       "cs2kzId": 2,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 100.3125
     },
     {
       "id": "kz_igneous",
@@ -49,7 +50,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 90.7109375,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -81,7 +82,8 @@
       "workshopId": "3102712799",
       "cs2kzId": 3,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 135.4375
     },
     {
       "id": "kz_serfdom",
@@ -89,7 +91,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 43.703125,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -121,7 +123,8 @@
       "workshopId": "3162361624",
       "cs2kzId": 4,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 113.734375
     },
     {
       "id": "kz_leviathan",
@@ -129,7 +132,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 205.6875,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -161,7 +164,8 @@
       "workshopId": "3374560468",
       "cs2kzId": 5,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 280.390625
     },
     {
       "id": "kz_niche",
@@ -169,7 +173,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 170.2734375,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -201,7 +205,8 @@
       "workshopId": "3160291769",
       "cs2kzId": 6,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 238.328125
     },
     {
       "id": "kz_key",
@@ -209,7 +214,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 123.7578125,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -241,7 +246,8 @@
       "workshopId": "3344417199",
       "cs2kzId": 7,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 173.046875
     },
     {
       "id": "kz_ehcivec_final",
@@ -249,7 +255,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 81.109375,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -281,7 +287,8 @@
       "workshopId": "3082213334",
       "cs2kzId": 9,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 119.328125
     },
     {
       "id": "kz_phamous",
@@ -289,7 +296,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 104.1015625,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -321,7 +328,8 @@
       "workshopId": "3780087724",
       "cs2kzId": 10,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 143.875
     },
     {
       "id": "kz_bhop_apricity",
@@ -329,7 +337,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 166.421875,
       "tpTier": 7,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -361,7 +369,8 @@
       "workshopId": "3514400945",
       "cs2kzId": 11,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_madhatter",
@@ -369,7 +378,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 64.9609375,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -401,7 +410,8 @@
       "workshopId": "3540061470",
       "cs2kzId": 12,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Wonderland” (classic mode)."
+      "notes": "Tiers from course “Wonderland” (classic mode).",
+      "vnlTopTime": 126.6875
     },
     {
       "id": "kz_lumen",
@@ -409,7 +419,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 73.8828125,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -441,7 +451,8 @@
       "workshopId": "3429375699",
       "cs2kzId": 13,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 131.765625
     },
     {
       "id": "kz_labour",
@@ -449,7 +460,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 82.953125,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -481,7 +492,8 @@
       "workshopId": "3164403123",
       "cs2kzId": 14,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 155.171875
     },
     {
       "id": "kz_greebochki",
@@ -489,7 +501,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 66,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -521,7 +533,8 @@
       "workshopId": "3534437146",
       "cs2kzId": 15,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 1180.9375
     },
     {
       "id": "kz_devon",
@@ -529,7 +542,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 88.3046875,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -561,7 +574,8 @@
       "workshopId": "3434238689",
       "cs2kzId": 16,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 197.15625
     },
     {
       "id": "kz_jakke",
@@ -569,7 +583,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 491.171875,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -601,7 +615,8 @@
       "workshopId": "3428669060",
       "cs2kzId": 17,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_minecraft_village",
@@ -609,7 +624,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 110.3671875,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -641,7 +656,8 @@
       "workshopId": "3490455192",
       "cs2kzId": 18,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_summercliff2",
@@ -649,7 +665,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 181.84375,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -681,7 +697,8 @@
       "workshopId": "3353950265",
       "cs2kzId": 19,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 250.671875
     },
     {
       "id": "kz_consequence",
@@ -689,7 +706,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 159.65625,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -721,7 +738,8 @@
       "workshopId": "3250581189",
       "cs2kzId": 20,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “valley” (classic mode)."
+      "notes": "Tiers from course “valley” (classic mode).",
+      "vnlTopTime": 221.390625
     },
     {
       "id": "kz_avalon",
@@ -729,7 +747,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 31.34375,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -761,7 +779,8 @@
       "workshopId": "3583337319",
       "cs2kzId": 21,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_colors",
@@ -769,7 +788,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 884.1953125,
       "tpTier": 3,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -801,7 +820,8 @@
       "workshopId": "3160120310",
       "cs2kzId": 22,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Colors” (classic mode)."
+      "notes": "Tiers from course “Colors” (classic mode).",
+      "vnlTopTime": 1394.65625
     },
     {
       "id": "kz_natureblock",
@@ -809,7 +829,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 45.46875,
       "tpTier": 1,
       "proTier": 1,
       "headbangers": "Unknown",
@@ -841,7 +861,8 @@
       "workshopId": "3587639210",
       "cs2kzId": 23,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Natureblock” (classic mode)."
+      "notes": "Tiers from course “Natureblock” (classic mode).",
+      "vnlTopTime": 65.734375
     },
     {
       "id": "kz_kuutio",
@@ -849,7 +870,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 224.7578125,
       "tpTier": 3,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -881,7 +902,8 @@
       "workshopId": "3567982777",
       "cs2kzId": 24,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_nix",
@@ -889,7 +911,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 81.390625,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -921,7 +943,8 @@
       "workshopId": "3587750305",
       "cs2kzId": 26,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Nix” (classic mode)."
+      "notes": "Tiers from course “Nix” (classic mode).",
+      "vnlTopTime": 146.125
     },
     {
       "id": "kz_ozark",
@@ -929,7 +952,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 35.8359375,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -961,7 +984,8 @@
       "workshopId": "3561356772",
       "cs2kzId": 28,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 53.8125
     },
     {
       "id": "kz_bluekarko",
@@ -969,7 +993,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 141.46875,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -1001,7 +1025,8 @@
       "workshopId": "3539143823",
       "cs2kzId": 29,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “BlueKarko” (classic mode)."
+      "notes": "Tiers from course “BlueKarko” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_shift",
@@ -1009,7 +1034,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 70.5234375,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1041,7 +1066,8 @@
       "workshopId": "3523939369",
       "cs2kzId": 30,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 110.875
     },
     {
       "id": "kz_faded",
@@ -1049,7 +1075,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 42.171875,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1081,7 +1107,8 @@
       "workshopId": "3366047597",
       "cs2kzId": 31,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 80.4375
     },
     {
       "id": "kz_outback",
@@ -1089,7 +1116,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 116.046875,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -1121,7 +1148,8 @@
       "workshopId": "3571933172",
       "cs2kzId": 32,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 199.265625
     },
     {
       "id": "kz_xmas2025",
@@ -1129,7 +1157,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 162.9453125,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1161,7 +1189,8 @@
       "workshopId": "3627515270",
       "cs2kzId": 33,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “kz_xmas2025” (classic mode)."
+      "notes": "Tiers from course “kz_xmas2025” (classic mode).",
+      "vnlTopTime": 274.296875
     },
     {
       "id": "kz_sanctum",
@@ -1169,7 +1198,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 103.5625,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1201,7 +1230,8 @@
       "workshopId": "3582314764",
       "cs2kzId": 34,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “kz_sanctum” (classic mode)."
+      "notes": "Tiers from course “kz_sanctum” (classic mode).",
+      "vnlTopTime": 160.984375
     },
     {
       "id": "kz_dojo",
@@ -1209,7 +1239,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 165.6875,
       "tpTier": 3,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -1241,7 +1271,8 @@
       "workshopId": "3616333913",
       "cs2kzId": 35,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 321.1875
     },
     {
       "id": "kz_moorish",
@@ -1249,7 +1280,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 42.921875,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1281,7 +1312,8 @@
       "workshopId": "3590615475",
       "cs2kzId": 36,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 59.65625
     },
     {
       "id": "kz_hex",
@@ -1289,7 +1321,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 72,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1321,7 +1353,8 @@
       "workshopId": "3584437689",
       "cs2kzId": 37,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 112.109375
     },
     {
       "id": "kz_royalcapital",
@@ -1329,7 +1362,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 75.25,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -1361,7 +1394,8 @@
       "workshopId": "3366541429",
       "cs2kzId": 38,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 104.03125
     },
     {
       "id": "kz_kiwivision",
@@ -1369,7 +1403,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 162.9375,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1401,7 +1435,8 @@
       "workshopId": "3639644156",
       "cs2kzId": 39,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 248.953125
     },
     {
       "id": "kz_kiwitech",
@@ -1409,7 +1444,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 49.15625,
       "tpTier": 5,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -1441,7 +1476,8 @@
       "workshopId": "3602610300",
       "cs2kzId": 40,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_horror",
@@ -1449,7 +1485,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 156.109375,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -1481,7 +1517,8 @@
       "workshopId": "3582131545",
       "cs2kzId": 42,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “kz_horror” (classic mode)."
+      "notes": "Tiers from course “kz_horror” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_why",
@@ -1489,7 +1526,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 52.0546875,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -1521,7 +1558,8 @@
       "workshopId": "3603577252",
       "cs2kzId": 43,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_antimony",
@@ -1529,7 +1567,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 208.7734375,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -1561,7 +1599,8 @@
       "workshopId": "3609954118",
       "cs2kzId": 44,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_kiwiconsecration",
@@ -1569,7 +1608,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 55.6796875,
       "tpTier": 7,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -1601,7 +1640,8 @@
       "workshopId": "3648160400",
       "cs2kzId": 45,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_worlds2026_blue",
@@ -1609,7 +1649,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 156.34375,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -1641,7 +1681,8 @@
       "workshopId": "3622279620",
       "cs2kzId": 46,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_worlds2026_purple",
@@ -1649,7 +1690,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 99.3828125,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -1681,7 +1722,8 @@
       "workshopId": "3628804230",
       "cs2kzId": 47,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 146.0625
     },
     {
       "id": "kz_sxb2_remake",
@@ -1689,7 +1731,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 163.6796875,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -1721,7 +1763,8 @@
       "workshopId": "3071551126",
       "cs2kzId": 48,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_kzro_mountainsein",
@@ -1729,7 +1772,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 126.7265625,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1761,7 +1804,8 @@
       "workshopId": "3656317465",
       "cs2kzId": 49,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 316.46875
     },
     {
       "id": "kz_difficultas_discendi",
@@ -1769,7 +1813,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 67.53125,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1801,7 +1845,8 @@
       "workshopId": "3683028893",
       "cs2kzId": 50,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 117.15625
     },
     {
       "id": "kz_bayharborbhopper",
@@ -1809,7 +1854,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 68.1015625,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1841,7 +1886,8 @@
       "workshopId": "3593758954",
       "cs2kzId": 51,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 149.46875
     },
     {
       "id": "kz_sillychicken",
@@ -1849,7 +1895,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 91.8671875,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -1881,7 +1927,8 @@
       "workshopId": "3679498494",
       "cs2kzId": 52,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_worlds2026_red",
@@ -1889,7 +1936,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 77.2421875,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1921,7 +1968,8 @@
       "workshopId": "3634880409",
       "cs2kzId": 53,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 129.484375
     },
     {
       "id": "kz_ghs",
@@ -1929,7 +1977,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 127.0234375,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -1961,7 +2009,8 @@
       "workshopId": "3278824777",
       "cs2kzId": 54,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 179.84375
     },
     {
       "id": "kz_worlds2026_green",
@@ -1969,7 +2018,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 104.4453125,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -2001,7 +2050,8 @@
       "workshopId": "3656357340",
       "cs2kzId": 55,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 177
     },
     {
       "id": "kz_insomnia",
@@ -2009,7 +2059,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 151.65625,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -2041,7 +2091,8 @@
       "workshopId": "3654069326",
       "cs2kzId": 56,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_bored",
@@ -2049,7 +2100,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 169.4609375,
       "tpTier": 3,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -2081,7 +2132,8 @@
       "workshopId": "3672143345",
       "cs2kzId": 57,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 338.640625
     },
     {
       "id": "kz_worlds2026_yellow",
@@ -2089,7 +2141,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 81.4140625,
       "tpTier": 3,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -2121,7 +2173,8 @@
       "workshopId": "3626536692",
       "cs2kzId": 58,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_xc_dtt_nasty",
@@ -2129,7 +2182,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 77.515625,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -2161,7 +2214,8 @@
       "workshopId": "3673283473",
       "cs2kzId": 59,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 101.84375
     },
     {
       "id": "kz_pom",
@@ -2169,7 +2223,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 42.1015625,
       "tpTier": 1,
       "proTier": 1,
       "headbangers": "Unknown",
@@ -2201,7 +2255,8 @@
       "workshopId": "3723855844",
       "cs2kzId": 60,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “pom” (classic mode)."
+      "notes": "Tiers from course “pom” (classic mode).",
+      "vnlTopTime": 60.140625
     },
     {
       "id": "kz_lean",
@@ -2209,7 +2264,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 166.8515625,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -2241,7 +2296,8 @@
       "workshopId": "3687183209",
       "cs2kzId": 61,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 227.1875
     },
     {
       "id": "kz_fuyu",
@@ -2249,7 +2305,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 58.640625,
       "tpTier": 2,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -2281,7 +2337,8 @@
       "workshopId": "3694971410",
       "cs2kzId": 62,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 97.625
     },
     {
       "id": "kz_kings_ambition",
@@ -2289,7 +2346,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 176.7734375,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -2321,7 +2378,8 @@
       "workshopId": "3447277011",
       "cs2kzId": 63,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Kings Ambition” (classic mode)."
+      "notes": "Tiers from course “Kings Ambition” (classic mode).",
+      "vnlTopTime": 274
     },
     {
       "id": "kz_why_so_silly",
@@ -2329,7 +2387,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 47.25,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -2361,7 +2419,8 @@
       "workshopId": "3654067635",
       "cs2kzId": 64,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_sxb2_biewan",
@@ -2369,7 +2428,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 137.609375,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -2401,7 +2460,8 @@
       "workshopId": "3076000218",
       "cs2kzId": 65,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_lonelyidea",
@@ -2409,7 +2469,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 134.53125,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -2441,7 +2501,8 @@
       "workshopId": "3698268232",
       "cs2kzId": 66,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 192.515625
     },
     {
       "id": "kz_d_decompile",
@@ -2449,7 +2510,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 240.859375,
       "tpTier": 6,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -2481,7 +2542,8 @@
       "workshopId": "3630741626",
       "cs2kzId": 67,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_topsecret",
@@ -2489,7 +2551,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 147.4375,
       "tpTier": 4,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -2521,7 +2583,8 @@
       "workshopId": "3584830777",
       "cs2kzId": 68,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Top Secret” (classic mode)."
+      "notes": "Tiers from course “Top Secret” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_divert",
@@ -2529,7 +2592,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 131.1875,
       "tpTier": 6,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -2561,7 +2624,8 @@
       "workshopId": "3692108902",
       "cs2kzId": 70,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_kreedzune",
@@ -2569,7 +2633,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 98.2734375,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -2601,7 +2665,8 @@
       "workshopId": "3743714445",
       "cs2kzId": 71,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Kreedzune” (classic mode)."
+      "notes": "Tiers from course “Kreedzune” (classic mode).",
+      "vnlTopTime": 161.4375
     },
     {
       "id": "kz_porn",
@@ -2609,7 +2674,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 124.6796875,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -2641,7 +2706,8 @@
       "workshopId": "3733523067",
       "cs2kzId": 72,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 177.984375
     },
     {
       "id": "kz_slide_agave",
@@ -2649,7 +2715,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 181.21875,
       "tpTier": 7,
       "proTier": 9,
       "headbangers": "Unknown",
@@ -2681,7 +2747,8 @@
       "workshopId": "3735580891",
       "cs2kzId": 73,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_ego",
@@ -2689,7 +2756,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 128.359375,
       "tpTier": 5,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -2721,7 +2788,8 @@
       "workshopId": "3750045826",
       "cs2kzId": 74,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_sxb2_onlyslide",
@@ -2729,7 +2797,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 131.9140625,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -2761,7 +2829,8 @@
       "workshopId": "3370381464",
       "cs2kzId": 75,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_bhop_slide",
@@ -2769,7 +2838,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 236.046875,
       "tpTier": 6,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -2801,7 +2870,8 @@
       "workshopId": "3636997995",
       "cs2kzId": 76,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_moss",
@@ -2809,7 +2879,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 50.921875,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -2841,7 +2911,8 @@
       "workshopId": "3745801456",
       "cs2kzId": 77,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 78.21875
     },
     {
       "id": "kz_sahara",
@@ -2849,7 +2920,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 72.7578125,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -2881,7 +2952,8 @@
       "workshopId": "3718317934",
       "cs2kzId": 78,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Sahara” (classic mode)."
+      "notes": "Tiers from course “Sahara” (classic mode).",
+      "vnlTopTime": 743.9375
     },
     {
       "id": "kz_isuper",
@@ -2889,7 +2961,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 122.7109375,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -2921,7 +2993,8 @@
       "workshopId": "3100988369",
       "cs2kzId": 79,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_refurinfunflay",
@@ -2929,7 +3002,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 51.421875,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -2961,7 +3034,8 @@
       "workshopId": "3485831149",
       "cs2kzId": 80,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 67.828125
     },
     {
       "id": "kz_opticks",
@@ -2969,7 +3043,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 238.0625,
       "tpTier": 5,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -3001,7 +3075,8 @@
       "workshopId": "3688727257",
       "cs2kzId": 81,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 10150.65625
     },
     {
       "id": "kz_cherry",
@@ -3009,7 +3084,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 38.109375,
       "tpTier": 1,
       "proTier": 2,
       "headbangers": "Unknown",
@@ -3041,7 +3116,8 @@
       "workshopId": "3734077455",
       "cs2kzId": 82,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “main” (classic mode)."
+      "notes": "Tiers from course “main” (classic mode).",
+      "vnlTopTime": 54.359375
     },
     {
       "id": "kz_communitybhop",
@@ -3049,7 +3125,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 1012.28125,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -3081,7 +3157,8 @@
       "workshopId": "3755515861",
       "cs2kzId": 83,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_angina_x",
@@ -3089,7 +3166,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 2091.3203125,
       "tpTier": 7,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -3121,7 +3198,8 @@
       "workshopId": "3746453872",
       "cs2kzId": 84,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_sxb2_isbhop",
@@ -3129,7 +3207,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 179.5390625,
       "tpTier": 5,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -3161,7 +3239,8 @@
       "workshopId": "3357361972",
       "cs2kzId": 85,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_angina",
@@ -3169,7 +3248,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 230.546875,
       "tpTier": 6,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -3201,7 +3280,8 @@
       "workshopId": "3636272568",
       "cs2kzId": 86,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_mescaline",
@@ -3209,7 +3289,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 47.71875,
       "tpTier": 3,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -3241,7 +3321,8 @@
       "workshopId": "3781516256",
       "cs2kzId": 87,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Mescaline” (classic mode)."
+      "notes": "Tiers from course “Mescaline” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_silly_metamodernity",
@@ -3249,7 +3330,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 49.8203125,
       "tpTier": 2,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -3281,7 +3362,8 @@
       "workshopId": "3718800235",
       "cs2kzId": 88,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 76.171875
     },
     {
       "id": "kz_sxb2_misato",
@@ -3289,7 +3371,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 170.3046875,
       "tpTier": 6,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -3321,7 +3403,8 @@
       "workshopId": "3082850001",
       "cs2kzId": 89,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_royal_purple",
@@ -3329,7 +3412,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 157.9140625,
       "tpTier": 3,
       "proTier": 3,
       "headbangers": "Unknown",
@@ -3361,7 +3444,8 @@
       "workshopId": "3679728328",
       "cs2kzId": 90,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": 235.140625
     },
     {
       "id": "kz_hb_wangdefa",
@@ -3369,7 +3453,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 198.578125,
       "tpTier": 6,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -3401,7 +3485,8 @@
       "workshopId": "3776801864",
       "cs2kzId": 91,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_bhop_majka",
@@ -3409,7 +3494,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 264.703125,
       "tpTier": 3,
       "proTier": 4,
       "headbangers": "Unknown",
@@ -3441,7 +3526,8 @@
       "workshopId": "3764093804",
       "cs2kzId": 93,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_toofaded",
@@ -3449,7 +3535,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 749.15625,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -3481,7 +3567,8 @@
       "workshopId": "3678967447",
       "cs2kzId": 94,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Too Faded” (classic mode)."
+      "notes": "Tiers from course “Too Faded” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_engram",
@@ -3489,7 +3576,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 183.71875,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -3521,7 +3608,8 @@
       "workshopId": "3759997670",
       "cs2kzId": 95,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “engram” (classic mode)."
+      "notes": "Tiers from course “engram” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_liminal_geode",
@@ -3529,7 +3617,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 208.0625,
       "tpTier": 6,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -3561,7 +3649,8 @@
       "workshopId": "3747717986",
       "cs2kzId": 96,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_sxb2_slideasy",
@@ -3569,7 +3658,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 90.75,
       "tpTier": 5,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -3601,7 +3690,8 @@
       "workshopId": "3617813187",
       "cs2kzId": 97,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_sxb2_cxz",
@@ -3609,7 +3699,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 172.7109375,
       "tpTier": 4,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -3641,7 +3731,8 @@
       "workshopId": "3083714192",
       "cs2kzId": 98,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_sc_ruins",
@@ -3649,7 +3740,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 149.2421875,
       "tpTier": 5,
       "proTier": 6,
       "headbangers": "Unknown",
@@ -3681,7 +3772,8 @@
       "workshopId": "3767757448",
       "cs2kzId": 99,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_slide_dydanhomon2",
@@ -3689,7 +3781,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 32.890625,
       "tpTier": 5,
       "proTier": 5,
       "headbangers": "Unknown",
@@ -3721,7 +3813,8 @@
       "workshopId": "3801640043",
       "cs2kzId": 100,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     },
     {
       "id": "kz_func_detail",
@@ -3729,7 +3822,7 @@
       "global": "Yes",
       "materials": [],
       "props": [],
-      "topTime": null,
+      "topTime": 229.8125,
       "tpTier": 6,
       "proTier": 7,
       "headbangers": "Unknown",
@@ -3761,7 +3854,10 @@
       "workshopId": "3798986356",
       "cs2kzId": 101,
       "updatedAt": "2026-10-17T08:42:39.541Z",
-      "notes": "Tiers from course “Main” (classic mode)."
+      "notes": "Tiers from course “Main” (classic mode).",
+      "vnlTopTime": null
     }
-  ]
+  ],
+  "topTimesSource": "https://api.cs2kz.org/records",
+  "topTimesUpdatedAt": "2026-10-17T09:57:06.836Z"
 }

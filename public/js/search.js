@@ -64,6 +64,14 @@ const tierSelects = (prefix, label) => `<div class="tier-row">
       <option value="">Any</option>${Array.from({ length: 9 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
     </select></label>
   </div>`;
+const rangeBlock = (prefix, label) => `
+  <div class="preset-row">${TOP_TIME_PRESETS.map((preset, index) => `<button type="button" class="chip chip-sm" data-range-preset="${prefix}" data-preset-index="${index}">${escapeHtml(preset.label)}</button>`).join('')}</div>
+  <div class="range-control" data-range="${prefix}">
+    <div class="range-track"><div class="range-fill" data-range-fill="${prefix}"></div></div>
+    <input class="range-input range-min" type="range" min="0" max="${TOP_RANGE_MAX}" step="1" value="0" data-range-min="${prefix}" aria-label="Minimum ${label} top time in minutes" />
+    <input class="range-input range-max" type="range" min="0" max="${TOP_RANGE_MAX}" step="1" value="${TOP_RANGE_MAX}" data-range-max="${prefix}" aria-label="Maximum ${label} top time in minutes" />
+  </div>
+  <div class="range-readout"><span data-range-readout="${prefix}">Any duration</span><button type="button" class="link-btn" data-clear-range="${prefix}">Reset</button></div>`;
 function buildSidebar() {
     filtersEl.innerHTML = `
     <div class="filters-head">
@@ -88,13 +96,8 @@ function buildSidebar() {
          </div>
        </div>`, 'Which materials are included?', true)}
     ${section('Props', amountGroup('props'), 'Are there prop blocks?', true)}
-    ${section('Top time', `<div class="preset-row">${TOP_TIME_PRESETS.map((preset, index) => `<button type="button" class="chip chip-sm" data-top-preset="${index}">${escapeHtml(preset.label)}</button>`).join('')}</div>
-       <div class="range-control" data-range="top">
-         <div class="range-track"><div class="range-fill" data-range-fill></div></div>
-         <input class="range-input range-min" type="range" min="0" max="${TOP_RANGE_MAX}" step="1" value="0" data-range-min aria-label="Minimum top time in minutes" />
-         <input class="range-input range-max" type="range" min="0" max="${TOP_RANGE_MAX}" step="1" value="${TOP_RANGE_MAX}" data-range-max aria-label="Maximum top time in minutes" />
-       </div>
-       <div class="range-readout"><span data-top-readout>Any duration</span><button type="button" class="link-btn" data-clear-top>Reset</button></div>`, 'Fastest completion time, in minutes.', true)}
+    ${section('CKZ top time', rangeBlock('top', 'CKZ'), 'Classic / CKZ fastest completion time, in minutes.', true)}
+    ${section('VNL top time', rangeBlock('vnl', 'VNL'), 'Vanilla / VNL fastest completion time, in minutes.')}
     ${section('Tiers', `${tierSelects('tp', 'TP tier')}<div class="tier-gap"></div>${tierSelects('pro', 'Pro tier')}`, '1–9 difficulty tiers.', true)}
     ${section('Headbangers', chipGroup('headbangers', TRI_OPTIONS))}
     ${section('Ladders', `<div class="sub-group"><span class="field-label">Amount</span>${amountGroup('ladderAmount')}</div>
@@ -136,10 +139,6 @@ function toggleValue(key, value) {
 }
 function setExclusive(key, value) {
     setArrayFilter(key, value == null ? [] : [value]);
-}
-function setTopRange(min, max) {
-    filters.topMin = min;
-    filters.topMax = max;
 }
 function setTierRange(prefix, min, max) {
     if (prefix === 'tp') {
@@ -192,10 +191,13 @@ function syncSidebar() {
     });
     if (document.activeElement !== nameSearchEl)
         nameSearchEl.value = filters.q;
-    syncTopRange();
-    $$('[data-top-preset]', filtersEl).forEach((button) => {
-        const preset = TOP_TIME_PRESETS[Number(button.dataset.topPreset)];
-        const active = preset != null && filters.topMin === preset.min && filters.topMax === preset.max;
+    syncTimeRange('top');
+    syncTimeRange('vnl');
+    $$('[data-range-preset]', filtersEl).forEach((button) => {
+        const prefix = button.dataset.rangePreset;
+        const preset = TOP_TIME_PRESETS[Number(button.dataset.presetIndex)];
+        const range = getRange(prefix);
+        const active = preset != null && range.min === preset.min && range.max === preset.max;
         button.classList.toggle('active', active);
         button.setAttribute('aria-pressed', String(active));
     });
@@ -206,23 +208,39 @@ function syncSidebar() {
         countEl.classList.toggle('is-empty', count === 0);
     }
 }
-function syncTopRange() {
-    const minInput = $('[data-range-min]', filtersEl);
-    const maxInput = $('[data-range-max]', filtersEl);
-    const fill = $('[data-range-fill]', filtersEl);
-    const readout = $('[data-top-readout]', filtersEl);
+function getRange(prefix) {
+    return prefix === 'top'
+        ? { min: filters.topMin, max: filters.topMax }
+        : { min: filters.vnlTopMin, max: filters.vnlTopMax };
+}
+function setRange(prefix, min, max) {
+    if (prefix === 'top') {
+        filters.topMin = min;
+        filters.topMax = max;
+    }
+    else {
+        filters.vnlTopMin = min;
+        filters.vnlTopMax = max;
+    }
+}
+function syncTimeRange(prefix) {
+    const minInput = $(`[data-range-min="${prefix}"]`, filtersEl);
+    const maxInput = $(`[data-range-max="${prefix}"]`, filtersEl);
+    const fill = $(`[data-range-fill="${prefix}"]`, filtersEl);
+    const readout = $(`[data-range-readout="${prefix}"]`, filtersEl);
     if (!minInput || !maxInput || !fill || !readout)
         return;
-    const min = filters.topMin ?? 0;
-    const max = filters.topMax ?? TOP_RANGE_MAX;
+    const { min: minValue, max: maxValue } = getRange(prefix);
+    const min = minValue ?? 0;
+    const max = maxValue ?? TOP_RANGE_MAX;
     minInput.value = String(min);
     maxInput.value = String(max);
     fill.style.left = `${(min / TOP_RANGE_MAX) * 100}%`;
     fill.style.right = `${100 - (max / TOP_RANGE_MAX) * 100}%`;
     readout.textContent =
-        filters.topMin == null && filters.topMax == null
+        minValue == null && maxValue == null
             ? 'Any duration'
-            : `${formatRange(filters.topMin, filters.topMax, 'm')} top time`;
+            : `${formatRange(minValue, maxValue, 'm')} top time`;
 }
 function renderActiveFilters() {
     const chips = activeFilterChips(filters);
@@ -271,7 +289,8 @@ function mapCard(map) {
       <div class="map-stats">
         ${map.tpTier != null ? `<span class="stat stat-tp">TP ${map.tpTier}</span>` : '<span class="stat stat-empty">TP —</span>'}
         ${map.proTier != null ? `<span class="stat stat-pro">Pro ${map.proTier}</span>` : '<span class="stat stat-empty">Pro —</span>'}
-        <span class="stat stat-time">${formatTopTime(map.topTime)}</span>
+        <span class="stat stat-time stat-ckz"><span class="stat-key">CKZ</span>${formatTopTime(map.topTime)}</span>
+        <span class="stat stat-time stat-vnl"><span class="stat-key">VNL</span>${formatTopTime(map.vnlTopTime)}</span>
       </div>
       <div class="map-tags">${cardTags(map)}</div>
       <div class="map-footer">
@@ -397,6 +416,10 @@ function hydrateFromUrl() {
         filters.topMin = Math.max(0, Math.min(TOP_RANGE_MAX, filters.topMin));
     if (filters.topMax != null)
         filters.topMax = Math.max(0, Math.min(TOP_RANGE_MAX, filters.topMax));
+    if (filters.vnlTopMin != null)
+        filters.vnlTopMin = Math.max(0, Math.min(TOP_RANGE_MAX, filters.vnlTopMin));
+    if (filters.vnlTopMax != null)
+        filters.vnlTopMax = Math.max(0, Math.min(TOP_RANGE_MAX, filters.vnlTopMax));
     // Unknown is an inferred state, not a filter value. Drop it from old URLs.
     const unknownKeys = [
         'global',
@@ -472,7 +495,8 @@ function openMap(map) {
     <div class="modal-stats">
       <div><span>TP tier</span><strong>${map.tpTier ?? '—'}</strong></div>
       <div><span>Pro tier</span><strong>${map.proTier ?? '—'}</strong></div>
-      <div><span>Top time</span><strong>${formatTopTime(map.topTime)}</strong></div>
+      <div><span>CKZ top time</span><strong>${formatTopTime(map.topTime)}</strong></div>
+      <div><span>VNL top time</span><strong>${formatTopTime(map.vnlTopTime)}</strong></div>
       <div><span>Port</span><strong>${escapeHtml(map.port)}</strong></div>
     </div>
     <div class="modal-body">
@@ -483,7 +507,8 @@ function openMap(map) {
           ${detailItem('Bonus', map.bonus)}
           ${detailItem('Materials', joinList(map.materials))}
           ${detailItem('Props', joinList(map.props))}
-          ${detailItem('Top time', formatTopTime(map.topTime))}
+          ${detailItem('CKZ top time', formatTopTime(map.topTime))}
+          ${detailItem('VNL top time', formatTopTime(map.vnlTopTime))}
           ${detailItem('TP / Pro tier', `${map.tpTier ?? '—'} / ${map.proTier ?? '—'}`)}
           ${detailItem('Port', map.port)}
           ${detailItem('Based on', detailValue(map.basedOn))}
@@ -591,31 +616,31 @@ function focusFilterField(selector) {
         field.select();
     });
 }
-function topMinCommand(min) {
+function topMinCommand(min, prefix = 'top') {
     const maxOptions = [1, 2, 3, 4, 5, 10, 20].filter((max) => max >= min);
     return {
-        id: `top-min:${min}`,
+        id: `${prefix}-min:${min}`,
         label: String(min),
         hint: `at least ${min} min`,
         keywords: [`${min}m`],
         children: [
             ...maxOptions.map((max) => ({
-                id: `top:${min}-${max}`,
+                id: `${prefix}:${min}-${max}`,
                 label: String(max),
                 hint: `${min}–${max} min`,
                 keywords: [`${max}m`],
                 run: () => {
-                    setTopRange(min, max);
+                    setRange(prefix, min, max);
                     onFiltersChanged();
                 },
             })),
             {
-                id: `top:${min}-open`,
+                id: `${prefix}:${min}-open`,
                 label: 'No max',
                 hint: `${min}m or longer`,
                 keywords: ['open', 'plus', 'max'],
                 run: () => {
-                    setTopRange(min, null);
+                    setRange(prefix, min, null);
                     onFiltersChanged();
                 },
             },
@@ -765,9 +790,9 @@ function buildPaletteCommands() {
         },
         {
             id: 'top',
-            label: 'Top time',
+            label: 'CKZ top time',
             hint: 'e.g. Top > 1 > 2',
-            keywords: ['top', 'time', 'duration', 'range'],
+            keywords: ['top', 'time', 'duration', 'range', 'ckz', 'classic'],
             children: [
                 {
                     id: 'top-under-1',
@@ -775,17 +800,45 @@ function buildPaletteCommands() {
                     hint: 'Under one minute',
                     keywords: ['under', 'less'],
                     run: () => {
-                        setTopRange(null, 1);
+                        setRange('top', null, 1);
                         onFiltersChanged();
                     },
                 },
-                ...[1, 2, 3, 4, 5, 10, 20].map((min) => topMinCommand(min)),
+                ...[1, 2, 3, 4, 5, 10, 20].map((min) => topMinCommand(min, 'top')),
                 {
                     id: 'top-clear',
                     label: 'Any',
-                    hint: 'Clear top time range',
+                    hint: 'Clear CKZ top time range',
                     run: () => {
-                        setTopRange(null, null);
+                        setRange('top', null, null);
+                        onFiltersChanged();
+                    },
+                },
+            ],
+        },
+        {
+            id: 'vnl-top',
+            label: 'VNL top time',
+            hint: 'e.g. VNL > 1 > 2',
+            keywords: ['vnl', 'vanilla', 'top', 'time', 'duration', 'range'],
+            children: [
+                {
+                    id: 'vnl-top-under-1',
+                    label: '< 1m',
+                    hint: 'Under one minute',
+                    keywords: ['under', 'less'],
+                    run: () => {
+                        setRange('vnl', null, 1);
+                        onFiltersChanged();
+                    },
+                },
+                ...[1, 2, 3, 4, 5, 10, 20].map((min) => topMinCommand(min, 'vnl')),
+                {
+                    id: 'vnl-top-clear',
+                    label: 'Any',
+                    hint: 'Clear VNL top time range',
+                    run: () => {
+                        setRange('vnl', null, null);
                         onFiltersChanged();
                     },
                 },
@@ -1106,18 +1159,21 @@ function bindEvents() {
             onFiltersChanged();
             return;
         }
-        const preset = target.closest('[data-top-preset]');
+        const preset = target.closest('[data-range-preset]');
         if (preset) {
-            const value = TOP_TIME_PRESETS[Number(preset.dataset.topPreset)];
+            const prefix = preset.dataset.rangePreset;
+            const value = TOP_TIME_PRESETS[Number(preset.dataset.presetIndex)];
             if (!value)
                 return;
-            const active = filters.topMin === value.min && filters.topMax === value.max;
-            setTopRange(active ? null : value.min, active ? null : value.max);
+            const range = getRange(prefix);
+            const active = range.min === value.min && range.max === value.max;
+            setRange(prefix, active ? null : value.min, active ? null : value.max);
             onFiltersChanged();
             return;
         }
-        if (target.closest('[data-clear-top]')) {
-            setTopRange(null, null);
+        const clearRange = target.closest('[data-clear-range]');
+        if (clearRange) {
+            setRange(clearRange.dataset.clearRange, null, null);
             onFiltersChanged();
             return;
         }
@@ -1177,13 +1233,15 @@ function bindEvents() {
             textHandler(text, text.value);
             return;
         }
-        if (target.matches('[data-range-min]') || target.matches('[data-range-max]')) {
-            const minInput = $('[data-range-min]', filtersEl);
-            const maxInput = $('[data-range-max]', filtersEl);
+        const rangeInput = target.closest('[data-range-min], [data-range-max]');
+        if (rangeInput) {
+            const prefix = (rangeInput.dataset.rangeMin ?? rangeInput.dataset.rangeMax);
+            const minInput = $(`[data-range-min="${prefix}"]`, filtersEl);
+            const maxInput = $(`[data-range-max="${prefix}"]`, filtersEl);
             let min = Number(minInput.value);
             let max = Number(maxInput.value);
             if (min > max) {
-                if (target === minInput) {
+                if (rangeInput === minInput) {
                     min = max;
                     minInput.value = String(min);
                 }
@@ -1192,15 +1250,16 @@ function bindEvents() {
                     maxInput.value = String(max);
                 }
             }
-            setTopRange(min === 0 ? null : min, max === TOP_RANGE_MAX ? null : max);
-            syncTopRange();
+            setRange(prefix, min === 0 ? null : min, max === TOP_RANGE_MAX ? null : max);
+            syncTimeRange(prefix);
             renderActiveFilters();
             const rangeCountEl = filterCountElForSync ?? $('#filter-count', filtersEl);
             if (rangeCountEl)
                 rangeCountEl.textContent = String(countActiveFilters(filters));
-            $$('[data-top-preset]', filtersEl).forEach((button) => {
-                const preset = TOP_TIME_PRESETS[Number(button.dataset.topPreset)];
-                button.classList.toggle('active', preset != null && filters.topMin === preset.min && filters.topMax === preset.max);
+            const range = getRange(prefix);
+            $$(`[data-range-preset="${prefix}"]`, filtersEl).forEach((button) => {
+                const preset = TOP_TIME_PRESETS[Number(button.dataset.presetIndex)];
+                button.classList.toggle('active', preset != null && range.min === preset.min && range.max === preset.max);
             });
             renderSoon();
             updateUrl();

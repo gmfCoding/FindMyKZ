@@ -86,8 +86,10 @@ export interface MapRecord {
   global: Tri;
   materials: Material[];
   props: Amount[];
-  /** Top time in seconds. `null` = unknown. */
+  /** Top time in seconds for classic / CKZ. `null` = unknown. */
   topTime: number | null;
+  /** Top time in seconds for vanilla / VNL. `null` = unknown. */
+  vnlTopTime: number | null;
   tpTier: number | null;
   proTier: number | null;
   headbangers: Tri;
@@ -138,6 +140,9 @@ export interface SearchFilters {
   /** Minutes. `null` = unbounded. */
   topMin: number | null;
   topMax: number | null;
+  /** VNL top-time range, in minutes. */
+  vnlTopMin: number | null;
+  vnlTopMax: number | null;
   tpMin: number | null;
   tpMax: number | null;
   proMin: number | null;
@@ -223,6 +228,8 @@ export const DEFAULT_FILTERS: SearchFilters = {
   props: [],
   topMin: null,
   topMax: null,
+  vnlTopMin: null,
+  vnlTopMax: null,
   tpMin: null,
   tpMax: null,
   proMin: null,
@@ -260,6 +267,7 @@ export function defaultMapRecord(name = '', id = ''): MapRecord {
     materials: [],
     props: [],
     topTime: null,
+    vnlTopTime: null,
     tpTier: null,
     proTier: null,
     headbangers: 'Unknown',
@@ -301,7 +309,8 @@ export const FILTER_LABELS: Record<string, string> = {
   materials: 'Material',
   materialsMode: 'Material match',
   props: 'Props',
-  top: 'Top time',
+  top: 'CKZ top time',
+  vnlTop: 'VNL top time',
   tp: 'TP tier',
   pro: 'Pro tier',
   headbangers: 'Headbangers',
