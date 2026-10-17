@@ -24,9 +24,11 @@ Other scripts:
 | `npm run watch` | Recompile TypeScript on change (run `npm run serve` in another terminal) |
 | `npm run pack` | Rebuild only `public/data/maps.zip` |
 | `npm run serve` | Serve `public/` at port 5173 |
-| `npm run seed` | Regenerate the 20-map demo dataset (overwrites `public/data/maps.json`) |
+| `npm run refresh:data` | Rebuild `public/data/maps.json` from the live cs2kz.org API (real maps only) |
 
-> The site must be served over HTTP(S) — opening `index.html` via `file://` cannot fetch the dataset.
+> The shipped dataset is generated from cs2kz.org's public API. It contains only approved maps and
+> only values cs2kz actually provides; every other property is intentionally `Unknown` / empty until
+> you verify it in the data editor.
 
 ## Pages
 
@@ -55,10 +57,12 @@ through property → value chains, with fuzzy matching on every level.
 | `Bon > Yes` | Bonus map |
 | `Sort > Top time` | Change result ordering |
 
-Example: `Glo > Y`, `Mat > Con`, `Mat > Grass`, `Top > 1 > 2`, `Bh > Yes` narrows the demo dataset
-to `kz_grass_global`.
+Example: use `Glo > Y` and `TP > 3 > 6` to narrow the real cs2kz map list by tier. Material, scenery
+and movement filters become useful as those properties are filled in through data entry.
 
 Keyboard: `↑`/`↓` navigate, `↵` select, `Esc` close, `Ctrl+P` / `Ctrl+K` open.
+
+> The site must be served over HTTP(S) — opening `index.html` via `file://` cannot fetch the dataset.
 
 ## Data entry workflow
 
@@ -89,47 +93,49 @@ JSON file (`maps.json` is what the export creates). Load is client-side via `Dec
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "updatedAt": "2026-10-17T00:00:00.000Z",
+  "source": "https://cs2kz.org",
   "maps": [
     {
       "id": "kz_grotto",
       "name": "kz_grotto",
       "global": "Yes",
-      "materials": ["Concrete", "Grass", "Wood"],
+      "materials": [],
       "props": [],
-      "topTime": 164.0,
-      "tpTier": 3,
-      "proTier": 4,
-      "headbangers": "No",
-      "ladderAmount": ["Some"],
-      "ladderTypes": ["Brush-Mesh", "Rope"],
-      "bhop": "Yes",
-      "bhopColour": "Green",
-      "multi": "No",
+      "topTime": null,
+      "tpTier": 2,
+      "proTier": 3,
+      "headbangers": "Unknown",
+      "ladderAmount": [],
+      "ladderTypes": [],
+      "bhop": "Unknown",
+      "bhopColour": null,
+      "multi": "Unknown",
       "multiColour": null,
-      "prekeep": "No",
+      "prekeep": "Unknown",
       "prekeepColour": null,
-      "surfAmounts": ["None"],
+      "surfAmounts": [],
       "surfMaterials": [],
-      "port": "GO",
+      "port": "Unknown",
       "basedOn": "",
-      "weather": ["Summer"],
-      "scenery": ["Confined", "Indoors", "Trees"],
-      "timeOfDay": ["Day"],
+      "weather": [],
+      "scenery": [],
+      "timeOfDay": [],
       "tech": [],
-      "ljRoom": "Yes",
-      "ljBlock": "Yes",
-      "ladderRoom": "Yes",
-      "path": ["Linear"],
-      "special": ["Slides", "Crouch"],
-      "bonus": "No",
+      "ljRoom": "Unknown",
+      "ljBlock": "Unknown",
+      "ladderRoom": "Unknown",
+      "path": [],
+      "special": [],
+      "bonus": "Unknown",
       "mappers": "ReDMooN",
-      "description": "KZ but in a GROTTO!",
+      "description": "KZ but in a GROTTO! Make your way through an obstacle course based in a cave.",
       "thumbnail": "https://images.steamusercontent.com/…",
       "workshopId": "3121168339",
       "cs2kzId": 2,
-      "updatedAt": "2026-10-17T00:00:00.000Z"
+      "updatedAt": "2026-10-17T00:00:00.000Z",
+      "notes": "Tiers from course “Main” (classic mode)."
     }
   ]
 }
@@ -145,6 +151,24 @@ Notes:
 - `port` is `"GO" | "Source" | "1.6" | "Unknown"`.
 - Missing or invalid fields are normalised to safe defaults when loaded.
 - Searchable string fields (`mappers`, `basedOn`) are capped at 255 characters.
+
+## Data provenance
+
+`npm run refresh:data` rebuilds the dataset from `https://api.cs2kz.org/maps?limit=10000`:
+
+- Only maps with `state: "approved"` are written. Invalid/superseded records are skipped.
+- The following values come directly from cs2kz.org: map name, mappers, description, Workshop ID,
+  cs2kz ID and approval status.
+- `global` is `"Yes"` for approved cs2kz global maps.
+- `tpTier` / `proTier` come from the **classic** mode filter of the primary course (the course named
+  `Main`, otherwise the first course listed by cs2kz). Classic tiers are the numbers shown on the
+  cs2kz.org map list. The course used is recorded in `notes`.
+- Thumbnails are resolved from Steam's public `GetPublishedFileDetails` API using the real Workshop ID.
+- **Every other property is left `Unknown` or empty.** Nothing is inferred from descriptions,
+  screenshots, map names or personal knowledge. Fill those in through the data entry page.
+
+The 94-map dataset shipped in this repository was generated this way. The previous demo/fake dataset
+is preserved as `public/data/maps_fake.json` and is excluded from the packaged site.
 
 ## How search matching works
 
@@ -177,10 +201,11 @@ public/
   index.html  entry.html  favicon.svg
   css/styles.css
   js/                     Compiled TypeScript (do not edit by hand)
-  data/maps.json          Editable master dataset
+  data/maps.json          Real cs2kz dataset (editable master)
   data/maps.zip           Generated compressed dataset
+  data/maps_fake.json     Preserved backup of the original fake demo data
 scripts/
-  seed-data.mjs           Demo dataset generator
+  refresh-cs2kz-data.mjs  Fetch approved maps + thumbnails from cs2kz.org/Steam
   pack-data.mjs           maps.json → maps.zip
   package-site.mjs        public/ → dist/ + findmykz-static.zip
 ```

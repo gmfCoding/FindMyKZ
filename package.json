@@ -11,7 +11,8 @@
     "pack": "node scripts/pack-data.mjs",
     "serve": "python3 -m http.server 5173 --directory public",
     "dev": "npm run build && npm run serve",
-    "seed": "node scripts/seed-data.mjs"
+    "refresh:data": "node scripts/refresh-cs2kz-data.mjs",
+    "seed": "node scripts/refresh-cs2kz-data.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

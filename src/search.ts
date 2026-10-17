@@ -4,6 +4,7 @@ import {
   clearFilters,
   countActiveFilters,
   filterMaps,
+  hasManualProperties,
   removeFilterChip,
   sortMaps,
   type ActiveFilterChip,
@@ -362,6 +363,7 @@ function cardTags(map: MapRecord): string {
   if (map.special.length) tags.push(`<span class="tag">${escapeHtml(map.special[0])}</span>`);
   if (map.path.length) tags.push(`<span class="tag">${escapeHtml(map.path[0])}</span>`);
   if (map.scenery.length && tags.length < 4) tags.push(`<span class="tag">${escapeHtml(map.scenery[0])}</span>`);
+  if (tags.length === 0) tags.push('<span class="tag tag-unverified">Unverified</span>');
   return tags.slice(0, 4).join('');
 }
 
@@ -569,6 +571,7 @@ function openMap(map: MapRecord): void {
         )}</div>
       </div>
     </div>
+    ${!hasManualProperties(map) ? `<div class="unverified-banner"><span class="unverified-dot"></span>Only cs2kz.org metadata is recorded for this map. Materials, movement, scenery and top time have not been verified yet.</div>` : ''}
     <div class="modal-stats">
       <div><span>TP tier</span><strong>${map.tpTier ?? '—'}</strong></div>
       <div><span>Pro tier</span><strong>${map.proTier ?? '—'}</strong></div>
@@ -621,6 +624,7 @@ function openMap(map: MapRecord): void {
           ${detailItem('Mappers', detailValue(map.mappers))}
           ${detailItem('Updated', new Date(map.updatedAt).toLocaleString())}
           ${detailItem('Workshop ID', map.workshopId ?? '—')}
+          ${map.notes ? detailItem('Notes', map.notes) : ''}
         </div>
       </section>
     </div>

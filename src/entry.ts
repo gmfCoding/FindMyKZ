@@ -168,7 +168,7 @@ function renderRecordList(): void {
       if (!query) return true;
       return matchesAllTokens(query, [record.name, record.id, record.mappers, record.basedOn].join(' '));
     })
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt) || a.name.localeCompare(b.name, undefined, { numeric: true }));
 
   recordListEl.innerHTML =
     filtered.length === 0

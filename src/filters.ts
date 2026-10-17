@@ -29,8 +29,36 @@ function textContains(haystack: string | null | undefined, needle: string): bool
   return (haystack ?? '').toLowerCase().includes(needle.trim().toLowerCase());
 }
 
-export function filterMaps(maps: MapRecord[], filters: SearchFilters): MapRecord[] {
-  const q = filters.q.trim().toLowerCase();
+/** True once any property beyond the cs2kz metadata has been entered. */
+export function hasManualProperties(map: MapRecord): boolean {
+  return (
+    map.materials.length > 0 ||
+    map.props.length > 0 ||
+    map.topTime != null ||
+    map.headbangers !== 'Unknown' ||
+    map.ladderAmount.length > 0 ||
+    map.ladderTypes.length > 0 ||
+    map.bhop !== 'Unknown' ||
+    map.multi !== 'Unknown' ||
+    map.prekeep !== 'Unknown' ||
+    map.surfAmounts.length > 0 ||
+    map.surfMaterials.length > 0 ||
+    map.port !== 'Unknown' ||
+    map.basedOn.trim() !== '' ||
+    map.weather.length > 0 ||
+    map.scenery.length > 0 ||
+    map.timeOfDay.length > 0 ||
+    map.tech.length > 0 ||
+    map.ljRoom !== 'Unknown' ||
+    map.ljBlock !== 'Unknown' ||
+    map.ladderRoom !== 'Unknown' ||
+    map.path.length > 0 ||
+    map.special.length > 0 ||
+    map.bonus !== 'Unknown'
+  );
+}
+
+export function filterMaps(maps: MapRecord[], filters: SearchFilters): MapRecord[] {  const q = filters.q.trim().toLowerCase();
   const tokens = q.split(/\s+/).filter(Boolean);
   const topMinSeconds = filters.topMin == null ? null : filters.topMin * 60;
   const topMaxSeconds = filters.topMax == null ? null : filters.topMax * 60;

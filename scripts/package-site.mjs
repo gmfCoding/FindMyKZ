@@ -51,8 +51,9 @@ async function collectFiles(dir, base = dir) {
     }
     const rel = relative(base, absolute).split(sep).join('/');
 
-    // Keep the deployment lean: sourcemaps are dev-only.
+    // Dev-only sourcemaps and the user's fake-data backup are not part of the site.
     if (rel.endsWith('.map')) continue;
+    if (rel.startsWith('data/maps_fake')) continue;
 
     let data = await readFile(absolute);
     if (rel.endsWith('.js')) {

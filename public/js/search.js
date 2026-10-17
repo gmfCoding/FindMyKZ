@@ -1,5 +1,5 @@
 import { loadServedDataset } from './data.js';
-import { activeFilterChips, clearFilters, countActiveFilters, filterMaps, removeFilterChip, sortMaps, } from './filters.js';
+import { activeFilterChips, clearFilters, countActiveFilters, filterMaps, hasManualProperties, removeFilterChip, sortMaps, } from './filters.js';
 import { CommandPalette } from './palette.js';
 import { AMOUNTS, COLOURS, DEFAULT_FILTERS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SORT_OPTIONS, SPECIALS, TIMES_OF_DAY, TOP_TIME_PRESETS, TRI_OPTIONS, WEATHER, } from './types.js';
 import { $, $$, decodeState, encodeState, escapeHtml, formatRange, formatTopTime, mapInitials, required, slugify, thumbStyle, } from './util.js';
@@ -248,6 +248,8 @@ function cardTags(map) {
         tags.push(`<span class="tag">${escapeHtml(map.path[0])}</span>`);
     if (map.scenery.length && tags.length < 4)
         tags.push(`<span class="tag">${escapeHtml(map.scenery[0])}</span>`);
+    if (tags.length === 0)
+        tags.push('<span class="tag tag-unverified">Unverified</span>');
     return tags.slice(0, 4).join('');
 }
 function mapCard(map) {
@@ -436,6 +438,7 @@ function openMap(map) {
         <div class="modal-byline">${escapeHtml(map.mappers || 'Unknown mapper')} <span>·</span> ${escapeHtml(map.id)}</div>
       </div>
     </div>
+    ${!hasManualProperties(map) ? `<div class="unverified-banner"><span class="unverified-dot"></span>Only cs2kz.org metadata is recorded for this map. Materials, movement, scenery and top time have not been verified yet.</div>` : ''}
     <div class="modal-stats">
       <div><span>TP tier</span><strong>${map.tpTier ?? '—'}</strong></div>
       <div><span>Pro tier</span><strong>${map.proTier ?? '—'}</strong></div>
@@ -488,6 +491,7 @@ function openMap(map) {
           ${detailItem('Mappers', detailValue(map.mappers))}
           ${detailItem('Updated', new Date(map.updatedAt).toLocaleString())}
           ${detailItem('Workshop ID', map.workshopId ?? '—')}
+          ${map.notes ? detailItem('Notes', map.notes) : ''}
         </div>
       </section>
     </div>

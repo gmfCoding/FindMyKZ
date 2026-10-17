@@ -114,7 +114,7 @@ function renderRecordList() {
             return true;
         return matchesAllTokens(query, [record.name, record.id, record.mappers, record.basedOn].join(' '));
     })
-        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt) || a.name.localeCompare(b.name, undefined, { numeric: true }));
     recordListEl.innerHTML =
         filtered.length === 0
             ? `<div class="record-list-empty">No records match “${escapeHtml(query)}”.</div>`

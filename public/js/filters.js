@@ -29,6 +29,32 @@ function textContains(haystack, needle) {
         return true;
     return (haystack ?? '').toLowerCase().includes(needle.trim().toLowerCase());
 }
+/** True once any property beyond the cs2kz metadata has been entered. */
+export function hasManualProperties(map) {
+    return (map.materials.length > 0 ||
+        map.props.length > 0 ||
+        map.topTime != null ||
+        map.headbangers !== 'Unknown' ||
+        map.ladderAmount.length > 0 ||
+        map.ladderTypes.length > 0 ||
+        map.bhop !== 'Unknown' ||
+        map.multi !== 'Unknown' ||
+        map.prekeep !== 'Unknown' ||
+        map.surfAmounts.length > 0 ||
+        map.surfMaterials.length > 0 ||
+        map.port !== 'Unknown' ||
+        map.basedOn.trim() !== '' ||
+        map.weather.length > 0 ||
+        map.scenery.length > 0 ||
+        map.timeOfDay.length > 0 ||
+        map.tech.length > 0 ||
+        map.ljRoom !== 'Unknown' ||
+        map.ljBlock !== 'Unknown' ||
+        map.ladderRoom !== 'Unknown' ||
+        map.path.length > 0 ||
+        map.special.length > 0 ||
+        map.bonus !== 'Unknown');
+}
 export function filterMaps(maps, filters) {
     const q = filters.q.trim().toLowerCase();
     const tokens = q.split(/\s+/).filter(Boolean);
