@@ -5,3 +5,4 @@ findmykz-static.zip
 .DS_Store
 public/js/*.map
 *.zip
+public/data/maps.zip

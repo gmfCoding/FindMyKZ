@@ -70,8 +70,11 @@ Keyboard: `↑`/`↓` navigate, `↵` select, `Esc` close, `Ctrl+P` / `Ctrl+K` o
 2. Pick an existing record or press **New** (`Ctrl+Shift+N`).
 3. Use `Ctrl+P` to add properties fast. In the entry palette:
    - multi-value fields **add** values, they never remove them (`Mat > Con`, `Wea > Snowing`);
-   - tri-state fields set a value (`Glo > Y`, `Bh > Yes`);
+   - tri-state fields set a value (`Glo > Y`, `Bh > Yes`), or clear the selection;
    - `Lad > Type > Rope`, `Path > Spiral`, etc. walk nested menus.
+   - Leaving a property unselected means **Unknown**. It is not an extra value to pick. Clicking an
+     already-active Yes/No/Specific chip clears it. Port keeps an explicit `Unknown` option because
+     it is a single-choice enum.
 4. For **global** maps, set Globalness = Yes. The **Global map lookup** panel appears:
    - type a `kz_` map name and press **Lookup + autofill**;
    - results come from the public `api.cs2kz.org/maps?name=…` endpoint;
@@ -145,10 +148,13 @@ Notes:
 
 - `topTime` is stored in **seconds**; the UI displays `m:ss.xx` and filters in minutes.
 - Multi-value fields are arrays. `ladderAmount`, `props`, and `surfAmounts` may contain several amounts.
-- `global`, `headbangers`, `bhop`, `multi`, `prekeep`, `ljRoom`, `ladderRoom`, `bonus` are
-  `"Yes" | "No" | "Unknown"`.
-- `ljBlock` is `"Yes" | "No" | "Specific" | "Unknown"`.
-- `port` is `"GO" | "Source" | "1.6" | "Unknown"`.
+- `global`, `headbangers`, `bhop`, `multi`, `prekeep`, `ljRoom`, `ladderRoom`, `bonus` are stored as
+  `"Yes" | "No" | "Unknown"`, but the UI only offers Yes/No. No selection means Unknown.
+- `ljBlock` is stored as `"Yes" | "No" | "Specific" | "Unknown"`; no selection means Unknown.
+- `port` is `"GO" | "Source" | "1.6" | "Unknown"` and keeps its explicit Unknown option because it is
+  a single-choice enum in `Property.txt`.
+- Unknown never appears as a material, amount, ladder type or colour choice. Empty arrays/null mean
+  unknown. Legacy `Unknown` array entries are dropped when a dataset is loaded.
 - Missing or invalid fields are normalised to safe defaults when loaded.
 - Searchable string fields (`mappers`, `basedOn`) are capped at 255 characters.
 
@@ -173,6 +179,11 @@ is preserved as `public/data/maps_fake.json` and is excluded from the packaged s
 ## How search matching works
 
 Every selected category is ANDed together.
+
+> **No selection means unknown.** Unknown is inferred from an empty property group, so it is never a
+> searchable value. Leaving a category empty does not search for maps with missing data — it simply
+> applies no constraint. The one exception is **Port**, where `Unknown` is a real single-choice enum
+> value from `Property.txt`.
 
 - **Materials** default to **All of** (the map must include every selected material); switch to
   **Any of** in the sidebar.

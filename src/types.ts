@@ -16,17 +16,16 @@ export const COLOURS = [
   'White',
   'Black',
   'Rainbow',
-  'Unknown',
 ] as const;
 export type Colour = (typeof COLOURS)[number];
 
-export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow', 'Unknown'] as const;
+export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow'] as const;
 export type Material = (typeof MATERIALS)[number];
 
-export const AMOUNTS = ['None', 'Some', 'Lots', 'All', 'Unknown'] as const;
+export const AMOUNTS = ['None', 'Some', 'Lots', 'All'] as const;
 export type Amount = (typeof AMOUNTS)[number];
 
-export const LADDER_TYPES = ['Prop', 'Brush-Mesh', 'Inset', 'Rope', 'Unknown'] as const;
+export const LADDER_TYPES = ['Prop', 'Brush-Mesh', 'Inset', 'Rope'] as const;
 export type LadderType = (typeof LADDER_TYPES)[number];
 
 export const PORTS = ['GO', 'Source', '1.6', 'Unknown'] as const;
@@ -77,8 +76,8 @@ export const SPECIALS = [
 ] as const;
 export type Special = (typeof SPECIALS)[number];
 
-export const TRI_OPTIONS: readonly Tri[] = ['Yes', 'No', 'Unknown'];
-export const LJ_BLOCK_OPTIONS: readonly LjBlockValue[] = ['Yes', 'No', 'Specific', 'Unknown'];
+export const TRI_OPTIONS: readonly Tri[] = ['Yes', 'No'];
+export const LJ_BLOCK_OPTIONS: readonly LjBlockValue[] = ['Yes', 'No', 'Specific'];
 export const TECH_OPTIONS = ['Box Tech'] as const;
 
 export interface MapRecord {

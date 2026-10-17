@@ -138,6 +138,7 @@ function buildSidebar(): void {
         <button type="button" class="icon-btn filters-close" id="filters-close" aria-label="Close filters">×</button>
       </div>
     </div>
+    <p class="filters-hint">Leave a property empty to treat it as unknown. Unknown is not queried, except for Port.</p>
 
     ${section('Global-ness', chipGroup('global', TRI_OPTIONS), 'Is the map on the global list?', true)}
     ${section(
@@ -191,7 +192,7 @@ function buildSidebar(): void {
        <div class="sub-group"><span class="field-label">Material</span>${chipGroup('surfMaterials', MATERIALS)}</div>`,
       'Surf ramps and their surface material.',
     )}
-    ${section('Port', chipGroup('ports', PORTS), 'Ported from an older game?')}
+    ${section('Port', chipGroup('ports', PORTS), 'Ported from an older game? Unknown is a real value here.')}
     ${section(
       'Based on',
       `<input type="text" class="text-input" data-text="basedOn" maxlength="255" placeholder="Minecraft, Mirror's Edge…" />`,
@@ -515,6 +516,33 @@ function hydrateFromUrl(): void {
   filters = merged as unknown as SearchFilters;
   if (filters.topMin != null) filters.topMin = Math.max(0, Math.min(TOP_RANGE_MAX, filters.topMin));
   if (filters.topMax != null) filters.topMax = Math.max(0, Math.min(TOP_RANGE_MAX, filters.topMax));
+
+  // Unknown is an inferred state, not a filter value. Drop it from old URLs.
+  const unknownKeys = [
+    'global',
+    'materials',
+    'props',
+    'ladderAmount',
+    'ladderTypes',
+    'bhop',
+    'multi',
+    'prekeep',
+    'surfAmounts',
+    'surfMaterials',
+    'ljRoom',
+    'ljBlock',
+    'ladderRoom',
+    'bonus',
+  ] as const;
+  for (const key of unknownKeys) {
+    const value = filters[key];
+    if (Array.isArray(value)) {
+      (filters as unknown as Record<string, unknown>)[key] = (value as string[]).filter((item) => item !== 'Unknown');
+    }
+  }
+  if ((filters.bhopColour as string | null) === 'Unknown') filters.bhopColour = null;
+  if ((filters.multiColour as string | null) === 'Unknown') filters.multiColour = null;
+  if ((filters.prekeepColour as string | null) === 'Unknown') filters.prekeepColour = null;
 }
 
 // ---------------------------------------------------------------------------
@@ -672,7 +700,7 @@ const amountCommands = (key: keyof SearchFilters, hint = 'Add amount filter'): P
     id: `${String(key)}:${value}`,
     label: value,
     hint,
-    keywords: value === 'None' ? ['n'] : value === 'Unknown' ? ['u', 'unk'] : [],
+    keywords: value === 'None' ? ['n'] : [],
     run: () => {
       toggleValue(key, value);
       onFiltersChanged();
@@ -817,7 +845,7 @@ function buildPaletteCommands(): PaletteCommand[] {
     {
       id: 'global',
       label: 'Globalness',
-      hint: 'Yes / No / Unknown',
+      hint: 'Yes / No',
       keywords: ['global', 'glo', 'globalled'],
       children: [
         ...triCommands('global', (value) => {
@@ -952,7 +980,7 @@ function buildPaletteCommands(): PaletteCommand[] {
     {
       id: 'headbangers',
       label: 'Headbangers',
-      hint: 'Yes / No / Unknown',
+      hint: 'Yes / No',
       keywords: ['headbanger', 'hb'],
       children: triCommands('headbangers', (value) => {
         setExclusive('headbangers', value);
@@ -1006,12 +1034,12 @@ function buildPaletteCommands(): PaletteCommand[] {
           },
         },
         {
-          id: 'surfs-unknown',
-          label: 'Unknown',
-          hint: 'Surf amount unknown',
-          keywords: ['u'],
+          id: 'surfs-clear',
+          label: 'Clear',
+          hint: 'Do not filter on surf amount',
           run: () => {
-            setArrayFilter('surfAmounts', ['Unknown']);
+            setArrayFilter('surfAmounts', []);
+            setArrayFilter('surfMaterials', []);
             onFiltersChanged();
           },
         },
@@ -1154,7 +1182,7 @@ function buildPaletteCommands(): PaletteCommand[] {
     {
       id: 'bonus',
       label: 'Bonus',
-      hint: 'Yes / No / Unknown',
+      hint: 'Yes / No',
       keywords: ['bonus'],
       children: triCommands('bonus', (value) => {
         setExclusive('bonus', value);

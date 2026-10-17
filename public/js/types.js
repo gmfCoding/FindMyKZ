@@ -11,11 +11,10 @@ export const COLOURS = [
     'White',
     'Black',
     'Rainbow',
-    'Unknown',
 ];
-export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow', 'Unknown'];
-export const AMOUNTS = ['None', 'Some', 'Lots', 'All', 'Unknown'];
-export const LADDER_TYPES = ['Prop', 'Brush-Mesh', 'Inset', 'Rope', 'Unknown'];
+export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow'];
+export const AMOUNTS = ['None', 'Some', 'Lots', 'All'];
+export const LADDER_TYPES = ['Prop', 'Brush-Mesh', 'Inset', 'Rope'];
 export const PORTS = ['GO', 'Source', '1.6', 'Unknown'];
 export const WEATHER = [
     'Winter',
@@ -52,8 +51,8 @@ export const SPECIALS = [
     'Turbines',
     'Crouch',
 ];
-export const TRI_OPTIONS = ['Yes', 'No', 'Unknown'];
-export const LJ_BLOCK_OPTIONS = ['Yes', 'No', 'Specific', 'Unknown'];
+export const TRI_OPTIONS = ['Yes', 'No'];
+export const LJ_BLOCK_OPTIONS = ['Yes', 'No', 'Specific'];
 export const TECH_OPTIONS = ['Box Tech'];
 export const SORT_OPTIONS = [
     { value: 'name', label: 'Name (A–Z)' },

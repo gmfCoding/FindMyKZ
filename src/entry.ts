@@ -354,15 +354,15 @@ function renderForm(): void {
       <div class="form-grid three movement-grid">
         <div class="surface-card">
           ${chipRow('bhop', 'Bhop', TRI_OPTIONS, 'exclusive')}
-          ${selectField('bhopColour', 'Bhop colour', COLOURS, 'Any')}
+          ${selectField('bhopColour', 'Bhop colour', COLOURS, 'Not set')}
         </div>
         <div class="surface-card">
           ${chipRow('multi', 'Multi', TRI_OPTIONS, 'exclusive')}
-          ${selectField('multiColour', 'Multi colour', COLOURS, 'Any')}
+          ${selectField('multiColour', 'Multi colour', COLOURS, 'Not set')}
         </div>
         <div class="surface-card">
           ${chipRow('prekeep', 'Prekeep', TRI_OPTIONS, 'exclusive')}
-          ${selectField('prekeepColour', 'Prekeep colour', COLOURS, 'Any')}
+          ${selectField('prekeepColour', 'Prekeep colour', COLOURS, 'Not set')}
         </div>
       </div>`,
     )}
@@ -1004,13 +1004,21 @@ function focusEntryField(selector: string): void {
   });
 }
 
-const entryTri = (field: string, label: string): PaletteCommand[] =>
-  TRI_OPTIONS.map((value) => ({
+const entryTri = (field: string, label: string): PaletteCommand[] => [
+  ...TRI_OPTIONS.map((value) => ({
     id: `${field}:${value}`,
     label: value,
-    keywords: value === 'Yes' ? ['y'] : value === 'No' ? ['n'] : ['u'],
+    keywords: value === 'Yes' ? ['y'] : ['n'],
     run: () => applyEntryExclusive(field, value, label),
-  }));
+  })),
+  {
+    id: `${field}:clear`,
+    label: 'Clear selection',
+    hint: 'No selection means unknown',
+    keywords: ['u', 'unk', 'unknown', 'clear', 'none'],
+    run: () => applyEntryExclusive(field, 'Unknown', label),
+  },
+];
 
 const entryAmounts = (field: string, label: string): PaletteCommand[] =>
   AMOUNTS.map((value) => ({
@@ -1041,7 +1049,7 @@ function buildEntryCommands(): PaletteCommand[] {
     {
       id: 'entry-global',
       label: 'Globalness',
-      hint: 'Yes / No / Unknown',
+      hint: 'Yes / No',
       keywords: ['glo', 'global'],
       children: entryTri('global', 'Globalness'),
     },
@@ -1110,7 +1118,7 @@ function buildEntryCommands(): PaletteCommand[] {
     {
       id: 'entry-headbangers',
       label: 'Headbangers',
-      hint: 'Yes / No / Unknown',
+      hint: 'Yes / No',
       keywords: ['headbanger', 'hb'],
       children: entryTri('headbangers', 'Headbangers'),
     },
@@ -1175,7 +1183,7 @@ function buildEntryCommands(): PaletteCommand[] {
           },
         },
         { id: 'entry-surfs-no', label: 'No', keywords: ['n'], run: () => { const record = current(); if (!record) return; setArrayField(record, 'surfAmounts', ['None']); afterEntryChange('Surfs: None'); } },
-        { id: 'entry-surfs-unknown', label: 'Unknown', keywords: ['u'], run: () => { const record = current(); if (!record) return; setArrayField(record, 'surfAmounts', ['Unknown']); afterEntryChange('Surfs: Unknown'); } },
+        { id: 'entry-surfs-clear', label: 'Clear selection', keywords: ['u', 'unk', 'unknown', 'clear'], run: () => { const record = current(); if (!record) return; setArrayField(record, 'surfAmounts', []); setArrayField(record, 'surfMaterials', []); afterEntryChange('Surfs cleared'); } },
         { id: 'entry-surf-amount', label: 'Amount', children: entryAmounts('surfAmounts', 'Surf amount') },
         { id: 'entry-surf-material', label: 'Material', children: entryMaterials('surfMaterials', 'Surf material') },
       ],
@@ -1235,7 +1243,7 @@ function buildEntryCommands(): PaletteCommand[] {
       keywords: ['lj', 'room', 'ladder room'],
       children: [
         { id: 'entry-lj-room', label: 'LJ room', children: entryTri('ljRoom', 'LJ room') },
-        { id: 'entry-lj-block', label: 'LJ block', children: LJ_BLOCK_OPTIONS.map((value) => ({ id: `entry-ljBlock:${value}`, label: value, run: () => applyEntryExclusive('ljBlock', value, 'LJ block') })) },
+        { id: 'entry-lj-block', label: 'LJ block', children: [...LJ_BLOCK_OPTIONS.map((value) => ({ id: `entry-ljBlock:${value}`, label: value, run: () => applyEntryExclusive('ljBlock', value, 'LJ block') })), { id: 'entry-ljBlock:clear', label: 'Clear selection', keywords: ['u', 'unknown', 'clear'], run: () => applyEntryExclusive('ljBlock', 'Unknown', 'LJ block') }] },
         { id: 'entry-ladder-room', label: 'Ladder room', children: entryTri('ladderRoom', 'Ladder room') },
       ],
     },
@@ -1253,7 +1261,7 @@ function buildEntryCommands(): PaletteCommand[] {
       keywords: ['special', 'blocks'],
       children: SPECIALS.map((value) => ({ id: `entry-special:${value}`, label: value, run: () => addEntryArray('special', value, 'Special') })),
     },
-    { id: 'entry-bonus', label: 'Bonus', hint: 'Yes / No / Unknown', keywords: ['bonus'], children: entryTri('bonus', 'Bonus') },
+    { id: 'entry-bonus', label: 'Bonus', hint: 'Yes / No', keywords: ['bonus'], children: entryTri('bonus', 'Bonus') },
     { id: 'entry-name', label: 'Map name', hint: 'Focus the name field', keywords: ['name'], keepOpen: false, run: () => focusEntryField('[data-entry-text="name"]') },
     { id: 'entry-mappers', label: 'Mappers', hint: 'Focus the mappers field', keywords: ['mapper'], keepOpen: false, run: () => focusEntryField('[data-entry-text="mappers"]') },
     { id: 'entry-description', label: 'Description', hint: 'Focus the description field', keywords: ['desc'], keepOpen: false, run: () => focusEntryField('[data-entry-text="description"]') },
@@ -1310,8 +1318,14 @@ function bindEvents(): void {
 
     const exclusiveButton = target.closest<HTMLButtonElement>('[data-entry-exclusive]');
     if (exclusiveButton) {
+      const record = current();
+      if (!record) return;
       const field = exclusiveButton.dataset.entryExclusive ?? '';
-      applyEntryExclusive(field, exclusiveButton.dataset.value ?? '', field === 'global' ? 'Globalness' : field);
+      const value = exclusiveButton.dataset.value ?? '';
+      const label = field === 'global' ? 'Globalness' : field;
+      const isActive = String((record as unknown as Record<string, unknown>)[field] ?? '') === value;
+      // Clicking the active choice clears it: empty means Unknown.
+      applyEntryExclusive(field, isActive ? 'Unknown' : value, label);
       return;
     }
 
