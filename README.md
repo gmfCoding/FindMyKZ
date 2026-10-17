@@ -27,6 +27,7 @@ Other scripts:
 | `npm run refresh:data` | Rebuild `public/data/maps.json` from the live cs2kz.org API (real maps only) |
 | `npm run top-times` | Fill CKZ and VNL top times in `maps.json` from cs2kz.org records |
 | `npm run steam:data` | Pull `kz_*` / `bkz_*` maps from the Steam Workshop into `public/data/maps_steam.json` |
+| `npm run apply:changes` | Apply an exported `maps_changes.json` delta to `public/data/maps.json` |
 
 > The shipped dataset is generated from cs2kz.org's public API. It contains only approved maps and
 > only values cs2kz actually provides; every other property is intentionally `Unknown` / empty until
@@ -86,11 +87,22 @@ Keyboard: `↑`/`↓` navigate, `↵` select, `Esc` close, `Ctrl+P` / `Ctrl+K` o
 5. Add a thumbnail URL manually if you want a specific image. **Fetch thumbnail from Steam** attempts
    the public Steam Web API; Steam does not send CORS headers, so this can fail in the browser — paste
    the `images.steamusercontent.com` URL into the field instead.
-6. Edits autosave to the browser (IndexedDB, with localStorage fallback). Press `Ctrl+S` to force a save.
-7. Click **Export ZIP** to download `maps.zip`, replace `public/data/maps.zip`, and deploy.
+6. Edits autosave as **delta changes** in browser local storage. Only fields that differ from the
+   served dataset are stored. HTTP cookies are limited to roughly 4 KB, so local storage is used
+   instead of a cookie for the change set.
+7. Use the export buttons:
+   - **Export Changes** downloads `maps_changes.json` — only the changed fields, additions and deletions.
+   - **Export All** downloads the full merged `maps.json`.
+   - **Export All ZIP** downloads the full dataset as `maps.zip`.
+8. Apply the changes in the dev workspace:
 
-Use **Export JSON** for a readable backup, **Import…** to load a `.json`/`.zip` backup, and
-**Reload served** to discard the browser copy and re-read `public/data/maps.zip`.
+```bash
+npm run apply:changes -- maps_changes.json
+```
+
+The apply script patches `public/data/maps.json` by map ID, preserves untouched maps and properties,
+warns if the base dataset version changed, and rebuilds `public/data/maps.zip`. Use `--dry-run` to
+preview and `--no-pack` to skip the ZIP rebuild.
 
 ## Data format
 
@@ -187,6 +199,34 @@ Notes:
 The 94-map dataset shipped in this repository was generated this way. The previous demo/fake dataset
 is preserved as `public/data/maps_fake.json` and is excluded from the packaged site.
 
+## Delta changes format
+
+`Export Changes` writes a small, self-describing file:
+
+```json
+{
+  "format": "findmykz-changes",
+  "version": 1,
+  "baseUpdatedAt": "2026-10-17T08:42:45.921Z",
+  "exportedAt": "2026-10-17T10:00:00.000Z",
+  "changes": {
+    "kz_grotto": {
+      "materials": ["Concrete", "Grass"],
+      "bhop": "Yes",
+      "updatedAt": "2026-10-17T09:58:12.000Z"
+    }
+  },
+  "added": {},
+  "deleted": []
+}
+```
+
+- `changes` contains only fields whose values differ from the served `maps.json`.
+- `added` contains complete records for new maps.
+- `deleted` contains IDs of removed base maps.
+- The browser saves the same structure in local storage and discards a map's patch when its values are
+  reverted to the base values.
+
 ## Steam Workshop data
 
 `npm run steam:data` crawls the public Counter-Strike 2 Workshop search
@@ -234,6 +274,7 @@ src/
   zip.ts                  ZIP reader (DecompressionStream) + ZIP writer
   data.ts                 Dataset loading, normalisation, IndexedDB storage
   filters.ts              Filter predicates, sorting, active-filter chips
+  delta.ts                Delta change model + localStorage persistence
   palette.ts              Reusable VS Code-style command palette
   search.ts               Search page
   entry.ts                Data entry page
@@ -249,6 +290,7 @@ scripts/
   refresh-cs2kz-data.mjs  Fetch approved maps + thumbnails from cs2kz.org/Steam
   update-top-times.mjs    Fill CKZ/VNL top times from cs2kz.org records
   fetch-steam-maps.mjs    Crawl Steam Workshop for kz_/bkz_ maps
+  apply-changes.mjs       Apply maps_changes.json deltas to maps.json
   pack-data.mjs           maps.json → maps.zip
   package-site.mjs        public/ → dist/ + findmykz-static.zip
 ```

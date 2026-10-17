@@ -74,10 +74,11 @@
           </div>
 
           <div class="record-actions">
-            <button type="button" id="export-zip" class="btn accent" title="Download maps.zip for the static site">Export ZIP</button>
-            <button type="button" id="export-json" class="btn" title="Download raw maps.json">Export JSON</button>
+            <button type="button" id="export-changes" class="btn accent" title="Download only the fields you changed (maps_changes.json)">Export Changes</button>
+            <button type="button" id="export-json" class="btn" title="Download the full dataset (maps.json)">Export All</button>
+            <button type="button" id="export-zip" class="btn ghost" title="Download the full dataset as maps.zip">Export All ZIP</button>
             <button type="button" id="import-btn" class="btn ghost">Import…</button>
-            <button type="button" id="reload-served" class="btn ghost" title="Discard the browser copy and reload data/maps.zip">Reload served</button>
+            <button type="button" id="reload-served" class="btn ghost" title="Discard saved changes and reload data/maps.zip">Discard changes</button>
             <input type="file" id="import-file" accept=".json,.zip,application/json,application/zip" hidden />
           </div>
 
@@ -86,9 +87,10 @@
             <ol>
               <li>Press <kbd class="kbd">Ctrl</kbd><kbd class="kbd">P</kbd> and type a property path.</li>
               <li>Set global maps to <em>Yes</em>, then lookup on cs2kz.org to autofill.</li>
-              <li>Export <code>maps.zip</code> and replace <code>public/data/maps.zip</code>.</li>
+              <li>Only changed fields are saved. Press <strong>Export Changes</strong> to download them.</li>
+              <li>In the dev workspace, run <code>npm run apply:changes -- maps_changes.json</code>.</li>
             </ol>
-            <p class="record-help-note">Edits save automatically to this browser. Export regularly — clearing site data removes the working copy.</p>
+            <p class="record-help-note">Deltas save automatically to this browser's local storage (cookies are limited to ~4 KB). Export regularly — clearing site data removes them.</p>
           </div>
         </aside>
 

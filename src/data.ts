@@ -188,16 +188,19 @@ export async function loadServedDataset(): Promise<LoadedDataset> {
   );
 }
 
-export async function readDatasetFile(file: File): Promise<MapDataset> {
+export async function readJsonFile(file: File): Promise<unknown> {
   const isZip =
     file.name.toLowerCase().endsWith('.zip') ||
     file.type === 'application/zip' ||
     file.type === 'application/x-zip-compressed';
   if (isZip) {
-    const text = await readFirstJsonEntry(await file.arrayBuffer());
-    return normalizeDataset(JSON.parse(text));
+    return JSON.parse(await readFirstJsonEntry(await file.arrayBuffer()));
   }
-  return normalizeDataset(JSON.parse(await file.text()));
+  return JSON.parse(await file.text());
+}
+
+export async function readDatasetFile(file: File): Promise<MapDataset> {
+  return normalizeDataset(await readJsonFile(file));
 }
 
 // ---------------------------------------------------------------------------

@@ -145,15 +145,17 @@ export async function loadServedDataset() {
     }
     throw new Error(`Could not load the map database. ${errors.join(' · ')}. Serve the \`public\` folder over HTTP (npm run serve) and make sure public/data/maps.zip exists.`);
 }
-export async function readDatasetFile(file) {
+export async function readJsonFile(file) {
     const isZip = file.name.toLowerCase().endsWith('.zip') ||
         file.type === 'application/zip' ||
         file.type === 'application/x-zip-compressed';
     if (isZip) {
-        const text = await readFirstJsonEntry(await file.arrayBuffer());
-        return normalizeDataset(JSON.parse(text));
+        return JSON.parse(await readFirstJsonEntry(await file.arrayBuffer()));
     }
-    return normalizeDataset(JSON.parse(await file.text()));
+    return JSON.parse(await file.text());
+}
+export async function readDatasetFile(file) {
+    return normalizeDataset(await readJsonFile(file));
 }
 // ---------------------------------------------------------------------------
 // Working copy persistence (IndexedDB, with localStorage fallback)

@@ -2321,6 +2321,7 @@ body.palette-open {
 }
 
 .record-name {
+  flex: 1 1 auto;
   overflow: hidden;
   color: #dedee3;
   font-family: var(--font-mono);
@@ -2328,6 +2329,15 @@ body.palette-open {
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.record-change-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(245, 218, 66, 0.45);
 }
 
 .record-item.active .record-name {

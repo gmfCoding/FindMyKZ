@@ -14,6 +14,7 @@
     "refresh:data": "node scripts/refresh-cs2kz-data.mjs",
     "top-times": "node scripts/update-top-times.mjs",
     "steam:data": "node scripts/fetch-steam-maps.mjs",
+    "apply:changes": "node scripts/apply-changes.mjs",
     "seed": "node scripts/refresh-cs2kz-data.mjs"
   },
   "devDependencies": {

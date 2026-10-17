@@ -1,12 +1,25 @@
 import {
+  clearWorkingDataset,
   datasetToJson,
   loadServedDataset,
   loadWorkingDataset,
   normalizeDataset,
-  readDatasetFile,
-  saveWorkingDataset,
+  readJsonFile,
   toDataset,
 } from './data.js';
+import {
+  applyDelta,
+  buildDelta,
+  clearDelta,
+  deltaCount,
+  deltaRecordIds,
+  emptyDelta,
+  isDeltaSet,
+  loadDelta,
+  normalizeDelta,
+  saveDelta,
+  type DeltaSet,
+} from './delta.js';
 import { CommandPalette, type PaletteCommand } from './palette.js';
 import {
   AMOUNTS,
@@ -48,14 +61,90 @@ import { createZip } from './zip.js';
 
 let records: MapRecord[] = [];
 let selectedId: string | null = null;
-let dataset: MapDataset = { version: 1, updatedAt: new Date().toISOString(), maps: [] };
+let baseDataset: MapDataset = { version: 1, updatedAt: new Date().toISOString(), maps: [] };
+let baseRecords: MapRecord[] = [];
+let delta: DeltaSet = emptyDelta();
 let recordQuery = '';
 let saveTimer: number | undefined;
 let palette: CommandPalette;
 let lookupResults: Cs2kzLookupMap[] = [];
 let lastAutoLookup = '';
-let storageLabel = 'Not saved yet';
+let baseSourceLabel = 'Not loaded';
 const autoIds = new Set<string>();
+
+function changesLabel(): string {
+  const count = deltaCount(delta);
+  return count === 0 ? 'No changes' : `${count} changed map${count === 1 ? '' : 's'} · saved in this browser`;
+}
+
+/**
+ * When migrating the old full working copy, only carry over manually entered
+ * properties. cs2kz-derived metadata (tiers, top times, descriptions, thumbnails…)
+ * may have improved since that copy was made and must not be reverted.
+ */
+const MIGRATION_FIELDS: (keyof MapRecord)[] = [
+  'materials',
+  'props',
+  'headbangers',
+  'ladderAmount',
+  'ladderTypes',
+  'bhop',
+  'bhopColour',
+  'multi',
+  'multiColour',
+  'prekeep',
+  'prekeepColour',
+  'surfAmounts',
+  'surfMaterials',
+  'port',
+  'basedOn',
+  'weather',
+  'scenery',
+  'timeOfDay',
+  'tech',
+  'ljRoom',
+  'ljBlock',
+  'ladderRoom',
+  'path',
+  'special',
+  'bonus',
+  'notes',
+];
+
+function buildMigrationDelta(oldBase: MapRecord[], legacyRecords: MapRecord[], baseUpdatedAt: string): DeltaSet {
+  const baseById = new Map(oldBase.map((record) => [record.id, record]));
+  const changes: Record<string, Partial<MapRecord>> = {};
+  const added: Record<string, MapRecord> = {};
+
+  for (const record of legacyRecords) {
+    const base = baseById.get(record.id);
+    if (!base) {
+      added[record.id] = structuredClone(record);
+      continue;
+    }
+    const patch: Record<string, unknown> = {};
+    for (const field of MIGRATION_FIELDS) {
+      if (JSON.stringify(base[field]) !== JSON.stringify(record[field])) {
+        patch[field] = structuredClone(record[field]);
+      }
+    }
+    if (Object.keys(patch).length > 0) {
+      patch.updatedAt = record.updatedAt;
+      changes[record.id] = patch as Partial<MapRecord>;
+    }
+  }
+
+  // Do not delete base maps that the legacy copy simply did not know about.
+  return {
+    format: 'findmykz-changes',
+    version: 1,
+    baseUpdatedAt,
+    exportedAt: new Date().toISOString(),
+    changes,
+    added,
+    deleted: [],
+  };
+}
 
 const recordListEl = required<HTMLElement>('#record-list');
 const recordSearchEl = required<HTMLInputElement>('#record-search');
@@ -164,6 +253,7 @@ const COMPLETENESS_TOTAL = 27;
 function renderRecordList(): void {
   const scroll = recordListEl.scrollTop;
   const query = recordQuery.trim();
+  const changedIds = deltaRecordIds(delta);
   const filtered = records
     .filter((record) => {
       if (!query) return true;
@@ -179,11 +269,12 @@ function renderRecordList(): void {
             const progress = Math.round((completeness(record) / COMPLETENESS_TOTAL) * 100);
             const state =
               record.global === 'Yes' ? 'Global' : record.global === 'No' ? 'Local' : 'Global?';
-            return `<button type="button" class="record-item${record.id === selectedId ? ' active' : ''}" data-record-id="${escapeHtml(
+            return `<button type="button" class="record-item${record.id === selectedId ? ' active' : ''}${changedIds.has(record.id) ? ' is-changed' : ''}" data-record-id="${escapeHtml(
               record.id,
             )}">
               <span class="record-item-top">
                 <span class="record-name">${escapeHtml(record.name || 'Untitled map')}</span>
+                ${changedIds.has(record.id) ? '<span class="record-change-dot" title="Saved change"></span>' : ''}
                 <span class="record-state ${record.global === 'Yes' ? 'is-global' : ''}">${escapeHtml(state)}</span>
               </span>
               <span class="record-meta">${record.materials.length ? escapeHtml(record.materials.slice(0, 2).join(' · ')) : 'No materials'} <span>·</span> TP ${record.tpTier ?? '—'} / Pro ${record.proTier ?? '—'}</span>
@@ -200,7 +291,8 @@ function renderRecordList(): void {
     else if (itemRect.bottom > listRect.bottom) recordListEl.scrollTop += itemRect.bottom - listRect.bottom + 4;
   }
   recordCountEl.textContent = `${filtered.length} / ${records.length} records`;
-  storageStatusEl.textContent = storageLabel;
+  storageStatusEl.textContent = changesLabel();
+  storageStatusEl.title = baseSourceLabel;
 }
 
 // ---------------------------------------------------------------------------
@@ -421,7 +513,7 @@ function renderForm(): void {
       <div class="meta-strip">
         <span>Record ID <code>${escapeHtml(record.id)}</code></span>
         <span>Updated <code>${new Date(record.updatedAt).toLocaleString()}</code></span>
-        <span class="meta-storage">${escapeHtml(storageLabel)}</span>
+        <span class="meta-storage">${escapeHtml(changesLabel())}</span>
       </div>
       <div class="inline-actions">
         <button type="button" class="btn" id="thumb-fetch">Fetch thumbnail from Steam</button>
@@ -530,34 +622,48 @@ function syncEditorControls(): void {
   }
   const globalPanel = $('#global-panel', formEl);
   if (globalPanel) globalPanel.hidden = record.global !== 'Yes';
+  const metaStorage = $<HTMLElement>('.meta-storage', formEl);
+  if (metaStorage) {
+    metaStorage.textContent = changesLabel();
+    metaStorage.title = baseSourceLabel;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Saving
 // ---------------------------------------------------------------------------
 
-async function saveNow(showToast = false): Promise<void> {
+function saveNow(showToast = false): void {
   window.clearTimeout(saveTimer);
-  const record = current();
-  if (record) record.updatedAt = new Date().toISOString();
-  dataset = toDataset(records);
-  const ok = await saveWorkingDataset(dataset);
-  storageLabel = ok ? 'Working copy saved in this browser' : 'Could not save — export a backup';
+  delta = buildDelta(baseRecords, records, baseDataset.updatedAt);
+  const count = deltaCount(delta);
+
+  let ok = true;
+  if (count === 0) clearDelta();
+  else ok = saveDelta(delta);
+
   setSaveStatus(ok ? `Saved ${new Date().toLocaleTimeString()}` : 'Save failed', ok ? 'saved' : 'error');
   renderRecordList();
   updateEditorThumb();
-  if (showToast) toast(ok ? 'Working copy saved' : 'Could not save working copy');
+  const metaStorage = $<HTMLElement>('.meta-storage', formEl);
+  if (metaStorage) {
+    metaStorage.textContent = ok ? changesLabel() : 'Could not save changes';
+    metaStorage.title = baseSourceLabel;
+  }
+  if (showToast) {
+    toast(ok ? (count === 0 ? 'No changes to save' : `Saved changes for ${count} map${count === 1 ? '' : 's'}`) : 'Could not save changes');
+  }
 }
 
 function saveSoon(): void {
   setSaveStatus('Unsaved changes…', 'pending');
   window.clearTimeout(saveTimer);
-  saveTimer = window.setTimeout(() => {
-    void saveNow();
-  }, 600);
+  saveTimer = window.setTimeout(() => saveNow(), 400);
 }
 
 function afterEntryChange(message?: string): void {
+  const record = current();
+  if (record) record.updatedAt = new Date().toISOString();
   syncEditorControls();
   updateEditorThumb();
   renderRecordList();
@@ -827,6 +933,7 @@ async function refreshThumbnail(onlyIfMissing = false): Promise<void> {
   const preview = await fetchSteamPreview(record.workshopId);
   if (preview) {
     record.thumbnail = preview;
+    record.updatedAt = new Date().toISOString();
     syncEditorControls();
     updateEditorThumb();
     saveSoon();
@@ -853,11 +960,23 @@ function maybeAutoLookup(): void {
 // Export / import
 // ---------------------------------------------------------------------------
 
-function exportJson(): void {
-  dataset = toDataset(records);
-  const json = datasetToJson(dataset);
-  downloadText('maps.json', json);
-  toast('maps.json downloaded');
+function exportChanges(): void {
+  delta = buildDelta(baseRecords, records, baseDataset.updatedAt);
+  const payload = {
+    ...delta,
+    changeCount: deltaCount(delta),
+    baseSource: baseSourceLabel,
+    exportedAt: new Date().toISOString(),
+  };
+  downloadText('maps_changes.json', `${JSON.stringify(payload, null, 2)}\n`);
+  const count = deltaCount(delta);
+  toast(count === 0 ? 'No changes to export' : `Exported changes for ${count} map${count === 1 ? '' : 's'}`);
+}
+
+function exportAll(): void {
+  const dataset = toDataset(records);
+  downloadText('maps.json', datasetToJson(dataset));
+  toast('Full maps.json downloaded');
 }
 
 function downloadText(filename: string, text: string): void {
@@ -873,7 +992,7 @@ function downloadText(filename: string, text: string): void {
 }
 
 async function exportZip(): Promise<void> {
-  dataset = toDataset(records);
+  const dataset = toDataset(records);
   const json = datasetToJson(dataset);
   const blob = await createZip('maps.json', json);
   const url = URL.createObjectURL(blob);
@@ -888,27 +1007,37 @@ async function exportZip(): Promise<void> {
   toast(`maps.zip downloaded (${kb} KB). Replace public/data/maps.zip and redeploy.`);
 }
 
+function applyImportedRecords(importedDelta: DeltaSet): void {
+  delta = importedDelta;
+  records = applyDelta(baseRecords, delta);
+  selectedId = records[0]?.id ?? null;
+  autoIds.clear();
+  for (const id of Object.keys(delta.added)) autoIds.add(id);
+  lookupResults = [];
+  lastAutoLookup = '';
+  renderRecordList();
+  renderForm();
+  saveNow();
+}
+
 async function importFile(file: File): Promise<void> {
   try {
-    const imported = normalizeDataset(await readDatasetFile(file));
-    if (
-      !window.confirm(
-        `Replace the current working set (${records.length} records) with the imported dataset (${imported.maps.length} records)?`,
-      )
-    ) {
+    const raw = await readJsonFile(file);
+
+    if (isDeltaSet(raw)) {
+      if (!window.confirm(`Replace the current saved changes with the changes from ${file.name}?`)) return;
+      const imported = normalizeDelta(raw, baseDataset.updatedAt);
+      if (!imported) throw new Error('The changes file is not valid.');
+      applyImportedRecords(imported);
+      toast(`Imported changes for ${deltaCount(imported)} map${deltaCount(imported) === 1 ? '' : 's'}`);
       return;
     }
-    dataset = imported;
-    records = imported.maps;
-    selectedId = records[0]?.id ?? null;
-    autoIds.clear();
-    lookupResults = [];
-    lastAutoLookup = '';
-    storageLabel = `Imported ${file.name}`;
-    renderRecordList();
-    renderForm();
-    await saveNow();
-    toast(`Imported ${records.length} records from ${file.name}`);
+
+    if (!window.confirm(`Import ${file.name} as a full change set against the served dataset?`)) return;
+    const imported = normalizeDataset(raw);
+    const importedDelta = buildDelta(baseRecords, imported.maps, baseDataset.updatedAt);
+    applyImportedRecords(importedDelta);
+    toast(`Imported ${imported.maps.length} records as changes`);
   } catch (error) {
     toast(`Import failed: ${error instanceof Error ? error.message : String(error)}`);
   }
@@ -917,23 +1046,27 @@ async function importFile(file: File): Promise<void> {
 async function reloadServed(): Promise<void> {
   if (
     !window.confirm(
-      'Discard the browser working copy and reload public/data/maps.zip? Export first if you have unsaved records.',
+      'Discard all saved changes and reload the served dataset? Export your changes first if you need them.',
     )
   ) {
     return;
   }
   try {
     const served = await loadServedDataset();
-    dataset = served.dataset;
-    records = served.dataset.maps;
+    await clearWorkingDataset();
+    clearDelta();
+    baseDataset = served.dataset;
+    baseRecords = served.dataset.maps;
+    baseSourceLabel = served.source;
+    delta = emptyDelta(baseDataset.updatedAt);
+    records = applyDelta(baseRecords, delta);
     selectedId = records[0]?.id ?? null;
     autoIds.clear();
     lookupResults = [];
     lastAutoLookup = '';
-    storageLabel = `Loaded ${served.source}`;
+    setSaveStatus('Changes discarded', 'idle');
     renderRecordList();
     renderForm();
-    await saveNow();
     toast(`Reloaded ${records.length} records from ${served.source}`);
   } catch (error) {
     toast(`Reload failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -1290,7 +1423,8 @@ function buildEntryCommands(): PaletteCommand[] {
     { id: 'entry-new', label: 'New map', hint: 'Create a blank record', keywords: ['new', 'add'], keepOpen: false, run: () => void createRecord() },
     { id: 'entry-duplicate', label: 'Duplicate map', hint: 'Copy the selected record', keywords: ['duplicate', 'copy'], keepOpen: false, run: () => duplicateRecord() },
     { id: 'entry-delete', label: 'Delete map', hint: 'Remove the selected record', keywords: ['delete', 'remove'], keepOpen: false, run: () => deleteRecord() },
-    { id: 'entry-export', label: 'Export maps.zip', hint: 'Download the static dataset', keywords: ['export', 'zip', 'download'], keepOpen: false, run: () => void exportZip() },
+    { id: 'entry-export-changes', label: 'Export Changes', hint: 'Download only the saved deltas', keywords: ['export', 'changes', 'delta', 'download'], keepOpen: false, run: () => exportChanges() },
+    { id: 'entry-export', label: 'Export All ZIP', hint: 'Download the full static dataset', keywords: ['export', 'zip', 'download', 'all'], keepOpen: false, run: () => void exportZip() },
   ];
 }
 
@@ -1356,6 +1490,7 @@ function bindEvents(): void {
       const record = current();
       if (!record) return;
       record.thumbnail = null;
+      record.updatedAt = new Date().toISOString();
       syncEditorControls();
       updateEditorThumb();
       saveSoon();
@@ -1416,6 +1551,7 @@ function bindEvents(): void {
       } else {
         timeInput.classList.remove('invalid');
         record[field] = parsed.seconds;
+        record.updatedAt = new Date().toISOString();
         if (hint) hint.textContent = parsed.seconds == null ? 'Unknown — leave blank' : formatTopTime(parsed.seconds);
         saveSoon();
       }
@@ -1446,6 +1582,7 @@ function bindEvents(): void {
     } else {
       setStringField(record, field, text.value);
     }
+    record.updatedAt = new Date().toISOString();
     renderRecordList();
     saveSoon();
   });
@@ -1483,7 +1620,8 @@ function bindEvents(): void {
   required<HTMLButtonElement>('#new-record').addEventListener('click', () => createRecord());
   required<HTMLButtonElement>('#empty-new-record').addEventListener('click', () => createRecord());
   required<HTMLButtonElement>('#import-btn').addEventListener('click', () => importFileEl.click());
-  required<HTMLButtonElement>('#export-json').addEventListener('click', exportJson);
+  required<HTMLButtonElement>('#export-changes').addEventListener('click', exportChanges);
+  required<HTMLButtonElement>('#export-json').addEventListener('click', exportAll);
   required<HTMLButtonElement>('#export-zip').addEventListener('click', () => void exportZip());
   required<HTMLButtonElement>('#reload-served').addEventListener('click', () => void reloadServed());
   required<HTMLButtonElement>('#duplicate-btn').addEventListener('click', duplicateRecord);
@@ -1521,26 +1659,65 @@ function bindEvents(): void {
 
 async function boot(): Promise<void> {
   setSaveStatus('Loading…');
-  const working = await loadWorkingDataset();
-  if (working) {
-    dataset = working;
-    records = working.maps;
-    storageLabel = 'Loaded browser working copy';
-  } else {
-    try {
-      const served = await loadServedDataset();
-      dataset = served.dataset;
-      records = served.dataset.maps;
-      storageLabel = `Loaded ${served.source}`;
-    } catch (error) {
-      dataset = toDataset([]);
-      records = [];
-      storageLabel = 'No data found — starting empty';
-      toast(error instanceof Error ? error.message : String(error));
-    }
+
+  let served: Awaited<ReturnType<typeof loadServedDataset>> | null = null;
+  let servedError: unknown = null;
+  try {
+    served = await loadServedDataset();
+  } catch (error) {
+    servedError = error;
   }
 
+  const legacy = await loadWorkingDataset();
+  const storedDelta = loadDelta();
+
+  if (served) {
+    baseDataset = served.dataset;
+    baseSourceLabel = served.source;
+    baseRecords = served.dataset.maps;
+
+    if (storedDelta) {
+      delta = storedDelta;
+      if (legacy) await clearWorkingDataset();
+      if (
+        storedDelta.baseUpdatedAt &&
+        storedDelta.baseUpdatedAt !== baseDataset.updatedAt &&
+        deltaCount(storedDelta) > 0
+      ) {
+        window.setTimeout(
+          () => toast('Saved changes were made against an older dataset version. Review them before exporting.'),
+          500,
+        );
+      }
+    } else if (legacy) {
+      // Migrate the old full working copy into the new delta format.
+      delta = buildMigrationDelta(baseRecords, legacy.maps, baseDataset.updatedAt);
+      saveDelta(delta);
+      await clearWorkingDataset();
+      toast('Migrated the previous browser working copy to delta changes');
+    } else {
+      delta = emptyDelta(baseDataset.updatedAt);
+    }
+  } else if (legacy) {
+    // Offline / unavailable served data: keep the legacy copy usable.
+    baseDataset = legacy;
+    baseSourceLabel = 'Legacy browser copy';
+    baseRecords = legacy.maps;
+    delta = emptyDelta(baseDataset.updatedAt);
+    toast(servedError instanceof Error ? servedError.message : String(servedError));
+  } else {
+    baseDataset = toDataset([]);
+    baseSourceLabel = 'No served data';
+    baseRecords = [];
+    delta = emptyDelta(baseDataset.updatedAt);
+    if (servedError) toast(servedError instanceof Error ? servedError.message : String(servedError));
+  }
+
+  records = applyDelta(baseRecords, delta);
+  autoIds.clear();
+  for (const id of Object.keys(delta.added)) autoIds.add(id);
   selectedId = records[0]?.id ?? null;
+
   palette = new CommandPalette({
     commands: buildEntryCommands(),
     placeholder: 'e.g. Glo > Y   ·   Mat > Con   ·   Bh > Yes   ·   Lad > Type > Rope',
@@ -1553,7 +1730,8 @@ async function boot(): Promise<void> {
   bindEvents();
   renderRecordList();
   renderForm();
-  setSaveStatus(storageLabel, 'idle');
+  const count = deltaCount(delta);
+  setSaveStatus(count ? `${count} changed map${count === 1 ? '' : 's'} loaded` : 'Loaded', 'idle');
 
   if (records.length === 0) {
     createRecord();
