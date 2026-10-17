@@ -1,0 +1,7 @@
+node_modules/
+dist/
+findmykz-static.zip
+*.log
+.DS_Store
+public/js/*.map
+*.zip

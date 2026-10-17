@@ -1,0 +1,1330 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-17T06:58:52.340Z",
+  "maps": [
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Grass",
+        "Wood"
+      ],
+      "props": [],
+      "topTime": 164,
+      "tpTier": 3,
+      "proTier": 4,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Brush-Mesh",
+        "Rope"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Green",
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Summer"
+      ],
+      "scenery": [
+        "Confined",
+        "Indoors",
+        "Trees"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Yes",
+      "ladderRoom": "Yes",
+      "path": [
+        "Linear"
+      ],
+      "special": [
+        "Slides",
+        "Crouch"
+      ],
+      "bonus": "No",
+      "mappers": "ReDMooN",
+      "description": "KZ but in a GROTTO! Make your way through an obstacle course based in a cave.",
+      "thumbnail": "https://images.steamusercontent.com/ugc/16887021893697142709/6701C8AE3147DF0CCCACF2A7E3B3C68FE0E9041C/",
+      "workshopId": "3121168339",
+      "cs2kzId": 2,
+      "id": "kz_grotto",
+      "name": "kz_grotto",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Plastic",
+        "Wood"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 210.5,
+      "tpTier": 2,
+      "proTier": 3,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Prop",
+        "Inset"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Blue",
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Indoors",
+        "Industrial"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Yes",
+      "ladderRoom": "No",
+      "path": [
+        "Linear"
+      ],
+      "special": [
+        "Boosters",
+        "Jump Pads"
+      ],
+      "bonus": "No",
+      "mappers": "GameChaos",
+      "description": "A grand chessboard themed course with clean movement and a few tricky jumps.",
+      "thumbnail": "https://images.steamusercontent.com/ugc/16245905561475639654/90B0DB328E341E45BB71131C9980A69E4B65F33C/",
+      "workshopId": "3070194623",
+      "cs2kzId": 1,
+      "id": "kz_checkmate",
+      "name": "kz_checkmate",
+      "updatedAt": "2026-01-02T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Plastic"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 340,
+      "tpTier": 4,
+      "proTier": 5,
+      "headbangers": "Yes",
+      "ladderAmount": [
+        "None"
+      ],
+      "ladderTypes": [],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "Yes",
+      "multiColour": "Orange",
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Summer"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Industrial",
+        "Lava",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Dusk"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "No",
+      "path": [
+        "Linear",
+        "Staged"
+      ],
+      "special": [
+        "Boosters",
+        "Wall Jumps",
+        "Jump Pads"
+      ],
+      "bonus": "No",
+      "mappers": "Vex",
+      "description": "Volcanic processing plant. Long staged course with a multi-mode finale.",
+      "thumbnail": "https://images.steamusercontent.com/ugc/18038188131544338303/F8834B9631945466986E1F95E165C749AD968C5A/",
+      "workshopId": "3102712799",
+      "cs2kzId": 3,
+      "id": "kz_igneous",
+      "name": "kz_igneous",
+      "updatedAt": "2026-01-03T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Grass",
+        "Wood",
+        "Concrete"
+      ],
+      "props": [
+        "Lots"
+      ],
+      "topTime": 421.2,
+      "tpTier": 5,
+      "proTier": 6,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Lots"
+      ],
+      "ladderTypes": [
+        "Rope",
+        "Brush-Mesh"
+      ],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Autumn",
+        "Cloudy",
+        "Raining"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Trees",
+        "Water"
+      ],
+      "timeOfDay": [
+        "Dawn"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "Yes",
+      "path": [
+        "Circular",
+        "Staged"
+      ],
+      "special": [
+        "Slides",
+        "Wall Jumps",
+        "Turbines"
+      ],
+      "bonus": "No",
+      "mappers": "Kubex",
+      "description": "A medieval farming village with a looped route and a lot of ladders.",
+      "thumbnail": "https://images.steamusercontent.com/ugc/15018672469098178316/5A80FED17935BE524A0BCE2004BE38D72AC7E021/",
+      "workshopId": "3162361624",
+      "cs2kzId": 4,
+      "id": "kz_serfdom",
+      "name": "kz_serfdom",
+      "updatedAt": "2026-01-04T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Plastic",
+        "Rainbow"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 733.8,
+      "tpTier": 6,
+      "proTier": 7,
+      "headbangers": "Yes",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Prop",
+        "Inset"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Purple-Pink",
+      "multi": "Yes",
+      "multiColour": "Purple-Pink",
+      "prekeep": "Yes",
+      "prekeepColour": "White",
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Confined",
+        "Indoors",
+        "Industrial"
+      ],
+      "timeOfDay": [
+        "Night"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Specific",
+      "ladderRoom": "Yes",
+      "path": [
+        "Spiral",
+        "Staged"
+      ],
+      "special": [
+        "Boosters",
+        "Wall Jumps",
+        "Jump Pads",
+        "Gravity",
+        "Crouch"
+      ],
+      "bonus": "No",
+      "mappers": "Nova",
+      "description": "A huge deep-sea facility. Spiral layout, several tech sections and long top times.",
+      "thumbnail": "https://images.steamusercontent.com/ugc/14058982473719553514/5282207D6811B7B42960F3B477B04FC5B8A3BE62/",
+      "workshopId": "3374560468",
+      "cs2kzId": 5,
+      "id": "kz_leviathan",
+      "name": "kz_leviathan",
+      "updatedAt": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Grass"
+      ],
+      "props": [
+        "None"
+      ],
+      "topTime": 95.4,
+      "tpTier": 2,
+      "proTier": 2,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Brush-Mesh"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Yellow",
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Summer",
+        "Sunny"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Trees",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Yes",
+      "ladderRoom": "No",
+      "path": [
+        "Linear"
+      ],
+      "special": [
+        "Slides"
+      ],
+      "bonus": "No",
+      "mappers": "Moss",
+      "description": "Short, green beginner-friendly global map. Ideal for learning basic ladder control.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_grass_global",
+      "name": "kz_grass_global",
+      "updatedAt": "2026-01-06T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Concrete",
+        "Wood"
+      ],
+      "props": [
+        "None"
+      ],
+      "topTime": 512.6,
+      "tpTier": 6,
+      "proTier": 7,
+      "headbangers": "Yes",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Brush-Mesh",
+        "Inset"
+      ],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "Source",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Indoors",
+        "Industrial",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Night"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "Yes",
+      "path": [
+        "Spiral",
+        "Staged"
+      ],
+      "special": [
+        "Wall Jumps",
+        "Boosters"
+      ],
+      "bonus": "No",
+      "mappers": "Rise",
+      "description": "The classic wall-jump tower. Tight ladders and one fall sends you down a floor.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_rise",
+      "name": "kz_rise",
+      "updatedAt": "2026-01-07T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Wood"
+      ],
+      "props": [
+        "Lots"
+      ],
+      "topTime": 287.3,
+      "tpTier": 3,
+      "proTier": 4,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Rope",
+        "Prop"
+      ],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "Yes",
+      "multiColour": "Yellow",
+      "prekeep": "Yes",
+      "prekeepColour": "Yellow",
+      "surfAmounts": [
+        "Some"
+      ],
+      "surfMaterials": [
+        "Concrete"
+      ],
+      "port": "Source",
+      "basedOn": "Uncharted (visual style)",
+      "weather": [
+        "Summer",
+        "Sunny"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Trees",
+        "Water",
+        "Beach"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Specific",
+      "ladderRoom": "Yes",
+      "path": [
+        "Linear",
+        "Staged"
+      ],
+      "special": [
+        "Water",
+        "Slides",
+        "Boosters"
+      ],
+      "bonus": "No",
+      "mappers": "Temple",
+      "description": "Jungle temple ruins with a short surf section and lots of wooden props.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_aztec_gold",
+      "name": "kz_aztec_gold",
+      "updatedAt": "2026-01-08T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Concrete",
+        "Plastic"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 198.9,
+      "tpTier": 3,
+      "proTier": 3,
+      "headbangers": "No",
+      "ladderAmount": [
+        "None"
+      ],
+      "ladderTypes": [],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "Lots",
+        "All"
+      ],
+      "surfMaterials": [
+        "Concrete",
+        "Plastic"
+      ],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Indoors",
+        "Industrial",
+        "Water"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "No",
+      "path": [
+        "Circular"
+      ],
+      "special": [
+        "Boosters",
+        "Slides"
+      ],
+      "bonus": "No",
+      "mappers": "Wave",
+      "description": "Pure surf practice map with ramps of two materials and a circular route.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_surf_utility",
+      "name": "kz_surf_utility",
+      "updatedAt": "2026-01-09T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Concrete",
+        "Wood",
+        "Plastic"
+      ],
+      "props": [
+        "Lots"
+      ],
+      "topTime": 376.1,
+      "tpTier": 4,
+      "proTier": 5,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Rope",
+        "Inset"
+      ],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Winter",
+        "Snowing",
+        "Snow",
+        "Windy"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Indoors",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Dusk",
+        "Night"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "No",
+      "ladderRoom": "Yes",
+      "path": [
+        "Staged",
+        "Linear"
+      ],
+      "special": [
+        "Crouch",
+        "Turbines",
+        "Jump Pads"
+      ],
+      "bonus": "No",
+      "mappers": "Frost",
+      "description": "Snowed-in military fort. Wind turbines push you around the outdoor sections.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_winter_fort",
+      "name": "kz_winter_fort",
+      "updatedAt": "2026-01-10T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Plastic"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 452.7,
+      "tpTier": 5,
+      "proTier": 5,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Prop",
+        "Rope"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Red",
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Indoors",
+        "Industrial",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Night"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "No",
+      "path": [
+        "Locked",
+        "Staged"
+      ],
+      "special": [
+        "Crouch",
+        "Gravity",
+        "Wall Jumps"
+      ],
+      "bonus": "No",
+      "mappers": "Cell",
+      "description": "Prison break map. Find keys to unlock each wing before the route continues.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_lockdown",
+      "name": "kz_lockdown",
+      "updatedAt": "2026-01-11T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Plastic",
+        "Rainbow"
+      ],
+      "props": [
+        "All"
+      ],
+      "topTime": 268.4,
+      "tpTier": 3,
+      "proTier": 4,
+      "headbangers": "Yes",
+      "ladderAmount": [
+        "None"
+      ],
+      "ladderTypes": [],
+      "bhop": "Yes",
+      "bhopColour": "Rainbow",
+      "multi": "Yes",
+      "multiColour": "Rainbow",
+      "prekeep": "Yes",
+      "prekeepColour": "Rainbow",
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Spring"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Dawn"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "No",
+      "path": [
+        "Spiral"
+      ],
+      "special": [
+        "Jump Pads",
+        "Gravity"
+      ],
+      "bonus": "No",
+      "mappers": "Helix",
+      "description": "A rainbow spiral tower packed with props. One fall can drop you several floors.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_spiral_tower",
+      "name": "kz_spiral_tower",
+      "updatedAt": "2026-01-12T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Wood",
+        "Plastic"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 315.9,
+      "tpTier": 4,
+      "proTier": 5,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Prop",
+        "Brush-Mesh"
+      ],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "Source",
+      "basedOn": "Mirror's Edge (visual style)",
+      "weather": [
+        "Raining",
+        "Cloudy",
+        "Windy"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Industrial",
+        "Water",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Night",
+        "Dusk"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Yes",
+      "ladderRoom": "No",
+      "path": [
+        "Linear",
+        "Staged"
+      ],
+      "special": [
+        "Boosters",
+        "Wall Jumps",
+        "Slides"
+      ],
+      "bonus": "No",
+      "mappers": "Drizzle",
+      "description": "Rooftops in the rain. Slick slides, ventilation shafts and long jumps between buildings.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_rain_city",
+      "name": "kz_rain_city",
+      "updatedAt": "2026-01-13T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Grass",
+        "Wood",
+        "Plastic"
+      ],
+      "props": [
+        "Lots"
+      ],
+      "topTime": 142.8,
+      "tpTier": 2,
+      "proTier": 3,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Brush-Mesh"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Green",
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "Minecraft",
+      "weather": [
+        "Summer",
+        "Sunny"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Trees",
+        "Water"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Yes",
+      "ladderRoom": "No",
+      "path": [
+        "Linear"
+      ],
+      "special": [
+        "Jump Pads",
+        "Slides"
+      ],
+      "bonus": "No",
+      "mappers": "Blocky",
+      "description": "Blocky overworld course with bhop islands and a small water section.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_minecraft_blocks",
+      "name": "kz_minecraft_blocks",
+      "updatedAt": "2026-01-14T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Plastic"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 521.5,
+      "tpTier": 5,
+      "proTier": 6,
+      "headbangers": "Yes",
+      "ladderAmount": [
+        "Lots"
+      ],
+      "ladderTypes": [
+        "Rope",
+        "Brush-Mesh",
+        "Inset"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "White",
+      "multi": "Yes",
+      "multiColour": "White",
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Winter",
+        "Windy",
+        "Snow"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Confined",
+        "Water"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "Yes",
+      "path": [
+        "Staged",
+        "Spiral"
+      ],
+      "special": [
+        "Turbines",
+        "Jump Pads",
+        "Crouch",
+        "Wall Jumps"
+      ],
+      "bonus": "Yes",
+      "mappers": "Summit",
+      "description": "Mountain ascent with three bonus courses. Main route is long and ladder heavy.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_bonus_peak",
+      "name": "kz_bonus_peak",
+      "updatedAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Concrete",
+        "Wood"
+      ],
+      "props": [
+        "None"
+      ],
+      "topTime": 88.2,
+      "tpTier": 1,
+      "proTier": 2,
+      "headbangers": "No",
+      "ladderAmount": [
+        "None"
+      ],
+      "ladderTypes": [],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "1.6",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Day"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "Specific",
+      "ladderRoom": "No",
+      "path": [
+        "Linear"
+      ],
+      "special": [
+        "Boosters"
+      ],
+      "bonus": "No",
+      "mappers": "Classic",
+      "description": "Straightforward 1.6-style jump map. Great for warmups.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_old_school_jumps",
+      "name": "kz_old_school_jumps",
+      "updatedAt": "2026-01-16T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Plastic",
+        "Rainbow",
+        "Unknown"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": null,
+      "tpTier": 7,
+      "proTier": 8,
+      "headbangers": "Unknown",
+      "ladderAmount": [
+        "Unknown"
+      ],
+      "ladderTypes": [
+        "Unknown"
+      ],
+      "bhop": "Unknown",
+      "bhopColour": null,
+      "multi": "Yes",
+      "multiColour": "Black",
+      "prekeep": "Unknown",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "Unknown"
+      ],
+      "surfMaterials": [
+        "Unknown"
+      ],
+      "port": "Unknown",
+      "basedOn": "",
+      "weather": [],
+      "scenery": [
+        "Confined",
+        "Indoors"
+      ],
+      "timeOfDay": [
+        "Night"
+      ],
+      "tech": [
+        "Box Tech"
+      ],
+      "ljRoom": "Unknown",
+      "ljBlock": "Unknown",
+      "ladderRoom": "Unknown",
+      "path": [
+        "Spiral"
+      ],
+      "special": [
+        "Gravity",
+        "Turbines",
+        "Wall Jumps"
+      ],
+      "bonus": "No",
+      "mappers": "Null",
+      "description": "WIP testing map with a lot of unknown properties. Useful for Unknown filtering tests.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_nightmare_void",
+      "name": "kz_nightmare_void",
+      "updatedAt": "2026-01-17T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Concrete",
+        "Wood"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 233,
+      "tpTier": 3,
+      "proTier": 3,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Prop",
+        "Inset"
+      ],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Summer",
+        "Sunny",
+        "Windy"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Industrial",
+        "Beach"
+      ],
+      "timeOfDay": [
+        "Day",
+        "Dusk"
+      ],
+      "tech": [],
+      "ljRoom": "Yes",
+      "ljBlock": "No",
+      "ladderRoom": "No",
+      "path": [
+        "Linear"
+      ],
+      "special": [
+        "Jump Pads",
+        "Slides",
+        "Crouch"
+      ],
+      "bonus": "No",
+      "mappers": "Dune",
+      "description": "Sun-bleached desert outpost with a beach section and a short vent crawl.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_desert_outpost",
+      "name": "kz_desert_outpost",
+      "updatedAt": "2026-01-18T00:00:00.000Z"
+    },
+    {
+      "global": "Yes",
+      "materials": [
+        "Concrete",
+        "Plastic"
+      ],
+      "props": [
+        "Lots"
+      ],
+      "topTime": 612.4,
+      "tpTier": 6,
+      "proTier": 7,
+      "headbangers": "Yes",
+      "ladderAmount": [
+        "None"
+      ],
+      "ladderTypes": [],
+      "bhop": "No",
+      "bhopColour": null,
+      "multi": "Yes",
+      "multiColour": "Green",
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "GO",
+      "basedOn": "",
+      "weather": [
+        "Cloudy"
+      ],
+      "scenery": [
+        "Indoors",
+        "Industrial",
+        "Acid",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Night"
+      ],
+      "tech": [
+        "Box Tech"
+      ],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "No",
+      "path": [
+        "Linear",
+        "Locked"
+      ],
+      "special": [
+        "Boosters",
+        "Gravity",
+        "Turbines",
+        "Crouch"
+      ],
+      "bonus": "No",
+      "mappers": "Toxin",
+      "description": "Acid processing plant. Locked doors and a box-tech room near the end.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_acid_factory",
+      "name": "kz_acid_factory",
+      "updatedAt": "2026-01-19T00:00:00.000Z"
+    },
+    {
+      "global": "No",
+      "materials": [
+        "Concrete",
+        "Wood",
+        "Rainbow"
+      ],
+      "props": [
+        "Some"
+      ],
+      "topTime": 301.7,
+      "tpTier": 4,
+      "proTier": 6,
+      "headbangers": "No",
+      "ladderAmount": [
+        "Some"
+      ],
+      "ladderTypes": [
+        "Rope",
+        "Brush-Mesh"
+      ],
+      "bhop": "Yes",
+      "bhopColour": "Orange",
+      "multi": "No",
+      "multiColour": null,
+      "prekeep": "No",
+      "prekeepColour": null,
+      "surfAmounts": [
+        "None"
+      ],
+      "surfMaterials": [],
+      "port": "Source",
+      "basedOn": "Unreal Tournament (visual style)",
+      "weather": [
+        "Summer"
+      ],
+      "scenery": [
+        "Outdoors",
+        "Lava",
+        "Industrial",
+        "Confined"
+      ],
+      "timeOfDay": [
+        "Dusk",
+        "Night"
+      ],
+      "tech": [],
+      "ljRoom": "No",
+      "ljBlock": "No",
+      "ladderRoom": "Yes",
+      "path": [
+        "Staged",
+        "Linear"
+      ],
+      "special": [
+        "Wall Jumps",
+        "Boosters",
+        "Jump Pads"
+      ],
+      "bonus": "No",
+      "mappers": "Ember",
+      "description": "Lava temple arena. Staged route with a difficult pro-tier final climb.",
+      "thumbnail": null,
+      "workshopId": null,
+      "cs2kzId": null,
+      "id": "kz_lava_temple",
+      "name": "kz_lava_temple",
+      "updatedAt": "2026-01-20T00:00:00.000Z"
+    }
+  ]
+}

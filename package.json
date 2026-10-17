@@ -1,0 +1,19 @@
+{
+  "name": "findmykz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Find CS2 KZ maps by their properties. Static, frontend-only property database.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node scripts/pack-data.mjs",
+    "package": "npm run build && node scripts/package-site.mjs",
+    "watch": "tsc --watch",
+    "pack": "node scripts/pack-data.mjs",
+    "serve": "python3 -m http.server 5173 --directory public",
+    "dev": "npm run build && npm run serve",
+    "seed": "node scripts/seed-data.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

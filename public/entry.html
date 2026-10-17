@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#09090b" />
+    <meta
+      name="description"
+      content="FindMyKZ data entry — quickly record KZ map properties and export a static maps.zip."
+    />
+    <title>Data entry · FindMyKZ</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="entry-body">
+    <header class="site-nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html" aria-label="FindMyKZ home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.5 21 7v10l-9 4.5L3 17V7l9-4.5Z" stroke="currentColor" stroke-width="1.6" />
+              <path d="M12 7.2v9.6M7.6 9.8l8.8 4.4M16.4 9.8l-8.8 4.4" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+          </span>
+          <span class="brand-word">Find<span class="brand-accent">My</span>KZ</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html">Maps</a>
+          <a href="entry.html" class="active" aria-current="page">Data entry</a>
+        </nav>
+        <div class="nav-meta">Local working copy</div>
+      </div>
+    </header>
+
+    <main class="entry-page">
+      <div class="entry-shortcuts">
+        <span class="entry-shortcut">
+          <kbd class="kbd">Ctrl</kbd><kbd class="kbd">P</kbd>
+          quick add property
+        </span>
+        <span class="entry-shortcut"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">S</kbd> save</span>
+        <span class="entry-shortcut"><kbd class="kbd">Ctrl</kbd><kbd class="kbd">Shift</kbd><kbd class="kbd">N</kbd> new map</span>
+        <span class="entry-shortcut-hint">Try <code>Glo &gt; Y</code>, <code>Mat &gt; Con</code>, <code>Bh &gt; Yes</code>, <code>Lad &gt; Type &gt; Rope</code></span>
+        <button type="button" class="btn accent entry-quick-open" id="entry-palette-open">
+          <kbd class="kbd kbd-dark">Ctrl</kbd><kbd class="kbd kbd-dark">P</kbd>
+          Quick add
+        </button>
+      </div>
+
+      <div class="entry-layout">
+        <aside class="record-sidebar" aria-label="Map records">
+          <div class="record-sidebar-head">
+            <div class="record-title-row">
+              <h1>Records</h1>
+              <span id="record-count" class="record-count">0 records</span>
+            </div>
+            <div class="record-search-row">
+              <input id="record-search" type="search" placeholder="Search records…" autocomplete="off" spellcheck="false" />
+              <button type="button" id="new-record" class="btn accent" title="Create a new map record">+ New</button>
+            </div>
+          </div>
+
+          <div id="record-list" class="record-list"></div>
+
+          <div class="record-sidebar-foot">
+            <span id="storage-status">Not saved yet</span>
+          </div>
+
+          <div class="record-actions">
+            <button type="button" id="export-zip" class="btn accent" title="Download maps.zip for the static site">Export ZIP</button>
+            <button type="button" id="export-json" class="btn" title="Download raw maps.json">Export JSON</button>
+            <button type="button" id="import-btn" class="btn ghost">Import…</button>
+            <button type="button" id="reload-served" class="btn ghost" title="Discard the browser copy and reload data/maps.zip">Reload served</button>
+            <input type="file" id="import-file" accept=".json,.zip,application/json,application/zip" hidden />
+          </div>
+
+          <div class="record-help">
+            <p><strong>Workflow</strong></p>
+            <ol>
+              <li>Press <kbd class="kbd">Ctrl</kbd><kbd class="kbd">P</kbd> and type a property path.</li>
+              <li>Set global maps to <em>Yes</em>, then lookup on cs2kz.org to autofill.</li>
+              <li>Export <code>maps.zip</code> and replace <code>public/data/maps.zip</code>.</li>
+            </ol>
+            <p class="record-help-note">Edits save automatically to this browser. Export regularly — clearing site data removes the working copy.</p>
+          </div>
+        </aside>
+
+        <section class="editor" aria-label="Map editor">
+          <div class="editor-toolbar">
+            <div class="editor-title-row">
+              <div id="editor-thumb" class="editor-thumb"><span class="editor-thumb-empty">KZ</span></div>
+              <div class="editor-title-copy">
+                <span class="eyebrow"><span class="eyebrow-dot"></span>Map record</span>
+                <h2 id="editor-heading">No map selected</h2>
+                <p id="editor-sub">Create a record or pick one from the list.</p>
+              </div>
+            </div>
+            <div class="editor-actions">
+              <span id="save-status" class="save-status" data-state="idle">Loading…</span>
+              <button type="button" id="duplicate-btn" class="btn ghost">Duplicate</button>
+              <button type="button" id="delete-btn" class="btn danger">Delete</button>
+              <button type="button" id="save-btn" class="btn accent">Save</button>
+            </div>
+          </div>
+
+          <div id="editor-empty" class="empty-state editor-empty" hidden>
+            <div class="empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <rect x="12" y="10" width="40" height="44" rx="3" stroke="currentColor" stroke-width="2.2" />
+                <path d="M22 22h20M22 31h20M22 40h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".55" />
+              </svg>
+            </div>
+            <h2>No map selected</h2>
+            <p>Choose a record from the left, or create a new one to start entering properties.</p>
+            <button type="button" class="btn accent" id="empty-new-record">New map</button>
+          </div>
+
+          <form id="record-form" class="record-form" hidden autocomplete="off" novalidate></form>
+        </section>
+      </div>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+      <div class="noscript">FindMyKZ data entry needs JavaScript.</div>
+    </noscript>
+    <script type="module" src="js/entry.js"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#09090b" />
+    <meta
+      name="description"
+      content="FindMyKZ — filter CS2 KZ maps by materials, tiers, top time, scenery, tech and more."
+    />
+    <title>FindMyKZ · Find KZ maps by property</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="search-body">
+    <header class="site-nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html" aria-label="FindMyKZ home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.5 21 7v10l-9 4.5L3 17V7l9-4.5Z" stroke="currentColor" stroke-width="1.6" />
+              <path d="M12 7.2v9.6M7.6 9.8l8.8 4.4M16.4 9.8l-8.8 4.4" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+          </span>
+          <span class="brand-word">Find<span class="brand-accent">My</span>KZ</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html" class="active" aria-current="page">Maps</a>
+          <a href="entry.html">Data entry</a>
+        </nav>
+        <div class="nav-meta" id="dataset-meta">Loading database…</div>
+      </div>
+    </header>
+
+    <main class="search-page">
+      <section class="hero">
+        <div class="hero-orb hero-orb-a" aria-hidden="true"></div>
+        <div class="hero-orb hero-orb-b" aria-hidden="true"></div>
+        <div class="hero-inner">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>KZ map property database</div>
+          <h1>Find the <em>exact</em> map you want.</h1>
+          <p class="hero-copy">
+            Narrow thousands of KZ maps by material, tier, top time, scenery, tech and movement quirks.
+            Build a filter with the bar or keep both hands on the keyboard with the quick menu.
+          </p>
+          <div class="hero-search-row">
+            <div class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7" />
+                <path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+              <input id="name-search" type="search" placeholder="Search map names, mappers, inspiration…" autocomplete="off" spellcheck="false" />
+            </div>
+            <button type="button" id="palette-open" class="btn accent quick-open">
+              <kbd class="kbd kbd-dark">Ctrl</kbd><kbd class="kbd kbd-dark">P</kbd>
+              <span>Quick filter</span>
+            </button>
+          </div>
+          <div id="active-filters" class="active-filters" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <div id="filters-backdrop" class="filters-backdrop" hidden></div>
+        <aside id="filters" class="filters" aria-label="Map filters"></aside>
+
+        <section class="results" aria-label="Map results">
+          <div class="results-toolbar">
+            <div class="results-heading">
+              <button type="button" id="filters-toggle" class="btn filters-toggle" aria-expanded="false" aria-controls="filters">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+                Filters
+              </button>
+              <span id="result-count" class="result-count" aria-live="polite">Loading maps…</span>
+            </div>
+            <div class="results-actions">
+              <label class="sort-label">
+                <span>Sort</span>
+                <select id="sort">
+                  <option value="name">Name (A–Z)</option>
+                  <option value="top-asc">Top time (fast → slow)</option>
+                  <option value="top-desc">Top time (slow → fast)</option>
+                  <option value="tier-asc">TP tier (easy → hard)</option>
+                  <option value="tier-desc">TP tier (hard → easy)</option>
+                  <option value="recent">Recently updated</option>
+                </select>
+              </label>
+              <button type="button" class="btn ghost" data-clear-filters>Clear all</button>
+            </div>
+          </div>
+
+          <div id="map-grid" class="map-grid"></div>
+
+          <div id="empty-state" class="empty-state" hidden>
+            <div class="empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <circle cx="27" cy="27" r="15" stroke="currentColor" stroke-width="2.4" />
+                <path d="m39 39 12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+                <path d="M20 27h14M27 20v14" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".45" />
+              </svg>
+            </div>
+            <h2>No maps match those properties</h2>
+            <p>Loosen a filter, switch material matching to “Any of”, or clear everything and start again.</p>
+            <button type="button" class="btn accent" data-clear-filters>Clear all filters</button>
+          </div>
+
+          <div class="load-more-wrap">
+            <button type="button" id="load-more" class="btn load-more" hidden>Show more</button>
+          </div>
+        </section>
+      </div>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>FindMyKZ · a static KZ map property index</span>
+          <span class="footer-sep">·</span>
+          <a href="entry.html">Contribute map data</a>
+          <span class="footer-sep">·</span>
+          <span>Data served from <code>data/maps.zip</code></span>
+        </div>
+      </footer>
+    </main>
+
+    <div id="map-modal" class="modal" hidden>
+      <div class="modal-backdrop" data-modal-close></div>
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Map details">
+        <button type="button" class="modal-close" data-modal-close aria-label="Close details">×</button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+      <div class="noscript">FindMyKZ needs JavaScript to filter the map database.</div>
+    </noscript>
+    <script type="module" src="js/search.js"></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+Each property can also has an "Unknown" (not included in search)
+
+Colours:
+Red/Orange/Yellow/Green/Blue/Purple-Pink/
+Brown/Gray/White/Black/Rainbow/Unknown
+
+StringType: Arbituary datam, can be CSV list, max length 255
+
+MaterialTypes: (Unknown | Concrete | grass | wood | plastic (solid colour material) | rainbow) Modes: Any of / All of
+
+MaybeType: Yes / No / Unknown
+AmountType: Unknown / None / Some / Lots / All (Can selected multiple)
+
+RangeType: Range Slider
+	SubTypeTime Start/End: Sub 1 minute, 2, 3, 4, 5, 10, 20, Other
+
+Tick Modes:
+Y - Yes (Tick)
+N - No (Cross)
+U - Unknown (default) (empty box)
+
+Map Name: StringType
+
+Material-ness: (MaterialType)
+	- What materials are included in the map?
+	
+Global-ness: (MaybeType)
+	- is that map global?
+ 
+Prop-ness: (AmountType)
+	- are there prop blocks?
+
+Top Time Range: RangeType (SubTypeTime)
+
+TP Tier: Range (1 to 9 inclusive)
+Pro Tier: Range (1 to 9 inclusive)
+
+Headbangers: MaybeType
+Ladders: AmountType + (Unknown | Prop | Brush-Mesh | Inset | Rope)
+
+Bhop: Yes (ColourType) / No
+Multi: Yes (ColourType) / No
+Prekeep: Yes (ColourType) / No
+
+Surfs: AmountType + Material
+
+Port: GO, Source, 1.6, Unknown
+	- What the map a port from an older sequel?
+	
+Based On: StringType Minecraft?
+	- Is the map based on another game or uses scenary from another game?
+
+Weather:  Winter | Summer | Spring | Autumn | Cloudy | Sunny | Raining | Snowing | Snow | Windy
+
+Scenary <Confined | Indoors | Outdoors | Beach | Industrial | Water | Lava | Acid | Trees >
+	- Confined, not much space in the map.
+	- Does the scenary have a reachable indoor section?
+	- Does the scenary have a reachable outdoor section?
+	- Does the scenary have a Industrial look?
+	- Does the scenary have a beach?
+	- Does the scenary have water?
+	- Does the scenary have lava?
+	- Does the scenary have acid/goo/or other liquid?
+	- Does the scenary feature trees?
+	
+Time: Dawn/Dusk/Day/Night
+
+Tech <Box Tech>
+
+LJ Room: Yes/No
+LJ Block: Yes/No/Specific
+Ladder Room: Yes/No
+
+Path <Linear | Circular | Spiral | Staged | Locked>
+	- Linear: The map has a clear start and end point that are not near each other
+	- Circular: The start of the map is near the end of the map
+	- Spiral: The map sometimes gets close the the start, or gets close to a previous part of the map, one fall could set you back.
+	- Staged: The map has different sections with different styles.
+	- Locked: Some sections require keys and specific area to reach before continuing.
+
+Special Blocks/Sections (Boosters | Wall Jumps | Jump Pads | Water | Slides | Gravity | Turbines | Crouch)
+	- Boosters give lots of horizontal speed
+	- Wall Jumps like as seen in kz_rise
+	- Jump Pads give lots of vertical speed
+	- Water is there a water section?
+	- Slides are blocks which have zero friction
+	- Turbines are sections with wind that push you.
+	- Is there a forced crouch section? (Vent)
+	
+
+Is Bonus Map: Yes/No
+	
