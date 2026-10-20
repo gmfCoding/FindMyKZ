@@ -3,31 +3,42 @@
 A static, frontend-only KZ map property database. Filter CS2 KZ maps by material, tiers, top time,
 scenery, tech, movement quirks and more — then narrow down to the exact map you want.
 
-Built with **vanilla HTML, CSS and TypeScript** (compiled to plain JavaScript). No backend, no framework.
-The UI is styled after [cs2kz.org](https://cs2kz.org/) (dark zinc + gold, Akshar / Exo 2).
+Built with **vanilla HTML, CSS and TypeScript** (compiled to plain JavaScript) plus an optional
+**Node + SQLite** backend for writing map properties. The UI is styled after
+[cs2kz.org](https://cs2kz.org/) (dark zinc + gold, Akshar / Exo 2).
 
 ## Quick start
 
 ```bash
 npm install
-npm run dev
+npm run server      # builds, then serves the site + API at http://localhost:8787
 ```
 
-`npm run dev` compiles TypeScript, packs the data, and serves `public/` at **http://localhost:5173**.
+Open **http://localhost:8787/entry.html**. Edits are submitted with `POST` / `PUT` and stored in
+`server/data/findmykz.db` (SQLite, created and seeded on first boot).
+
+Static-only mode still works: `npm run dev` compiles TypeScript, packs the data, and serves
+`public/` at **http://localhost:5173** with browser-storage deltas and file export.
 
 Other scripts:
 
 | Command | What it does |
 | --- | --- |
+| `npm start` | Run the Node server (serves `public/` + `/api`) |
+| `npm run server` | `npm run build`, then `npm start` |
 | `npm run build` | `tsc` → `public/js`, then packs `public/data/maps.json` → `maps.zip` |
 | `npm run package` | Build, then create `dist/` + `findmykz-static.zip` for deployment |
-| `npm run watch` | Recompile TypeScript on change (run `npm run serve` in another terminal) |
+| `npm run db:export` | Export the SQLite database back to `public/data/maps.json` and rebuild `maps.zip` |
+| `npm run watch` | Recompile TypeScript on change |
 | `npm run pack` | Rebuild only `public/data/maps.zip` |
-| `npm run serve` | Serve `public/` at port 5173 |
+| `npm run serve` | Serve `public/` at port 5173 (static, no API) |
 | `npm run refresh:data` | Rebuild `public/data/maps.json` from the live cs2kz.org API (real maps only) |
 | `npm run top-times` | Fill CKZ and VNL top times in `maps.json` from cs2kz.org records |
 | `npm run steam:data` | Pull `kz_*` / `bkz_*` maps from the Steam Workshop into `public/data/maps_steam.json` |
 | `npm run apply:changes` | Apply an exported `maps_changes.json` delta to `public/data/maps.json` |
+
+> Node **22.5+** is required for the built-in `node:sqlite` driver. There are no native modules or
+database services to install.
 
 > The shipped dataset is generated from cs2kz.org's public API. It contains only approved maps and
 > only values cs2kz actually provides; every other property is intentionally `Unknown` / empty until
@@ -36,8 +47,70 @@ Other scripts:
 ## Pages
 
 - **`index.html`** — map search, filter sidebar, quick menu, detail modal.
-- **`entry.html`** — data entry editor with a working copy in IndexedDB, cs2kz.org autofill, and
-  JSON / ZIP export.
+- **`entry.html`** — data entry editor. With the Node server running it reads and writes the SQLite
+  database; without it, it falls back to browser storage with JSON / ZIP export.
+
+## Backend API & audit trail
+
+The server (`server/index.mjs`) serves `public/` and mounts a small JSON API:
+
+| Method | Route | Notes |
+| --- | --- | --- |
+| `GET` | `/api/health` | DB status, map count, whether writes/audit need a token |
+| `GET` | `/api/maps` | Full dataset + per-map `revisions` |
+| `GET` | `/api/maps/:id` | One map + current revision |
+| `POST` | `/api/maps` | Create a record (`201`, `409` if the id exists) |
+| `PUT` | `/api/maps/:id` | Replace a record (`200`, `409` on stale `If-Match`) |
+| `DELETE` | `/api/maps/:id` | Delete a record |
+| `POST` | `/api/maps/:id/open` | Records that a browser opened the map for editing |
+| `GET` | `/api/maps/:id/audit` | **Private** audit trail — requires the audit token |
+
+Writes carry the editor name (`X-Editor`), a stable browser id (`X-Client`), and optionally an
+`If-Match` revision for optimistic locking. The record body is the full map object; the server
+normalizes it with the same code the browser uses.
+
+### Audit trail
+
+Every create, update and delete appends a row to `map_audit`, keyed by map id. An entry stores the
+revision, action, actor, client id, IP, user agent, timestamp, and **only the fields whose value
+changed**, as `{ field, from, to }`:
+
+```json
+{
+  "action": "update",
+  "revision": 12,
+  "changes": [
+    { "field": "tpTier", "from": 3, "to": 4 },
+    { "field": "scenery", "from": ["Laboratory"], "to": ["Laboratory", "Office"] }
+  ]
+}
+```
+
+Opening a map in the editor logs an `open` event with no value changes (deduplicated per client for
+30 minutes). The History dialog hides those by default.
+
+Audit rows are never served publicly. Reading them requires `FINDMYKZ_AUDIT_TOKEN`:
+
+```bash
+FINDMYKZ_AUDIT_TOKEN=some-long-secret npm start
+# then in the editor: History → paste the token → Load
+curl -H 'X-Audit-Token: some-long-secret' http://localhost:8787/api/maps/kz_angina/audit
+```
+
+Writes can also be locked with `FINDMYKZ_EDIT_TOKEN`. Enter it once under **History → Edit token**;
+the editor then sends it as `X-Editor-Token` on every `POST` / `PUT` / `DELETE`.
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `PORT` | `8787` | HTTP port |
+| `HOST` | `127.0.0.1` | Bind address (`0.0.0.0` in containers) |
+| `FINDMYKZ_DB` | `server/data/findmykz.db` | SQLite file location |
+| `FINDMYKZ_EDIT_TOKEN` | unset | Require a token for `POST` / `PUT` / `DELETE` |
+| `FINDMYKZ_AUDIT_TOKEN` | unset | Required to read the audit trail |
+
+The database is seeded from `public/data/maps.json` the first time it starts, so existing data and
+the data-entry workflow carry over. Run `npm run db:export` when you want to publish the database
+contents back into the static site.
 
 ## Quick menu (Ctrl+P / Cmd+P)
 
@@ -56,6 +129,8 @@ through property → value chains, with fuzzy matching on every level.
 | `TP > 3 > 6` | TP tier range 3–6 |
 | `Lad > Type > Rope` | Ladder construction = Rope |
 | `Scen > Water` | Scenery includes Water |
+| `Scen > Indoor > Lab` | Scenery includes Laboratory (grouped path) |
+| `Scen > Outdoor > Volc` | Scenery includes Volcano (grouped path) |
 | `Spec > Boosters` | Special section includes Boosters |
 | `Port > GO` | Port = GO |
 | `Bon > Yes` | Bonus map |
@@ -87,14 +162,17 @@ Keyboard: `↑`/`↓` navigate, `↵` select, `Esc` close, `Ctrl+P` / `Ctrl+K` o
 5. Add a thumbnail URL manually if you want a specific image. **Fetch thumbnail from Steam** attempts
    the public Steam Web API; Steam does not send CORS headers, so this can fail in the browser — paste
    the `images.steamusercontent.com` URL into the field instead.
-6. Edits autosave as **delta changes** in browser local storage. Only fields that differ from the
-   served dataset are stored. HTTP cookies are limited to roughly 4 KB, so local storage is used
-   instead of a cookie for the change set.
-7. Use the export buttons:
+6. With the Node server running, edits autosave through the API: changed maps are `POST`ed (new) or
+   `PUT` (existing) and stored in SQLite. Only fields that differ from the stored record are sent.
+   If the API is unreachable, the change set is kept in browser storage as an outbox and retried on
+   the next save.
+7. **History** opens the private audit trail for the selected map: every create / update / delete
+   with the old and new value of each changed field (requires `FINDMYKZ_AUDIT_TOKEN`).
+8. Static fallback only (`npm run dev`): use the export buttons:
    - **Export Changes** downloads `maps_changes.json` — only the changed fields, additions and deletions.
    - **Export All** downloads the full merged `maps.json`.
    - **Export All ZIP** downloads the full dataset as `maps.zip`.
-8. Apply the changes in the dev workspace:
+9. Apply an exported change file in the dev workspace:
 
 ```bash
 npm run apply:changes -- maps_changes.json
@@ -106,8 +184,9 @@ preview and `--no-pack` to skip the ZIP rebuild.
 
 ## Data format
 
-The site fetches `data/maps.zip` first and falls back to `data/maps.json`. The ZIP must contain one
-JSON file (`maps.json` is what the export creates). Load is client-side via `DecompressionStream`.
+The site fetches the live API (`api/maps`) first, then `data/maps.zip`, then `data/maps.json`. The ZIP
+must contain one JSON file (`maps.json` is what the export creates). Load is client-side via
+`DecompressionStream`.
 
 ```json
 {
@@ -274,10 +353,18 @@ src/
   zip.ts                  ZIP reader (DecompressionStream) + ZIP writer
   data.ts                 Dataset loading, normalisation, IndexedDB storage
   filters.ts              Filter predicates, sorting, active-filter chips
-  delta.ts                Delta change model + localStorage persistence
+  delta.ts                Delta change model + localStorage outbox
+  api.ts                  Browser client for the Node API (POST/PUT/DELETE + audit)
+  audit.ts                Private per-map audit trail dialog
   palette.ts              Reusable VS Code-style command palette
   search.ts               Search page
   entry.ts                Data entry page
+server/
+  index.mjs               Node HTTP server: static site + /api
+  api.mjs                 Routes, auth headers, CORS, optimistic locking
+  db.mjs                  SQLite schema, seeding, reads/writes, audit rows
+  audit.mjs               Field-level diff ({ field, from, to })
+  data/                   SQLite database (git-ignored, seeded on first boot)
 public/
   index.html  entry.html  favicon.svg
   css/styles.css
@@ -291,15 +378,18 @@ scripts/
   update-top-times.mjs    Fill CKZ/VNL top times from cs2kz.org records
   fetch-steam-maps.mjs    Crawl Steam Workshop for kz_/bkz_ maps
   apply-changes.mjs       Apply maps_changes.json deltas to maps.json
+  export-db.mjs           SQLite → public/data/maps.json
   pack-data.mjs           maps.json → maps.zip
   package-site.mjs        public/ → dist/ + findmykz-static.zip
 ```
 
 ## Deploying
 
-The project is already a plain static site — the TypeScript is compiled ahead of time and the browser
-only receives HTML, CSS, JavaScript and data. There is no Node.js runtime, server process, database or
-build step on the host.
+The site has two deployment modes.
+
+**Static (read-only).** The TypeScript is compiled ahead of time and the browser only receives HTML,
+CSS, JavaScript and data. There is no Node.js runtime, server process or database on the host, and
+the data-entry page falls back to browser-storage deltas plus file export.
 
 ```bash
 npm run package
@@ -311,9 +401,15 @@ That command builds the project and produces:
   nginx, a Synology share…).
 - **`findmykz-static.zip`** — the same `dist/` contents as a single archive, handy for uploads.
 
+**Node + SQLite (read/write).** Run `npm start` on a host with Node 22.5+. It serves the same
+`public/` folder plus `/api`, stores submissions in `server/data/findmykz.db` and keeps the private
+audit trail. Set `HOST=0.0.0.0`, `PORT`, `FINDMYKZ_EDIT_TOKEN` and `FINDMYKZ_AUDIT_TOKEN` as needed.
+Back up the `.db` file (plus its `-wal` / `-shm` siblings) to back up the data and audit log.
+
 You only need to re-run `npm run package` after changing TypeScript, CSS, HTML or the dataset. If you
 only edited `public/data/maps.json`, run `npm run build` (or `npm run pack`) and replace
-`public/data/maps.zip` in the deployed folder.
+`public/data/maps.zip` in the deployed folder. With the database running, publish its contents with
+`npm run db:export` first.
 
 The only external requests at runtime are:
 

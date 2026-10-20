@@ -1,4 +1,12 @@
 import {
+  createMapRecord,
+  deleteMapRecord,
+  fetchSnapshot,
+  openMapForEdit,
+  updateMapRecord,
+} from './api.js';
+import { bindAuditDialog, openAuditDialog } from './audit.js';
+import {
   clearWorkingDataset,
   datasetToJson,
   loadServedDataset,
@@ -73,9 +81,26 @@ let lastAutoLookup = '';
 let baseSourceLabel = 'Not loaded';
 const autoIds = new Set<string>();
 
+/** True when the Node API answered; writes then go to SQLite instead of localStorage. */
+let serverMode = false;
+/** Last known server revision per map, used for optimistic locking (If-Match). */
+let serverRevisions = new Map<string, number>();
+let saveRunning = false;
+let saveQueued = false;
+const openedForEdit = new Set<string>();
+
+function trackEditOpen(id: string | null): void {
+  if (!serverMode || !id || openedForEdit.has(id)) return;
+  openedForEdit.add(id);
+  void openMapForEdit(id);
+}
+
 function changesLabel(): string {
   const count = deltaCount(delta);
-  return count === 0 ? 'No changes' : `${count} changed map${count === 1 ? '' : 's'} · saved in this browser`;
+  if (count === 0) return serverMode ? 'All changes saved to the database' : 'No changes';
+  return serverMode
+    ? `${count} unsaved map${count === 1 ? '' : 's'} · will POST/PUT to the API`
+    : `${count} changed map${count === 1 ? '' : 's'} · saved in this browser`;
 }
 
 /**
@@ -664,35 +689,168 @@ function syncEditorControls(): void {
 }
 
 // ---------------------------------------------------------------------------
-// Saving
+// Saving — the API is the source of truth, localStorage is the offline outbox
 // ---------------------------------------------------------------------------
 
-function saveNow(showToast = false): void {
-  window.clearTimeout(saveTimer);
-  delta = buildDelta(baseRecords, records, baseDataset.updatedAt);
-  const count = deltaCount(delta);
-
-  let ok = true;
-  if (count === 0) clearDelta();
-  else ok = saveDelta(delta);
-
-  setSaveStatus(ok ? `Saved ${new Date().toLocaleTimeString()}` : 'Save failed', ok ? 'saved' : 'error');
-  renderRecordList();
-  updateEditorThumb();
+function refreshStorageLabels(ok: boolean): void {
   const metaStorage = $<HTMLElement>('.meta-storage', formEl);
   if (metaStorage) {
-    metaStorage.textContent = ok ? changesLabel() : 'Could not save changes';
+    metaStorage.textContent = ok ? changesLabel() : 'Changes kept in this browser';
     metaStorage.title = baseSourceLabel;
   }
-  if (showToast) {
-    toast(ok ? (count === 0 ? 'No changes to save' : `Saved changes for ${count} map${count === 1 ? '' : 's'}`) : 'Could not save changes');
+  storageStatusEl.textContent = changesLabel();
+  storageStatusEl.title = baseSourceLabel;
+}
+
+function persistToBrowser(): boolean {
+  if (deltaCount(delta) === 0) {
+    clearDelta();
+    return true;
+  }
+  return saveDelta(delta);
+}
+
+/** Mirror a record the server accepted back into the diff baseline. */
+function applyServerRecord(id: string, map: MapRecord, version: number): void {
+  serverRevisions.set(id, version);
+  let found = false;
+  baseRecords = baseRecords.map((entry) => {
+    if (entry.id !== id) return entry;
+    found = true;
+    return map;
+  });
+  if (!found) baseRecords = [...baseRecords, map];
+}
+
+async function pushDelta(
+  pending: DeltaSet,
+): Promise<{ ok: boolean; conflict: boolean; error?: string; saved: number }> {
+  let saved = 0;
+
+  for (const id of Object.keys(pending.added)) {
+    const record = records.find((entry) => entry.id === id);
+    if (!record) continue;
+    let result = await createMapRecord(record);
+    if (!result.ok && result.status === 409) {
+      // The id already exists on the server — update it instead.
+      result = await updateMapRecord(record, serverRevisions.get(id) ?? null);
+    }
+    if (!result.ok) return { ok: false, conflict: result.status === 409, error: result.error, saved };
+    applyServerRecord(id, result.data.map, result.data.version);
+    saved += 1;
+  }
+
+  for (const id of Object.keys(pending.changes)) {
+    const record = records.find((entry) => entry.id === id);
+    if (!record) continue;
+    let result = await updateMapRecord(record, serverRevisions.get(id) ?? null);
+    if (!result.ok && result.status === 404) {
+      // Evicted from the database — recreate it.
+      result = await createMapRecord(record);
+    }
+    if (!result.ok) return { ok: false, conflict: result.status === 409, error: result.error, saved };
+    applyServerRecord(id, result.data.map, result.data.version);
+    saved += 1;
+  }
+
+  for (const id of pending.deleted) {
+    const result = await deleteMapRecord(id, serverRevisions.get(id) ?? null);
+    if (!result.ok && result.status !== 404) {
+      return { ok: false, conflict: result.status === 409, error: result.error, saved };
+    }
+    serverRevisions.delete(id);
+    baseRecords = baseRecords.filter((entry) => entry.id !== id);
+    saved += 1;
+  }
+
+  return { ok: true, conflict: false, saved };
+}
+
+async function saveNow(showToast = false): Promise<void> {
+  window.clearTimeout(saveTimer);
+  saveTimer = undefined;
+
+  if (saveRunning) {
+    saveQueued = true;
+    return;
+  }
+  saveRunning = true;
+
+  try {
+    delta = buildDelta(baseRecords, records, baseDataset.updatedAt);
+    const count = deltaCount(delta);
+
+    if (!serverMode) {
+      const ok = persistToBrowser();
+      setSaveStatus(ok ? `Saved ${new Date().toLocaleTimeString()}` : 'Save failed', ok ? 'saved' : 'error');
+      renderRecordList();
+      updateEditorThumb();
+      refreshStorageLabels(ok);
+      if (showToast) {
+        toast(
+          ok
+            ? count === 0
+              ? 'No changes to save'
+              : `Saved changes for ${count} map${count === 1 ? '' : 's'}`
+            : 'Could not save changes',
+        );
+      }
+      return;
+    }
+
+    if (count === 0) {
+      clearDelta();
+      setSaveStatus(`In sync · ${new Date().toLocaleTimeString()}`, 'saved');
+      renderRecordList();
+      updateEditorThumb();
+      refreshStorageLabels(true);
+      if (showToast) toast('Everything is already saved');
+      return;
+    }
+
+    setSaveStatus(`Saving ${count} map${count === 1 ? '' : 's'} to the database…`, 'pending');
+    const result = await pushDelta(delta);
+    delta = buildDelta(baseRecords, records, baseDataset.updatedAt);
+
+    if (result.ok) {
+      const remaining = deltaCount(delta);
+      if (remaining === 0) clearDelta();
+      else saveDelta(delta);
+      setSaveStatus(`Saved to database · ${new Date().toLocaleTimeString()}`, 'saved');
+      renderRecordList();
+      updateEditorThumb();
+      refreshStorageLabels(true);
+      if (showToast && result.saved > 0) {
+        toast(`Saved ${result.saved} map${result.saved === 1 ? '' : 's'} to the database`);
+      }
+      if (remaining > 0) saveSoon();
+      return;
+    }
+
+    // Keep the outbox so nothing is lost while the API is unreachable.
+    saveDelta(delta);
+    setSaveStatus(result.conflict ? 'Conflict — kept locally' : 'Offline — kept locally', 'error');
+    renderRecordList();
+    updateEditorThumb();
+    refreshStorageLabels(false);
+    toast(
+      result.conflict
+        ? 'Another editor changed this map. Reload from the server before saving again.'
+        : `Could not reach the server (${result.error}). Changes are kept in this browser.`,
+    );
+  } finally {
+    saveRunning = false;
+    if (saveQueued) {
+      saveQueued = false;
+      void saveNow();
+    }
   }
 }
 
 function saveSoon(): void {
   setSaveStatus('Unsaved changes…', 'pending');
   window.clearTimeout(saveTimer);
-  saveTimer = window.setTimeout(() => saveNow(), 400);
+  saveTimer = window.setTimeout(() => void saveNow(), serverMode ? 700 : 400);
 }
 
 function afterEntryChange(message?: string): void {
@@ -732,6 +890,7 @@ function selectRecord(id: string | null): void {
   renderRecordList();
   renderForm();
   if (palette) palette.setCommands(buildEntryCommands());
+  trackEditOpen(id);
 }
 
 function createRecord(): MapRecord {
@@ -1080,12 +1239,35 @@ async function importFile(file: File): Promise<void> {
 async function reloadServed(): Promise<void> {
   if (
     !window.confirm(
-      'Discard all saved changes and reload the served dataset? Export your changes first if you need them.',
+      'Discard all unsaved changes and reload from the database? Export your changes first if you need them.',
     )
   ) {
     return;
   }
   try {
+    if (serverMode) {
+      const snapshot = await fetchSnapshot();
+      if (!snapshot) throw new Error('The API is unreachable');
+      clearDelta();
+      baseDataset = snapshot.dataset;
+      baseSourceLabel = 'Server API · SQLite';
+      baseRecords = snapshot.dataset.maps;
+      serverRevisions = new Map(Object.entries(snapshot.revisions ?? {}));
+      delta = emptyDelta(baseDataset.updatedAt);
+      records = applyDelta(baseRecords, delta);
+      selectedId = records[0]?.id ?? null;
+      autoIds.clear();
+      openedForEdit.clear();
+      lookupResults = [];
+      lastAutoLookup = '';
+      setSaveStatus('Reloaded from the database', 'idle');
+      renderRecordList();
+      renderForm();
+      trackEditOpen(selectedId);
+      toast(`Reloaded ${records.length} records from the database`);
+      return;
+    }
+
     const served = await loadServedDataset();
     await clearWorkingDataset();
     clearDelta();
@@ -1678,6 +1860,14 @@ function bindEvents(): void {
   required<HTMLButtonElement>('#reload-served').addEventListener('click', () => void reloadServed());
   required<HTMLButtonElement>('#duplicate-btn').addEventListener('click', duplicateRecord);
   required<HTMLButtonElement>('#delete-btn').addEventListener('click', deleteRecord);
+  required<HTMLButtonElement>('#history-btn').addEventListener('click', () => {
+    const record = current();
+    if (!record) {
+      toast('Select a map to see its audit trail');
+      return;
+    }
+    openAuditDialog(record.id, record.name, serverMode);
+  });
   required<HTMLButtonElement>('#save-btn').addEventListener('click', () => void saveNow(true));
   required<HTMLButtonElement>('#entry-palette-open').addEventListener('click', () => palette.open());
 
@@ -1712,12 +1902,25 @@ function bindEvents(): void {
 async function boot(): Promise<void> {
   setSaveStatus('Loading…');
 
+  // Prefer the API: it is the writable source of truth. Fall back to the
+  // static dataset when the site is served without the Node backend.
+  let snapshot: Awaited<ReturnType<typeof fetchSnapshot>> = null;
+  try {
+    snapshot = await fetchSnapshot();
+  } catch {
+    snapshot = null;
+  }
+
   let served: Awaited<ReturnType<typeof loadServedDataset>> | null = null;
   let servedError: unknown = null;
-  try {
-    served = await loadServedDataset();
-  } catch (error) {
-    servedError = error;
+  if (snapshot) {
+    served = { dataset: snapshot.dataset, source: 'Server API · SQLite' };
+  } else {
+    try {
+      served = await loadServedDataset();
+    } catch (error) {
+      servedError = error;
+    }
   }
 
   const legacy = await loadWorkingDataset();
@@ -1727,6 +1930,10 @@ async function boot(): Promise<void> {
     baseDataset = served.dataset;
     baseSourceLabel = served.source;
     baseRecords = served.dataset.maps;
+    if (snapshot) {
+      serverMode = true;
+      serverRevisions = new Map(Object.entries(snapshot.revisions ?? {}));
+    }
 
     if (storedDelta) {
       delta = storedDelta;
@@ -1780,10 +1987,22 @@ async function boot(): Promise<void> {
   });
 
   bindEvents();
+  bindAuditDialog();
   renderRecordList();
   renderForm();
+  trackEditOpen(selectedId);
+  const navMeta = $('#nav-mode');
+  if (navMeta) navMeta.textContent = serverMode ? 'Server database' : 'Local working copy';
+
   const count = deltaCount(delta);
-  setSaveStatus(count ? `${count} changed map${count === 1 ? '' : 's'} loaded` : 'Loaded', 'idle');
+  setSaveStatus(
+    count
+      ? `${count} unsaved map${count === 1 ? '' : 's'} loaded`
+      : serverMode
+        ? 'Connected to the database'
+        : 'Loaded',
+    'idle',
+  );
 
   if (records.length === 0) {
     createRecord();

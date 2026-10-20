@@ -158,6 +158,8 @@ export function datasetToJson(dataset: MapDataset): string {
 }
 
 const DATA_SOURCES = [
+  // Live database first; static files keep the site working without Node.
+  { url: 'api/maps', zip: false },
   { url: 'data/maps.zip', zip: true },
   { url: 'data/maps.json', zip: false },
 ] as const;

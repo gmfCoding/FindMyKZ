@@ -34,7 +34,7 @@
           <a href="index.html">Maps</a>
           <a href="entry.html" class="active" aria-current="page">Data entry</a>
         </nav>
-        <div class="nav-meta">Local working copy</div>
+        <div class="nav-meta" id="nav-mode">Local working copy</div>
       </div>
     </header>
 
@@ -87,10 +87,10 @@
             <ol>
               <li>Press <kbd class="kbd">Ctrl</kbd><kbd class="kbd">P</kbd> and type a property path.</li>
               <li>Set global maps to <em>Yes</em>, then lookup on cs2kz.org to autofill.</li>
-              <li>Only changed fields are saved. Press <strong>Export Changes</strong> to download them.</li>
-              <li>In the dev workspace, run <code>npm run apply:changes -- maps_changes.json</code>.</li>
+              <li>Only changed fields are sent to the API (<code>POST</code>/<code>PUT</code>) and stored in SQLite.</li>
+              <li><strong>History</strong> shows the private audit trail: every change as old → new.</li>
             </ol>
-            <p class="record-help-note">Deltas save automatically to this browser's local storage (cookies are limited to ~4 KB). Export regularly — clearing site data removes them.</p>
+            <p class="record-help-note">Start the backend with <code>npm start</code>. Without it, changes stay in this browser and can be exported as a delta file.</p>
           </div>
         </aside>
 
@@ -106,6 +106,7 @@
             </div>
             <div class="editor-actions">
               <span id="save-status" class="save-status" data-state="idle">Loading…</span>
+              <button type="button" id="history-btn" class="btn ghost" title="Private per-map audit trail">History</button>
               <button type="button" id="duplicate-btn" class="btn ghost">Duplicate</button>
               <button type="button" id="delete-btn" class="btn danger">Delete</button>
               <button type="button" id="save-btn" class="btn accent">Save</button>
@@ -128,6 +129,39 @@
         </section>
       </div>
     </main>
+
+    <div id="audit-modal" class="modal audit-modal" hidden>
+      <div class="modal-backdrop" data-audit-close></div>
+      <div class="modal-panel audit-panel" role="dialog" aria-modal="true" aria-labelledby="audit-title">
+        <button type="button" class="modal-close" data-audit-close aria-label="Close audit trail">×</button>
+        <header class="audit-head">
+          <span class="eyebrow"><span class="eyebrow-dot"></span>Private audit trail</span>
+          <h2 id="audit-title">Audit trail</h2>
+          <p id="audit-sub">Only fields whose value changed are recorded, with the old and new value.</p>
+          <div class="audit-controls">
+            <label class="audit-control">
+              <span>Editing as</span>
+              <input id="audit-editor" type="text" maxlength="80" placeholder="your name" autocomplete="off" spellcheck="false" />
+            </label>
+            <label class="audit-control">
+              <span>Edit token</span>
+              <input id="edit-token" type="password" placeholder="only if writes are locked" autocomplete="off" spellcheck="false" />
+            </label>
+            <label class="audit-control">
+              <span>Audit token</span>
+              <input id="audit-token" type="password" placeholder="FINDMYKZ_AUDIT_TOKEN" autocomplete="off" spellcheck="false" />
+            </label>
+            <button type="button" id="audit-refresh" class="btn accent">Load</button>
+          </div>
+          <label class="audit-toggle">
+            <input id="audit-show-opens" type="checkbox" />
+            <span>Show edit opens (no value changes)</span>
+          </label>
+          <p id="audit-status" class="audit-status" hidden></p>
+        </header>
+        <div id="audit-list" class="audit-list"></div>
+      </div>
+    </div>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 

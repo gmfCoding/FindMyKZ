@@ -6,3 +6,5 @@ findmykz-static.zip
 public/js/*.map
 *.zip
 public/data/maps.zip
+server/data/
+.env

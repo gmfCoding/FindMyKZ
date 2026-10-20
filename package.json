@@ -4,11 +4,17 @@
   "private": true,
   "description": "Find CS2 KZ maps by their properties. Static, frontend-only property database.",
   "type": "module",
+  "engines": {
+    "node": ">=22.5"
+  },
   "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.mjs",
+    "server": "npm run build && npm run start",
     "build": "tsc && node scripts/pack-data.mjs",
     "package": "npm run build && node scripts/package-site.mjs",
     "watch": "tsc --watch",
     "pack": "node scripts/pack-data.mjs",
+    "db:export": "node scripts/export-db.mjs && node scripts/pack-data.mjs",
     "serve": "python3 -m http.server 5173 --directory public",
     "dev": "npm run build && npm run serve",
     "refresh:data": "node scripts/refresh-cs2kz-data.mjs",

@@ -52,6 +52,14 @@ export const SCENERY_GROUPS = [
     tags: ['Confined', 'Indoors', 'Outdoors', 'Outerspace'],
   },
   {
+    label: 'Indoor Settings',
+    tags: ['Laboratory', 'Temple', 'Factory', 'Warehouse', 'Dungeon', 'Office', 'Residential', 'Castle'],
+  },
+  {
+    label: 'Outdoor Settings',
+    tags: ['Island', 'Canyon', 'Volcano', 'Desert', 'Oasis', 'Graveyard'],
+  },
+  {
     label: 'Biomes & Nature',
     tags: [
       'Beach',
@@ -59,7 +67,6 @@ export const SCENERY_GROUPS = [
       'Lava',
       'Acid',
       'Trees',
-      'Desert',
       'Forest',
       'Mountain',
       'Snowy',

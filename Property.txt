@@ -54,13 +54,17 @@ Weather:  Winter | Summer | Spring | Autumn | Cloudy | Sunny | Raining | Snowing
 
 Scenary tags (multi-select, grouped):
 	Setting: Confined | Indoors | Outdoors | Outerspace
-	Biomes & Nature: Beach | Water | Lava | Acid | Trees | Desert | Forest | Mountain | Snowy | Swamp | Cave | Jungle | Tundra
+	Indoor Settings: Laboratory | Temple | Factory | Warehouse | Dungeon | Office | Residential | Castle
+	Outdoor Settings: Island | Canyon | Volcano | Desert | Oasis | Graveyard
+	Biomes & Nature: Beach | Water | Lava | Acid | Trees | Forest | Mountain | Snowy | Swamp | Cave | Jungle | Tundra
 	Urban & Architecture: Industrial | Cityscape | Ruins | Cyberpunk | Medieval | Post-Apocalyptic | Suburban | Underground | Abstract
 	Art Style: Realistic | Low Poly | Futuristic
 	Climate & Tone: Warm | Neutral | Cold
 	Atmosphere & Lighting: Daytime | Nighttime | Sunset | Foggy | Spooky | Surreal | Neon | Monochrome
 	Gameplay & Hazards: Toxic | Void | Ice | Floating Islands
 	- Setting: how enclosed/open the playable space is, and whether it is on another world.
+	- Indoor Settings: the specific indoor location the map is set in.
+	- Outdoor Settings: the specific outdoor location or landmark the map is built around.
 	- Biomes & Nature: natural environment, terrain and liquids present.
 	- Urban & Architecture: built environment, era and architectural style.
 	- Art Style: how realistic or stylised the visuals are.
