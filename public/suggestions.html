@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#09090b" />
+    <meta
+      name="description"
+      content="FindMyKZ suggestions — propose and vote on changes to KZ map materials, properties and fields."
+    />
+    <title>Suggestions · FindMyKZ</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Akshar:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="suggest-body">
+    <header class="site-nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html" aria-label="FindMyKZ home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.5 21 7v10l-9 4.5L3 17V7l9-4.5Z" stroke="currentColor" stroke-width="1.6" />
+              <path d="M12 7.2v9.6M7.6 9.8l8.8 4.4M16.4 9.8l-8.8 4.4" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+          </span>
+          <span class="brand-word">Find<span class="brand-accent">My</span>KZ</span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html">Maps</a>
+          <a href="entry.html">Data entry</a>
+          <a href="suggestions.html" class="active" aria-current="page">Suggestions</a>
+        </nav>
+        <div class="nav-meta" id="suggest-meta">Loading suggestions…</div>
+      </div>
+    </header>
+
+    <main class="suggest-page">
+      <div class="suggest-head">
+        <div class="eyebrow"><span class="eyebrow-dot"></span>Community suggestions</div>
+        <h1>Suggest a <em>change</em> to the data.</h1>
+        <p class="suggest-copy">
+          Propose new changes, these are not changes to maps, but changes to the data or the site in general.        </p>
+      </div>
+
+      <div class="suggest-layout">
+        <section class="suggest-main" aria-label="Suggestions">
+          <div class="suggest-toolbar">
+            <div class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7" />
+                <path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+              <input id="suggest-search" type="search" placeholder="Search suggestions…" autocomplete="off" spellcheck="false" />
+            </div>
+            <label class="suggest-filter">
+              <span>Type</span>
+              <select id="filter-area">
+                <option value="">All</option>
+                <option value="material">Material type</option>
+                <option value="property">Property</option>
+                <option value="field">Field</option>
+                <option value="general">General</option>
+              </select>
+            </label>
+            <label class="suggest-filter">
+              <span>Action</span>
+              <select id="filter-action">
+                <option value="">All</option>
+                <option value="add">Add</option>
+                <option value="update">Update</option>
+                <option value="remove">Remove</option>
+              </select>
+            </label>
+            <button type="button" class="btn ghost" id="filter-reset" hidden>Clear filters</button>
+          </div>
+
+          <div class="suggest-summary" id="suggest-summary" aria-live="polite"></div>
+          <div class="suggest-list" id="suggest-list"></div>
+          <div class="suggest-more">
+            <button type="button" class="btn" id="suggest-more" hidden>Show more</button>
+          </div>
+        </section>
+
+        <aside class="suggest-side" aria-label="New suggestion">
+          <form class="suggest-form" id="suggest-form" novalidate>
+            <h2>New suggestion</h2>
+
+            <div class="suggest-fields">
+              <div class="form-field">
+                <div class="form-label-row"><label for="sg-area">About a…</label></div>
+                <select id="sg-area">
+                  <option value="material">Material type</option>
+                  <option value="property">Property</option>
+                  <option value="field">Field</option>
+                  <option value="general">General</option>
+                </select>
+              </div>
+              <div class="form-field" id="sg-action-field">
+                <div class="form-label-row"><label>What do you want to do?</label></div>
+                <div class="chip-row" id="sg-action" role="radiogroup" aria-label="Action">
+                  <button type="button" class="chip active" role="radio" aria-checked="true" data-value="add">Add</button>
+                  <button type="button" class="chip" role="radio" aria-checked="false" data-value="update">Update</button>
+                  <button type="button" class="chip" role="radio" aria-checked="false" data-value="remove">Remove</button>
+                </div>
+              </div>
+              <div class="form-field">
+                <div class="form-label-row">
+                  <label for="sg-name" id="sg-name-label">Name</label>
+                  <span class="form-hint" id="sg-name-hint"></span>
+                </div>
+                <div class="combo">
+                  <input
+                    id="sg-name"
+                    type="text"
+                    maxlength="120"
+                    autocomplete="off"
+                    spellcheck="false"
+                    role="combobox"
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                    aria-controls="sg-name-list"
+                  />
+                  <ul id="sg-name-list" class="combo-list" role="listbox" hidden></ul>
+                </div>
+                <p class="combo-note" id="sg-name-note" hidden></p>
+              </div>
+              <div class="form-field">
+                <div class="form-label-row">
+                  <label for="sg-body">Description <span class="form-hint">(optional)</span></label>
+                  <span class="form-hint" id="sg-body-count"></span>
+                </div>
+                <textarea id="sg-body" rows="3" maxlength="280"></textarea>
+              </div>
+              <p class="suggest-preview" id="sg-preview"></p>
+            </div>
+
+            <p class="suggest-error" id="form-error" role="alert" hidden></p>
+            <button type="submit" class="btn accent suggest-submit" id="form-submit">Post suggestion</button>
+          </form>
+        </aside>
+      </div>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+      <div class="noscript">FindMyKZ suggestions need JavaScript.</div>
+    </noscript>
+    <script type="module" src="js/suggestions.js"></script>
+  </body>
+</html>

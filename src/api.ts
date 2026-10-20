@@ -6,6 +6,7 @@
  * browser only and sent as headers.
  */
 import { normalizeDataset } from './data.js';
+import type { Suggestion, SuggestionInput } from './suggestion-types.js';
 import type { MapDataset, MapRecord } from './types.js';
 
 const API_BASE = 'api';
@@ -210,4 +211,20 @@ export async function fetchAudit(
   return request('GET', `maps/${encodeURIComponent(mapId)}/audit?limit=200`, {
     headers: { 'X-Audit-Token': token },
   });
+}
+
+export async function fetchSuggestions(): Promise<ApiResult<{ suggestions: Suggestion[] }>> {
+  return request('GET', 'suggestions');
+}
+
+export async function postSuggestion(input: SuggestionInput): Promise<ApiResult<{ suggestion: Suggestion }>> {
+  return request('POST', 'suggestions', { body: input });
+}
+
+/** `value` 1 = up, -1 = down, 0 = clear the browser's vote. */
+export async function voteSuggestion(
+  id: number,
+  value: -1 | 0 | 1,
+): Promise<ApiResult<{ suggestion: Suggestion }>> {
+  return request('POST', `suggestions/${id}/vote`, { body: { value } });
 }

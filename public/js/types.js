@@ -13,7 +13,7 @@ export const COLOURS = [
     'Rainbow',
     'Multi-Colour',
 ];
-export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow'];
+export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Brick', 'Rainbow'];
 export const AMOUNTS = ['None', 'Some', 'Lots', 'All'];
 export const LADDER_TYPES = ['Prop', 'Brush-Mesh', 'Inset', 'Rope'];
 export const PORTS = ['GO', 'Source', '1.6', 'Unknown'];
@@ -133,6 +133,7 @@ export const DEFAULT_FILTERS = {
     global: [],
     materials: [],
     materialsMode: 'all',
+    brickColour: null,
     props: [],
     topMin: null,
     topMax: null,
@@ -173,6 +174,7 @@ export function defaultMapRecord(name = '', id = '') {
         name,
         global: 'Unknown',
         materials: [],
+        brickColour: null,
         props: [],
         topTime: null,
         vnlTopTime: null,
@@ -216,6 +218,7 @@ export const FILTER_LABELS = {
     global: 'Global',
     materials: 'Material',
     materialsMode: 'Material match',
+    brickColour: 'Brick colour',
     props: 'Props',
     top: 'CKZ top time',
     vnlTop: 'VNL top time',

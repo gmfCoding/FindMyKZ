@@ -85,12 +85,15 @@ export function normalizeRecord(raw: unknown): MapRecord {
   const source = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
   const name = asString(source.name).trim() || 'Untitled map';
   const base = defaultMapRecord(name, asString(source.id) || name);
+  const materials = enumArray<Material>(source.materials, MATERIALS);
   return {
     ...base,
     id: asString(source.id) || name,
     name,
     global: asTri(source.global),
-    materials: enumArray<Material>(source.materials, MATERIALS),
+    materials,
+    // The colour belongs to the Brick material, so it is dropped without it.
+    brickColour: materials.includes('Brick') ? asColour(source.brickColour) : null,
     props: enumArray<Amount>(source.props, AMOUNTS),
     topTime: asTopTime(source.topTime),
     vnlTopTime: asTopTime(source.vnlTopTime),

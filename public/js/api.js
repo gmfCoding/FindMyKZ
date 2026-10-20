@@ -147,4 +147,14 @@ export async function fetchAudit(mapId, token) {
         headers: { 'X-Audit-Token': token },
     });
 }
+export async function fetchSuggestions() {
+    return request('GET', 'suggestions');
+}
+export async function postSuggestion(input) {
+    return request('POST', 'suggestions', { body: input });
+}
+/** `value` 1 = up, -1 = down, 0 = clear the browser's vote. */
+export async function voteSuggestion(id, value) {
+    return request('POST', `suggestions/${id}/vote`, { body: { value } });
+}
 //# sourceMappingURL=api.js.map

@@ -72,7 +72,7 @@ db.exec(`
 
 const now = () => new Date().toISOString();
 
-function transaction(fn) {
+export function transaction(fn) {
   db.exec('BEGIN IMMEDIATE');
   try {
     const result = fn();

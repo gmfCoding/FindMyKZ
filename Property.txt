@@ -6,7 +6,7 @@ Brown/Gray/White/Black/Rainbow/Multi-Colour/Unknown
 
 StringType: Arbituary datam, can be CSV list, max length 255
 
-MaterialTypes: (Unknown | Concrete | grass | wood | plastic (solid colour material) | rainbow) Modes: Any of / All of
+MaterialTypes: (Unknown | Concrete | grass | wood | plastic (solid colour material) | brick (can have a colour) | rainbow) Modes: Any of / All of
 
 MaybeType: Yes / No / Unknown
 AmountType: Unknown / None / Some / Lots / All (Can selected multiple)

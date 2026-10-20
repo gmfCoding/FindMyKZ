@@ -20,7 +20,7 @@ export const COLOURS = [
 ] as const;
 export type Colour = (typeof COLOURS)[number];
 
-export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Rainbow'] as const;
+export const MATERIALS = ['Concrete', 'Grass', 'Wood', 'Plastic', 'Brick', 'Rainbow'] as const;
 export type Material = (typeof MATERIALS)[number];
 
 export const AMOUNTS = ['None', 'Some', 'Lots', 'All'] as const;
@@ -145,6 +145,8 @@ export interface MapRecord {
   name: string;
   global: Tri;
   materials: Material[];
+  /** Colour of the Brick material. Only meaningful when `materials` includes Brick. */
+  brickColour: Colour | null;
   props: Amount[];
   /** Top time in seconds for classic / CKZ. `null` = unknown. */
   topTime: number | null;
@@ -198,6 +200,7 @@ export interface SearchFilters {
   global: Tri[];
   materials: Material[];
   materialsMode: AnyAll;
+  brickColour: Colour | null;
   props: Amount[];
   /** Minutes. `null` = unbounded. */
   topMin: number | null;
@@ -288,6 +291,7 @@ export const DEFAULT_FILTERS: SearchFilters = {
   global: [],
   materials: [],
   materialsMode: 'all',
+  brickColour: null,
   props: [],
   topMin: null,
   topMax: null,
@@ -329,6 +333,7 @@ export function defaultMapRecord(name = '', id = ''): MapRecord {
     name,
     global: 'Unknown',
     materials: [],
+    brickColour: null,
     props: [],
     topTime: null,
     vnlTopTime: null,
@@ -373,6 +378,7 @@ export const FILTER_LABELS: Record<string, string> = {
   global: 'Global',
   materials: 'Material',
   materialsMode: 'Material match',
+  brickColour: 'Brick colour',
   props: 'Props',
   top: 'CKZ top time',
   vnlTop: 'VNL top time',

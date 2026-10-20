@@ -104,6 +104,7 @@ server.listen(PORT, HOST, () => {
   console.log('FindMyKZ server');
   console.log(`  site      ${origin}/`);
   console.log(`  data entry ${origin}/entry.html`);
+  console.log(`  suggestions ${origin}/suggestions.html`);
   console.log(`  api       ${origin}/api/maps`);
   console.log(`  database  ${DB_PATH} (${mapCount()} maps)`);
   if (seededCount > 0) console.log(`  seeded    ${seededCount} maps from public/data/maps.json`);

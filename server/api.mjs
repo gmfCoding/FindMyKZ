@@ -9,10 +9,16 @@
  *   DELETE /api/maps/:id               delete a map record
  *   POST   /api/maps/:id/open          record that a browser opened it for editing
  *   GET    /api/maps/:id/audit         PRIVATE per-map audit trail (token required)
+ *
+ *   GET    /api/suggestions            public suggestions, most liked first
+ *   POST   /api/suggestions            post a suggestion (no sign-in)
+ *   POST   /api/suggestions/:id/vote   { value: 1 | -1 | 0 } up/down-vote or clear (no sign-in)
  */
 import { timingSafeEqual } from 'node:crypto';
 
+import { validateSuggestion } from '../public/js/suggestion-types.js';
 import * as store from './db.mjs';
+import * as suggestions from './suggestions.mjs';
 
 const EDIT_TOKEN = process.env.FINDMYKZ_EDIT_TOKEN ?? '';
 const AUDIT_TOKEN = process.env.FINDMYKZ_AUDIT_TOKEN ?? '';
@@ -108,6 +114,36 @@ function clientIp(req) {
   return req.socket?.remoteAddress ?? null;
 }
 
+/** Anonymous per-browser identity used to de-duplicate suggestion votes. */
+function voterFrom(req) {
+  const raw = req.headers['x-client'];
+  const id = typeof raw === 'string' ? raw.trim() : '';
+  return /^[A-Za-z0-9._-]{8,64}$/.test(id) ? id : '';
+}
+
+const rateBuckets = new Map();
+
+/** Small in-memory sliding window so the open endpoints cannot be hammered. */
+function rateLimited(bucket, req, max, windowMs) {
+  const key = `${bucket}:${clientIp(req) ?? 'unknown'}`;
+  const cutoff = Date.now() - windowMs;
+  const hits = (rateBuckets.get(key) ?? []).filter((at) => at > cutoff);
+  if (hits.length >= max) {
+    rateBuckets.set(key, hits);
+    return true;
+  }
+  hits.push(Date.now());
+  rateBuckets.set(key, hits);
+  return false;
+}
+
+setInterval(() => {
+  const cutoff = Date.now() - 60 * 60 * 1000;
+  for (const [key, hits] of rateBuckets) {
+    if (hits.every((at) => at <= cutoff)) rateBuckets.delete(key);
+  }
+}, 10 * 60 * 1000).unref();
+
 function metaFrom(req, body) {
   const actor =
     (typeof body?.actor === 'string' && body.actor.trim()) ||
@@ -182,6 +218,55 @@ export async function handleApi(req, res, url) {
         writes: EDIT_TOKEN ? 'token' : 'open',
         audit: AUDIT_TOKEN ? 'token' : 'disabled',
       });
+      return true;
+    }
+
+    if (pathname === '/api/suggestions' && req.method === 'GET') {
+      json(res, 200, { suggestions: suggestions.listSuggestions(voterFrom(req)) });
+      return true;
+    }
+
+    if (pathname === '/api/suggestions' && req.method === 'POST') {
+      const voter = voterFrom(req);
+      if (!voter) {
+        fail(res, 400, 'invalid_client', 'A browser client id (X-Client header) is required.');
+        return true;
+      }
+      if (rateLimited('suggest', req, 10, 60 * 60 * 1000)) {
+        fail(res, 429, 'rate_limited', 'Too many suggestions. Please try again later.');
+        return true;
+      }
+      const checked = validateSuggestion(await readJson(req));
+      if (!checked.ok) {
+        fail(res, 400, 'invalid_suggestion', checked.message);
+        return true;
+      }
+      json(res, 201, { suggestion: suggestions.createSuggestion(checked.value, voter) });
+      return true;
+    }
+
+    const voteMatch = pathname.match(/^\/api\/suggestions\/(\d+)\/vote$/);
+    if (voteMatch && req.method === 'POST') {
+      const voter = voterFrom(req);
+      if (!voter) {
+        fail(res, 400, 'invalid_client', 'A browser client id (X-Client header) is required.');
+        return true;
+      }
+      if (rateLimited('vote', req, 120, 60 * 1000)) {
+        fail(res, 429, 'rate_limited', 'Voting too fast. Please slow down.');
+        return true;
+      }
+      const body = await readJson(req);
+      if (body?.value !== 1 && body?.value !== -1 && body?.value !== 0) {
+        fail(res, 400, 'invalid_vote', 'Vote value must be 1, -1 or 0.');
+        return true;
+      }
+      const updated = suggestions.castVote(Number(voteMatch[1]), voter, body.value);
+      if (!updated) {
+        fail(res, 404, 'not_found', 'No such suggestion.');
+        return true;
+      }
+      json(res, 200, { suggestion: updated });
       return true;
     }
 

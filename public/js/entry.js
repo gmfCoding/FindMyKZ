@@ -49,6 +49,7 @@ function changesLabel() {
  */
 const MIGRATION_FIELDS = [
     'materials',
+    'brickColour',
     'props',
     'headbangers',
     'ladderAmount',
@@ -155,6 +156,9 @@ function getArrayField(record, field) {
 }
 function setArrayField(record, field, values) {
     record[field] = values;
+    // The colour belongs to the Brick material, so it goes when Brick does.
+    if (field === 'materials' && !values.includes('Brick'))
+        record.brickColour = null;
 }
 function setStringField(record, field, value) {
     record[field] = value;
@@ -381,8 +385,11 @@ function renderForm() {
         ${tierSelect('proTier', 'Pro tier')}
       </div>`)}
 
-    ${panel('Surfaces & props', 'Pick every material present. Amounts can be multi-selected because a map can have several prop styles.', `<div class="form-grid two">
-        ${chipRow('materials', 'Materials', MATERIALS, 'array', 'What is included in the map?')}
+    ${panel('Surfaces & props', 'Pick every material present on blocks which you can stand or surf on.', `<div class="form-grid two">
+        <div class="form-group-stack">
+          ${chipRow('materials', 'Materials', MATERIALS, 'array', 'What is included in the map?')}
+          ${selectField('brickColour', 'Brick colour', COLOURS, 'Not set')}
+        </div>
         ${chipRow('props', 'Prop blocks', AMOUNTS, 'array')}
       </div>
       <div class="form-grid two">
@@ -1308,6 +1315,27 @@ function buildEntryCommands() {
             children: [
                 ...entryMaterials('materials', 'Material'),
                 {
+                    id: 'entry-brick-colour',
+                    label: 'Brick colour',
+                    hint: 'Set colour (adds Brick)',
+                    keywords: ['brick', 'color', 'colour'],
+                    children: COLOURS.map((colour) => ({
+                        id: `entry-brickColour:${colour}`,
+                        label: colour,
+                        run: () => {
+                            const record = current();
+                            if (!record) {
+                                toast('Select a map first');
+                                return;
+                            }
+                            if (!record.materials.includes('Brick'))
+                                setArrayField(record, 'materials', [...record.materials, 'Brick']);
+                            setNullableField(record, 'brickColour', colour);
+                            afterEntryChange(`Brick colour: ${colour}`);
+                        },
+                    })),
+                },
+                {
                     id: 'entry-materials-clear',
                     label: 'Clear materials',
                     run: () => {
@@ -1663,6 +1691,12 @@ function bindEvents() {
             const field = target.dataset.entrySelect;
             if (field === 'port') {
                 setStringField(record, 'port', target.value);
+            }
+            else if (field === 'brickColour') {
+                setNullableField(record, field, target.value || null);
+                if (target.value && !record.materials.includes('Brick')) {
+                    setArrayField(record, 'materials', [...record.materials, 'Brick']);
+                }
             }
             else if (field === 'bhopColour' || field === 'multiColour' || field === 'prekeepColour') {
                 setNullableField(record, field, target.value || null);
