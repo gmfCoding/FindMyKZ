@@ -84,6 +84,10 @@ export function filterMaps(maps: MapRecord[], filters: SearchFilters): MapRecord
       }
     }
 
+    if (filters.brickColour) {
+      if (!map.materials.includes('Brick') || map.brickColour !== filters.brickColour) return false;
+    }
+
     if (!intersects(filters.props, map.props)) return false;
     if (!inRange(map.topTime, topMinSeconds, topMaxSeconds)) return false;
     if (!inRange(map.vnlTopTime, vnlMinSeconds, vnlMaxSeconds)) return false;
@@ -145,7 +149,7 @@ export function countActiveFilters(filters: SearchFilters): number {
   let count = 0;
   if (filters.q.trim()) count++;
   if (filters.global.length) count++;
-  if (filters.materials.length) count++;
+  if (filters.materials.length || filters.brickColour) count++;
   if (filters.props.length) count++;
   if (filters.topMin != null || filters.topMax != null) count++;
   if (filters.vnlTopMin != null || filters.vnlTopMax != null) count++;
@@ -241,6 +245,7 @@ export function activeFilterChips(filters: SearchFilters): ActiveFilterChip[] {
   }
 
   const colourFields: { key: keyof SearchFilters; label: string }[] = [
+    { key: 'brickColour', label: 'Brick colour' },
     { key: 'bhopColour', label: 'Bhop colour' },
     { key: 'multiColour', label: 'Multi colour' },
     { key: 'prekeepColour', label: 'Prekeep colour' },
@@ -302,6 +307,7 @@ export function removeFilterChip(filters: SearchFilters, chip: ActiveFilterChip)
     case 'basedOn':
       filters.basedOn = '';
       return;
+    case 'brickColour':
     case 'bhopColour':
     case 'multiColour':
     case 'prekeepColour':

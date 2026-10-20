@@ -164,6 +164,7 @@ function buildSidebar(): void {
     ${section(
       'Material-ness',
       `${chipGroup('materials', MATERIALS)}
+       ${colourSelect('brickColour', 'Brick colour')}
        <div class="mode-row">
          <span class="field-label">Match</span>
          <div class="segmented" data-mode="materials">
@@ -276,7 +277,9 @@ function setTierRange(prefix: 'tp' | 'pro', min: number | null, max: number | nu
   }
 }
 
-function setColour(key: 'bhopColour' | 'multiColour' | 'prekeepColour', value: Colour | null): void {
+type ColourKey = 'brickColour' | 'bhopColour' | 'multiColour' | 'prekeepColour';
+
+function setColour(key: ColourKey, value: Colour | null): void {
   filters[key] = value;
 }
 
@@ -305,7 +308,7 @@ function syncSidebar(): void {
   });
 
   $$<HTMLSelectElement>('[data-select]', filtersEl).forEach((select) => {
-    const key = select.dataset.select as 'bhopColour' | 'multiColour' | 'prekeepColour';
+    const key = select.dataset.select as ColourKey;
     select.value = filters[key] ?? '';
   });
 
@@ -394,14 +397,20 @@ function renderActiveFilters(): void {
     .join('')}<button type="button" class="link-btn active-clear" data-clear-all>Clear all</button>`;
 }
 
-function materialTag(material: string): string {
+function materialTag(material: string, label = material): string {
   const className = `mat-${slugify(material) || 'unknown'}`;
-  return `<span class="tag tag-material ${className}"><span class="mat-dot"></span>${escapeHtml(material)}</span>`;
+  return `<span class="tag tag-material ${className}"><span class="mat-dot"></span>${escapeHtml(label)}</span>`;
 }
 
 function cardTags(map: MapRecord): string {
   const tags: string[] = [];
-  tags.push(...map.materials.slice(0, 2).map(materialTag));
+  tags.push(
+    ...map.materials
+      .slice(0, 2)
+      .map((material) =>
+        materialTag(material, material === 'Brick' && map.brickColour ? `Brick · ${map.brickColour}` : material),
+      ),
+  );
   if (map.tech.length) tags.push(`<span class="tag tag-tech">${escapeHtml(map.tech[0])}</span>`);
   if (map.special.length) tags.push(`<span class="tag">${escapeHtml(map.special[0])}</span>`);
   if (map.path.length) tags.push(`<span class="tag">${escapeHtml(map.path[0])}</span>`);
@@ -586,6 +595,7 @@ function hydrateFromUrl(): void {
       (filters as unknown as Record<string, unknown>)[key] = (value as string[]).filter((item) => item !== 'Unknown');
     }
   }
+  if ((filters.brickColour as string | null) === 'Unknown') filters.brickColour = null;
   if ((filters.bhopColour as string | null) === 'Unknown') filters.bhopColour = null;
   if ((filters.multiColour as string | null) === 'Unknown') filters.multiColour = null;
   if ((filters.prekeepColour as string | null) === 'Unknown') filters.prekeepColour = null;
@@ -662,7 +672,7 @@ function openMap(map: MapRecord): void {
           ${detailItem('Global', map.global)}
           ${detailItem('Bonus', map.bonus)}
           ${detailItem('Catalogue', map.catalogued)}
-          ${detailItem('Materials', joinList(map.materials))}
+          ${detailItem('Materials', joinList(map.materials.map((material) => (material === 'Brick' && map.brickColour ? `Brick (${map.brickColour})` : material))))}
           ${detailItem('Props', joinList(map.props))}
           ${detailItem('CKZ top time', formatTopTime(map.topTime))}
           ${detailItem('VNL top time', formatTopTime(map.vnlTopTime))}
@@ -922,6 +932,21 @@ function buildPaletteCommands(): PaletteCommand[] {
       children: [
         ...materialCommands('materials', 'Add material (AND by default)'),
         {
+          id: 'materials-brick-colour',
+          label: 'Brick colour',
+          hint: 'Colour of the Brick material (adds Brick)',
+          keywords: ['brick', 'color', 'colour'],
+          children: COLOURS.map((value) => ({
+            id: `brickColour:${value}`,
+            label: value,
+            run: () => {
+              if (!filters.materials.includes('Brick')) toggleValue('materials', 'Brick');
+              setColour('brickColour', value);
+              onFiltersChanged();
+            },
+          })),
+        },
+        {
           id: 'materials-mode',
           label: 'Match mode',
           hint: 'All of / Any of',
@@ -952,6 +977,7 @@ function buildPaletteCommands(): PaletteCommand[] {
           hint: 'Remove material filters',
           run: () => {
             filters.materials = [];
+            filters.brickColour = null;
             onFiltersChanged();
           },
         },
@@ -1408,7 +1434,7 @@ function bindEvents(): void {
     const select = target.closest<HTMLSelectElement>('select');
     if (!select) return;
     if (select.dataset.select) {
-      setColour(select.dataset.select as 'bhopColour' | 'multiColour' | 'prekeepColour', (select.value || null) as Colour | null);
+      setColour(select.dataset.select as ColourKey, (select.value || null) as Colour | null);
       onFiltersChanged();
       return;
     }

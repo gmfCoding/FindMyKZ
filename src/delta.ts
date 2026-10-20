@@ -11,6 +11,7 @@ const PATCHABLE_FIELDS: (keyof MapRecord)[] = [
   'name',
   'global',
   'materials',
+  'brickColour',
   'props',
   'topTime',
   'vnlTopTime',

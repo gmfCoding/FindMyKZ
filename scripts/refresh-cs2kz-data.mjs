@@ -50,6 +50,7 @@ function emptyRecord() {
     name: '',
     global: 'Unknown',
     materials: [],
+    brickColour: null,
     props: [],
     topTime: null,
     vnlTopTime: null,

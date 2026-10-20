@@ -125,6 +125,7 @@ through property → value chains, with fuzzy matching on every level.
 | `Bh > Yes` | Bhop = Yes |
 | `Mat > Con` | Add Concrete to materials (search defaults to **All of**) |
 | `Mat > Grass` | Also add Grass |
+| `Mat > Brick colour > Red` | Brick material with the colour Red |
 | `Top > 1 > 2` | CKZ / classic top time between 1 and 2 minutes |
 | `VNL > 1 > 2` | VNL / vanilla top time between 1 and 2 minutes |
 | `TP > 3 > 6` | TP tier range 3–6 |
@@ -204,6 +205,7 @@ must contain one JSON file (`maps.json` is what the export creates). Load is cli
       "name": "kz_grotto",
       "global": "Yes",
       "materials": [],
+      "brickColour": null,
       "props": [],
       "topTime": 71.71875,
       "vnlTopTime": 100.3125,
@@ -343,7 +345,8 @@ Every selected category is ANDed together.
 > value from `Property.txt`.
 
 - **Materials** default to **All of** (the map must include every selected material); switch to
-  **Any of** in the sidebar.
+  **Any of** in the sidebar. **Brick** can have a colour (`brickColour`); filtering by it only
+  matches maps that have Brick in that colour.
 - Other multi-select categories (weather, scenery, time, path, special, ladder types, surf materials)
   match **any** selected value.
 - Amount filters match a map whose amount list contains any selected amount.

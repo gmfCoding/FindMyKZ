@@ -8,6 +8,7 @@ const PATCHABLE_FIELDS = [
     'name',
     'global',
     'materials',
+    'brickColour',
     'props',
     'topTime',
     'vnlTopTime',
