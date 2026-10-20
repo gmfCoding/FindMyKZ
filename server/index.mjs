@@ -15,7 +15,7 @@ import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { apiConfig, handleApi } from './api.mjs';
-import { DB_PATH, closeDb, mapCount, seededCount } from './db.mjs';
+import { DB_PATH, catalogueMigrated, closeDb, mapCount, seededCount } from './db.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const PUBLIC_DIR = join(ROOT, 'public');
@@ -107,6 +107,7 @@ server.listen(PORT, HOST, () => {
   console.log(`  api       ${origin}/api/maps`);
   console.log(`  database  ${DB_PATH} (${mapCount()} maps)`);
   if (seededCount > 0) console.log(`  seeded    ${seededCount} maps from public/data/maps.json`);
+  if (catalogueMigrated > 0) console.log(`  migrated  ${catalogueMigrated} records defaulted to Uncatalogued`);
   console.log(`  writes    ${apiConfig.writesLocked ? 'token required (FINDMYKZ_EDIT_TOKEN)' : 'open'}`);
   console.log(
     `  audit     ${apiConfig.auditEnabled ? 'token required (FINDMYKZ_AUDIT_TOKEN)' : 'disabled — set FINDMYKZ_AUDIT_TOKEN to read it'}`,

@@ -97,7 +97,9 @@
         <section class="editor" aria-label="Map editor">
           <div class="editor-toolbar">
             <div class="editor-title-row">
-              <div id="editor-thumb" class="editor-thumb"><span class="editor-thumb-empty">KZ</span></div>
+              <button type="button" id="editor-thumb" class="editor-thumb" aria-label="Open larger thumbnail preview">
+                <span class="editor-thumb-empty">KZ</span>
+              </button>
               <div class="editor-title-copy">
                 <span class="eyebrow"><span class="eyebrow-dot"></span>Map record</span>
                 <h2 id="editor-heading">No map selected</h2>
@@ -129,6 +131,18 @@
         </section>
       </div>
     </main>
+
+    <div id="thumb-modal" class="modal thumb-modal" hidden>
+      <div class="modal-backdrop" data-thumb-close></div>
+      <div class="modal-panel thumb-panel" role="dialog" aria-modal="true" aria-label="Thumbnail preview">
+        <button type="button" class="modal-close" data-thumb-close aria-label="Close thumbnail preview">×</button>
+        <img id="thumb-modal-img" alt="" referrerpolicy="no-referrer" />
+        <footer class="thumb-caption">
+          <span id="thumb-modal-caption">Thumbnail preview</span>
+          <a id="thumb-modal-link" href="#" target="_blank" rel="noopener noreferrer">Open original ↗</a>
+        </footer>
+      </div>
+    </div>
 
     <div id="audit-modal" class="modal audit-modal" hidden>
       <div class="modal-backdrop" data-audit-close></div>

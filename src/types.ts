@@ -133,6 +133,13 @@ export const TRI_OPTIONS: readonly Tri[] = ['Yes', 'No'];
 export const LJ_BLOCK_OPTIONS: readonly LjBlockValue[] = ['Yes', 'No', 'Specific'];
 export const TECH_OPTIONS = ['Box Tech'] as const;
 
+/**
+ * Catalogue status: has every property of the map been fully verified?
+ * Every map starts as `Uncatalogued` until someone marks it complete.
+ */
+export const CATALOGUE_STATES = ['Catalogued', 'Uncatalogued'] as const;
+export type CatalogueState = (typeof CATALOGUE_STATES)[number];
+
 export interface MapRecord {
   id: string;
   name: string;
@@ -168,6 +175,8 @@ export interface MapRecord {
   path: PathTag[];
   special: Special[];
   bonus: Tri;
+  /** `Unknown` = not assessed yet. */
+  catalogued: CatalogueState;
   mappers: string;
   description: string;
   thumbnail: string | null;
@@ -223,6 +232,7 @@ export interface SearchFilters {
   path: PathTag[];
   special: Special[];
   bonus: Tri[];
+  catalogued: CatalogueState[];
 }
 
 export type SortKey = 'name' | 'top-asc' | 'top-desc' | 'tier-asc' | 'tier-desc' | 'recent';
@@ -310,6 +320,7 @@ export const DEFAULT_FILTERS: SearchFilters = {
   path: [],
   special: [],
   bonus: [],
+  catalogued: [],
 };
 
 export function defaultMapRecord(name = '', id = ''): MapRecord {
@@ -346,6 +357,7 @@ export function defaultMapRecord(name = '', id = ''): MapRecord {
     path: [],
     special: [],
     bonus: 'No',
+    catalogued: 'Uncatalogued',
     mappers: '',
     description: '',
     thumbnail: null,
@@ -389,4 +401,5 @@ export const FILTER_LABELS: Record<string, string> = {
   path: 'Path',
   special: 'Special',
   bonus: 'Bonus',
+  catalogued: 'Catalogue',
 };

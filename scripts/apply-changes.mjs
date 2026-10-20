@@ -63,6 +63,7 @@ const PATCHABLE_FIELDS = [
   'path',
   'special',
   'bonus',
+  'catalogued',
   'mappers',
   'description',
   'thumbnail',

@@ -141,6 +141,39 @@ function seedIfEmpty() {
 
 export const seededCount = seedIfEmpty();
 
+/**
+ * Records stored before the catalogue state existed (or holding the old
+ * "Unknown" value) become Uncatalogued. This is a baseline migration, so it
+ * deliberately writes no audit rows.
+ */
+function migrateCatalogueDefaults() {
+  if (getMeta('catalogueDefault') === 'uncatalogued-v1') return 0;
+
+  const rows = db.prepare('SELECT id, record FROM maps').all();
+  const update = db.prepare('UPDATE maps SET record = ? WHERE id = ?');
+  let changed = 0;
+
+  transaction(() => {
+    for (const row of rows) {
+      let record;
+      try {
+        record = JSON.parse(row.record);
+      } catch {
+        continue;
+      }
+      if (record.catalogued === 'Catalogued' || record.catalogued === 'Uncatalogued') continue;
+      record.catalogued = 'Uncatalogued';
+      update.run(JSON.stringify(record), row.id);
+      changed += 1;
+    }
+    setMeta('catalogueDefault', 'uncatalogued-v1');
+  });
+
+  return changed;
+}
+
+export const catalogueMigrated = migrateCatalogueDefaults();
+
 // ---------------------------------------------------------------------------
 // Audit
 // ---------------------------------------------------------------------------

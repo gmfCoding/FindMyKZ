@@ -106,6 +106,11 @@ export const SPECIALS = [
 export const TRI_OPTIONS = ['Yes', 'No'];
 export const LJ_BLOCK_OPTIONS = ['Yes', 'No', 'Specific'];
 export const TECH_OPTIONS = ['Box Tech'];
+/**
+ * Catalogue status: has every property of the map been fully verified?
+ * Every map starts as `Uncatalogued` until someone marks it complete.
+ */
+export const CATALOGUE_STATES = ['Catalogued', 'Uncatalogued'];
 export const SORT_OPTIONS = [
     { value: 'name', label: 'Name (A–Z)' },
     { value: 'top-asc', label: 'Top time (fast → slow)' },
@@ -160,6 +165,7 @@ export const DEFAULT_FILTERS = {
     path: [],
     special: [],
     bonus: [],
+    catalogued: [],
 };
 export function defaultMapRecord(name = '', id = '') {
     return {
@@ -195,6 +201,7 @@ export function defaultMapRecord(name = '', id = '') {
         path: [],
         special: [],
         bonus: 'No',
+        catalogued: 'Uncatalogued',
         mappers: '',
         description: '',
         thumbnail: null,
@@ -237,5 +244,6 @@ export const FILTER_LABELS = {
     path: 'Path',
     special: 'Special',
     bonus: 'Bonus',
+    catalogued: 'Catalogue',
 };
 //# sourceMappingURL=types.js.map

@@ -10,6 +10,7 @@ import {
   TIMES_OF_DAY,
   WEATHER,
   type Amount,
+  type CatalogueState,
   type Colour,
   type LjBlockValue,
   type MapDataset,
@@ -45,6 +46,11 @@ function asTri(value: unknown): Tri {
 function asLjBlock(value: unknown): LjBlockValue {
   if (value === 'Yes' || value === 'No' || value === 'Specific' || value === 'Unknown') return value;
   return 'Unknown';
+}
+
+function asCatalogueState(value: unknown): CatalogueState {
+  // Every map starts uncatalogued; legacy "Unknown" values fold into it too.
+  return value === 'Catalogued' ? 'Catalogued' : 'Uncatalogued';
 }
 
 function asTier(value: unknown): number | null {
@@ -117,6 +123,7 @@ export function normalizeRecord(raw: unknown): MapRecord {
     path: enumArray<PathTag>(source.path, PATHS),
     special: enumArray<Special>(source.special, SPECIALS),
     bonus: asTri(source.bonus),
+    catalogued: asCatalogueState(source.catalogued),
     mappers: asString(source.mappers).slice(0, 255),
     description: asString(source.description),
     thumbnail: typeof source.thumbnail === 'string' && source.thumbnail.trim() ? source.thumbnail.trim() : null,

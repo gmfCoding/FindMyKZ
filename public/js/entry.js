@@ -3,7 +3,7 @@ import { bindAuditDialog, openAuditDialog } from './audit.js';
 import { clearWorkingDataset, datasetToJson, loadServedDataset, loadWorkingDataset, normalizeDataset, readJsonFile, toDataset, } from './data.js';
 import { applyDelta, buildDelta, clearDelta, deltaCount, deltaRecordIds, emptyDelta, isDeltaSet, loadDelta, normalizeDelta, saveDelta, } from './delta.js';
 import { CommandPalette } from './palette.js';
-import { AMOUNTS, COLOURS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SCENERY_GROUPS, SPECIALS, TIMES_OF_DAY, TRI_OPTIONS, WEATHER, defaultMapRecord, } from './types.js';
+import { AMOUNTS, CATALOGUE_STATES, COLOURS, LADDER_TYPES, LJ_BLOCK_OPTIONS, MATERIALS, PATHS, PORTS, SCENERY, SCENERY_GROUPS, SPECIALS, TIMES_OF_DAY, TRI_OPTIONS, WEATHER, defaultMapRecord, } from './types.js';
 import { $, $$, escapeHtml, formatTopTime, mapInitials, matchesAllTokens, parseTopTimeInput, required, slugify, thumbStyle, } from './util.js';
 import { createZip } from './zip.js';
 // ---------------------------------------------------------------------------
@@ -73,6 +73,7 @@ const MIGRATION_FIELDS = [
     'path',
     'special',
     'bonus',
+    'catalogued',
     'notes',
 ];
 function buildMigrationDelta(oldBase, legacyRecords, baseUpdatedAt) {
@@ -193,10 +194,11 @@ function completeness(record) {
         record.path.length > 0,
         record.special.length > 0,
         record.bonus !== 'Unknown',
+        record.catalogued === 'Catalogued',
     ];
     return checks.filter(Boolean).length;
 }
-const COMPLETENESS_TOTAL = 27;
+const COMPLETENESS_TOTAL = 28;
 function renderRecordList() {
     const scroll = recordListEl.scrollTop;
     const query = recordQuery.trim();
@@ -215,10 +217,12 @@ function renderRecordList() {
                 .map((record) => {
                 const progress = Math.round((completeness(record) / COMPLETENESS_TOTAL) * 100);
                 const state = record.global === 'Yes' ? 'Global' : record.global === 'No' ? 'Local' : 'Global?';
+                const isCatalogued = record.catalogued === 'Catalogued';
                 return `<button type="button" class="record-item${record.id === selectedId ? ' active' : ''}${changedIds.has(record.id) ? ' is-changed' : ''}" data-record-id="${escapeHtml(record.id)}">
               <span class="record-item-top">
                 <span class="record-name">${escapeHtml(record.name || 'Untitled map')}</span>
                 ${changedIds.has(record.id) ? '<span class="record-change-dot" title="Saved change"></span>' : ''}
+                <span class="record-catalogue ${isCatalogued ? 'is-catalogued' : 'is-uncatalogued'}" title="${isCatalogued ? 'Fully catalogued' : 'Not fully catalogued'}">${isCatalogued ? 'Catalogued' : 'Uncatalogued'}</span>
                 <span class="record-state ${record.global === 'Yes' ? 'is-global' : ''}">${escapeHtml(state)}</span>
               </span>
               <span class="record-meta">${record.materials.length ? escapeHtml(record.materials.slice(0, 2).join(' · ')) : 'No materials'} <span>·</span> TP ${record.tpTier ?? '—'} / Pro ${record.proTier ?? '—'}</span>
@@ -352,6 +356,9 @@ function renderForm() {
         ${chipRow('global', 'Global-ness', TRI_OPTIONS, 'exclusive', 'Global = cs2kz.org listed')}
         ${chipRow('bonus', 'Bonus map', TRI_OPTIONS, 'exclusive')}
         ${selectField('port', 'Port', PORTS)}
+      </div>
+      <div class="form-grid">
+        ${chipRow('catalogued', 'Catalogue status', CATALOGUE_STATES, 'exclusive', 'Catalogued = every property has been verified.')}
       </div>`, 'identity-panel')}
 
     ${panel('Global map lookup', 'Search the cs2kz.org global map list to autofill name, mappers, tiers, workshop ID and thumbnail.', `<div class="lookup-row">
@@ -422,7 +429,8 @@ function renderForm() {
         ${chipRow('timeOfDay', 'Time of day', TIMES_OF_DAY, 'array')}
       </div>`)}
 
-    ${panel('Meta & media', 'Optional identifiers used by the static database and external links.', `<div class="form-grid">
+    ${panel('Meta & media', 'Optional identifiers used by the static database and external links.', `<button type="button" class="thumb-preview" data-thumb-preview aria-label="Open full-size thumbnail preview"></button>
+      <div class="form-grid">
         ${textField('thumbnail', 'Thumbnail URL', 'https://images.steamusercontent.com/…', { wide: true, type: 'url' })}
         ${textField('workshopId', 'Steam Workshop ID', '3121168339')}
         ${textField('cs2kzId', 'cs2kz.org map ID', '2')}
@@ -448,6 +456,8 @@ function updateEditorThumb() {
     const record = current();
     if (!record)
         return;
+    const hasThumb = Boolean(record.thumbnail);
+    editorThumbEl.classList.toggle('has-thumb', hasThumb);
     editorThumbEl.setAttribute('style', thumbStyle(record.name));
     if (record.thumbnail) {
         editorThumbEl.innerHTML = `<img src="${escapeHtml(record.thumbnail)}" alt="" referrerpolicy="no-referrer" />`;
@@ -458,6 +468,67 @@ function updateEditorThumb() {
     else {
         editorThumbEl.innerHTML = `<span class="editor-thumb-initials">${escapeHtml(mapInitials(record.name))}</span>`;
     }
+    renderThumbPreview(record);
+}
+/** Large preview shown inside the Meta & media panel. */
+function renderThumbPreview(record) {
+    const preview = $('[data-thumb-preview]', formEl);
+    if (!preview)
+        return;
+    preview.classList.toggle('has-thumb', Boolean(record.thumbnail));
+    preview.setAttribute('style', thumbStyle(record.name));
+    if (!record.thumbnail) {
+        preview.innerHTML = `<span class="thumb-preview-initials">${escapeHtml(mapInitials(record.name))}</span>
+      <span class="thumb-preview-note">No thumbnail yet — paste a URL or fetch one from Steam</span>`;
+        return;
+    }
+    preview.innerHTML = `<img src="${escapeHtml(record.thumbnail)}" alt="" referrerpolicy="no-referrer" />
+    <span class="thumb-preview-hint">Click to enlarge</span>`;
+    const image = $('img', preview);
+    image?.addEventListener('error', () => {
+        preview.classList.remove('has-thumb');
+        preview.innerHTML = `<span class="thumb-preview-initials">${escapeHtml(mapInitials(record.name))}</span>
+      <span class="thumb-preview-note">Thumbnail failed to load — check the URL</span>`;
+    });
+}
+let thumbModalEl = null;
+function openThumbPreview() {
+    const record = current();
+    if (!record?.thumbnail) {
+        toast('No thumbnail to preview');
+        return;
+    }
+    if (!thumbModalEl)
+        thumbModalEl = $('#thumb-modal');
+    if (!thumbModalEl)
+        return;
+    const image = $('#thumb-modal-img');
+    const caption = $('#thumb-modal-caption');
+    const link = $('#thumb-modal-link');
+    if (caption)
+        caption.textContent = `${record.name} · loading…`;
+    if (link)
+        link.href = record.thumbnail;
+    if (image) {
+        image.alt = `${record.name} thumbnail`;
+        image.onload = () => {
+            if (caption)
+                caption.textContent = `${record.name} · ${image.naturalWidth}×${image.naturalHeight}`;
+        };
+        image.onerror = () => {
+            if (caption)
+                caption.textContent = `${record.name} · thumbnail failed to load`;
+        };
+        image.src = record.thumbnail;
+    }
+    thumbModalEl.hidden = false;
+    document.body.classList.add('modal-open');
+}
+function closeThumbPreview() {
+    if (!thumbModalEl)
+        return;
+    thumbModalEl.hidden = true;
+    document.body.classList.remove('modal-open');
 }
 function updateGlobalPanel() {
     const record = current();
@@ -1466,6 +1537,19 @@ function buildEntryCommands() {
             children: SPECIALS.map((value) => ({ id: `entry-special:${value}`, label: value, run: () => addEntryArray('special', value, 'Special') })),
         },
         { id: 'entry-bonus', label: 'Bonus', hint: 'Yes / No', keywords: ['bonus'], children: entryTri('bonus', 'Bonus') },
+        {
+            id: 'entry-catalogued',
+            label: 'Catalogue status',
+            hint: 'Catalogued / Uncatalogued',
+            keywords: ['catalogue', 'catalogued', 'uncatalogued', 'complete', 'verified'],
+            children: [
+                ...CATALOGUE_STATES.map((value) => ({
+                    id: `entry-catalogued:${value}`,
+                    label: value,
+                    run: () => applyEntryExclusive('catalogued', value, 'Catalogue'),
+                })),
+            ],
+        },
         { id: 'entry-name', label: 'Map name', hint: 'Focus the name field', keywords: ['name'], keepOpen: false, run: () => focusEntryField('[data-entry-text="name"]') },
         { id: 'entry-mappers', label: 'Mappers', hint: 'Focus the mappers field', keywords: ['mapper'], keepOpen: false, run: () => focusEntryField('[data-entry-text="mappers"]') },
         { id: 'entry-description', label: 'Description', hint: 'Focus the description field', keywords: ['desc'], keepOpen: false, run: () => focusEntryField('[data-entry-text="description"]') },
@@ -1527,8 +1611,19 @@ function bindEvents() {
             const value = exclusiveButton.dataset.value ?? '';
             const label = field === 'global' ? 'Globalness' : field;
             const isActive = String(record[field] ?? '') === value;
+            // Catalogue status is always one of two states, so clicking the active
+            // choice keeps it. Other tri-state chips clear back to Unknown.
+            if (field === 'catalogued') {
+                if (!isActive)
+                    applyEntryExclusive(field, value, 'Catalogue');
+                return;
+            }
             // Clicking the active choice clears it: empty means Unknown.
             applyEntryExclusive(field, isActive ? 'Unknown' : value, label);
+            return;
+        }
+        if (target.closest('[data-thumb-preview]')) {
+            openThumbPreview();
             return;
         }
         if (target.closest('#thumb-fetch')) {
@@ -1693,7 +1788,13 @@ function bindEvents() {
     });
     required('#save-btn').addEventListener('click', () => void saveNow(true));
     required('#entry-palette-open').addEventListener('click', () => palette.open());
+    editorThumbEl.addEventListener('click', openThumbPreview);
+    $$('[data-thumb-close]').forEach((element) => element.addEventListener('click', closeThumbPreview));
     document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && thumbModalEl && !thumbModalEl.hidden) {
+            closeThumbPreview();
+            return;
+        }
         const modifier = event.ctrlKey || event.metaKey;
         if (modifier && ['p', 'k'].includes(event.key.toLowerCase())) {
             event.preventDefault();

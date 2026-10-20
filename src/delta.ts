@@ -39,6 +39,7 @@ const PATCHABLE_FIELDS: (keyof MapRecord)[] = [
   'path',
   'special',
   'bonus',
+  'catalogued',
   'mappers',
   'description',
   'thumbnail',

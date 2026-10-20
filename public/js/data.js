@@ -21,6 +21,10 @@ function asLjBlock(value) {
         return value;
     return 'Unknown';
 }
+function asCatalogueState(value) {
+    // Every map starts uncatalogued; legacy "Unknown" values fold into it too.
+    return value === 'Catalogued' ? 'Catalogued' : 'Uncatalogued';
+}
 function asTier(value) {
     const n = typeof value === 'number' ? value : Number(value);
     if (!Number.isFinite(n))
@@ -86,6 +90,7 @@ export function normalizeRecord(raw) {
         path: enumArray(source.path, PATHS),
         special: enumArray(source.special, SPECIALS),
         bonus: asTri(source.bonus),
+        catalogued: asCatalogueState(source.catalogued),
         mappers: asString(source.mappers).slice(0, 255),
         description: asString(source.description),
         thumbnail: typeof source.thumbnail === 'string' && source.thumbnail.trim() ? source.thumbnail.trim() : null,

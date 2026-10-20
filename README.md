@@ -134,6 +134,7 @@ through property → value chains, with fuzzy matching on every level.
 | `Spec > Boosters` | Special section includes Boosters |
 | `Port > GO` | Port = GO |
 | `Bon > Yes` | Bonus map |
+| `Cat > Catalogued` | Catalogue status = Catalogued |
 | `Sort > Top time` | Change result ordering |
 
 Example: use `Glo > Y` and `TP > 3 > 6` to narrow the real cs2kz map list by tier. Material, scenery
@@ -146,7 +147,8 @@ Keyboard: `↑`/`↓` navigate, `↵` select, `Esc` close, `Ctrl+P` / `Ctrl+K` o
 ## Data entry workflow
 
 1. Open **Data entry**.
-2. Pick an existing record or press **New** (`Ctrl+Shift+N`).
+2. Pick an existing record or press **New** (`Ctrl+Shift+N`). Every row shows whether the map is
+   **Catalogued** or **Uncatalogued**; new records start Uncatalogued.
 3. Use `Ctrl+P` to add properties fast. In the entry palette:
    - multi-value fields **add** values, they never remove them (`Mat > Con`, `Wea > Snowing`);
    - tri-state fields set a value (`Glo > Y`, `Bh > Yes`), or clear the selection;
@@ -161,7 +163,9 @@ Keyboard: `↑`/`↓` navigate, `↵` select, `Esc` close, `Ctrl+P` / `Ctrl+K` o
    - leaving the name field while Globalness = Yes also auto-fills when there is exactly one match.
 5. Add a thumbnail URL manually if you want a specific image. **Fetch thumbnail from Steam** attempts
    the public Steam Web API; Steam does not send CORS headers, so this can fail in the browser — paste
-   the `images.steamusercontent.com` URL into the field instead.
+   the `images.steamusercontent.com` URL into the field instead. The **Meta & media** panel shows a
+   large preview of the current thumbnail; click it (or the thumbnail in the toolbar) to open the
+   full-size image, with its pixel dimensions and an **Open original** link.
 6. With the Node server running, edits autosave through the API: changed maps are `POST`ed (new) or
    `PUT` (existing) and stored in SQLite. Only fields that differ from the stored record are sent.
    If the API is unreachable, the change set is kept in browser storage as an outbox and retried on
@@ -227,6 +231,7 @@ must contain one JSON file (`maps.json` is what the export creates). Load is cli
       "path": [],
       "special": [],
       "bonus": "Unknown",
+      "catalogued": "Uncatalogued",
       "mappers": "ReDMooN",
       "description": "KZ but in a GROTTO! Make your way through an obstacle course based in a cave.",
       "thumbnail": "https://images.steamusercontent.com/…",
@@ -248,6 +253,9 @@ Notes:
 - `global`, `headbangers`, `bhop`, `multi`, `prekeep`, `ljRoom`, `ladderRoom`, `bonus` are stored as
   `"Yes" | "No" | "Unknown"`, but the UI only offers Yes/No. No selection means Unknown.
 - `ljBlock` is stored as `"Yes" | "No" | "Specific" | "Unknown"`; no selection means Unknown.
+- `catalogued` is `"Catalogued" | "Uncatalogued"`. It records whether every property of the map
+  has been completely verified. Every record starts as `Uncatalogued`, including maps in datasets
+  created before the field existed (they are migrated once on startup).
 - `port` is `"GO" | "Source" | "1.6" | "Unknown"` and keeps its explicit Unknown option because it is
   a single-choice enum in `Property.txt`.
 - Unknown never appears as a material, amount, ladder type or colour choice. Empty arrays/null mean

@@ -53,7 +53,8 @@ export function hasManualProperties(map) {
         map.ladderRoom !== 'Unknown' ||
         map.path.length > 0 ||
         map.special.length > 0 ||
-        map.bonus !== 'Unknown');
+        map.bonus !== 'Unknown' ||
+        map.catalogued === 'Catalogued');
 }
 export function filterMaps(maps, filters) {
     const q = filters.q.trim().toLowerCase();
@@ -137,6 +138,8 @@ export function filterMaps(maps, filters) {
             return false;
         if (!matchesTri(filters.bonus, map.bonus))
             return false;
+        if (filters.catalogued.length > 0 && !filters.catalogued.includes(map.catalogued))
+            return false;
         return true;
     });
 }
@@ -212,6 +215,8 @@ export function countActiveFilters(filters) {
         count++;
     if (filters.bonus.length)
         count++;
+    if (filters.catalogued.length)
+        count++;
     return count;
 }
 const ARRAY_LABEL_KEYS = [
@@ -237,6 +242,7 @@ const ARRAY_LABEL_KEYS = [
     { key: 'path', label: 'Path' },
     { key: 'special', label: 'Special' },
     { key: 'bonus', label: 'Bonus' },
+    { key: 'catalogued', label: 'Catalogue' },
 ];
 export function activeFilterChips(filters) {
     const chips = [];

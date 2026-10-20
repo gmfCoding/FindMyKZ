@@ -110,4 +110,9 @@ Special Blocks/Sections (Boosters | Wall Jumps | Jump Pads | Water | Slides | Gr
 	
 
 Is Bonus Map: Yes/No
+
+Catalogue Status <Catalogued | Uncatalogued>
+	- Catalogued: every property on this map has been completely verified.
+	- Uncatalogued: at least one property is still missing or unverified.
+	- Default is Uncatalogued: every record starts unverified until it is marked Catalogued.
 	

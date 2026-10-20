@@ -12,6 +12,7 @@ import {
 import { CommandPalette, type PaletteCommand } from './palette.js';
 import {
   AMOUNTS,
+  CATALOGUE_STATES,
   COLOURS,
   DEFAULT_FILTERS,
   LADDER_TYPES,
@@ -154,6 +155,12 @@ function buildSidebar(): void {
     <p class="filters-hint">Leave a property empty to treat it as unknown. Unknown is not queried, except for Port.</p>
 
     ${section('Global-ness', chipGroup('global', TRI_OPTIONS), 'Is the map on the global list?', true)}
+    ${section(
+      'Catalogue',
+      chipGroup('catalogued', CATALOGUE_STATES),
+      'Has every property of the map been verified?',
+      true,
+    )}
     ${section(
       'Material-ness',
       `${chipGroup('materials', MATERIALS)}
@@ -414,6 +421,7 @@ function mapCard(map: MapRecord): string {
       <div class="map-badges">
         ${map.global === 'Yes' ? '<span class="badge badge-global">Global</span>' : ''}
         ${map.bonus === 'Yes' ? '<span class="badge badge-bonus">Bonus</span>' : ''}
+        ${map.catalogued === 'Catalogued' ? '<span class="badge badge-catalogued">Catalogued</span>' : ''}
       </div>
     </div>
     <div class="map-card-body">
@@ -571,6 +579,7 @@ function hydrateFromUrl(): void {
     'ljBlock',
     'ladderRoom',
     'bonus',
+    'catalogued',
   ] as const;
   for (const key of unknownKeys) {
     const value = filters[key];
@@ -629,6 +638,8 @@ function openMap(map: MapRecord): void {
           ${map.global === 'Yes' ? '<span class="badge badge-global">Global</span>' : ''}
           ${map.global === 'No' ? '<span class="badge">Local</span>' : ''}
           ${map.bonus === 'Yes' ? '<span class="badge badge-bonus">Bonus map</span>' : ''}
+          ${map.catalogued === 'Catalogued' ? '<span class="badge badge-catalogued">Catalogued</span>' : ''}
+          ${map.catalogued === 'Uncatalogued' ? '<span class="badge badge-uncatalogued">Uncatalogued</span>' : ''}
         </div>
         <h2>${escapeHtml(map.name)}</h2>
         <p>${escapeHtml(map.description || 'No description yet.')}</p>
@@ -651,6 +662,7 @@ function openMap(map: MapRecord): void {
         <div class="detail-grid">
           ${detailItem('Global', map.global)}
           ${detailItem('Bonus', map.bonus)}
+          ${detailItem('Catalogue', map.catalogued)}
           ${detailItem('Materials', joinList(map.materials))}
           ${detailItem('Props', joinList(map.props))}
           ${detailItem('CKZ top time', formatTopTime(map.topTime))}
@@ -1273,6 +1285,20 @@ function buildPaletteCommands(): PaletteCommand[] {
         setExclusive('bonus', value);
         onFiltersChanged();
       }),
+    },
+    {
+      id: 'catalogued',
+      label: 'Catalogue',
+      hint: 'Catalogued / Uncatalogued',
+      keywords: ['catalogue', 'catalogued', 'uncatalogued', 'complete', 'verified'],
+      children: CATALOGUE_STATES.map((value) => ({
+        id: `catalogued:${value}`,
+        label: value,
+        run: () => {
+          toggleValue('catalogued', value);
+          onFiltersChanged();
+        },
+      })),
     },
     {
       id: 'name',

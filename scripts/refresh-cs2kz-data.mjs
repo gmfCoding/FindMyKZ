@@ -78,6 +78,7 @@ function emptyRecord() {
     path: [],
     special: [],
     bonus: 'Unknown',
+    catalogued: 'Unknown',
     mappers: '',
     description: '',
     thumbnail: null,
