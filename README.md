@@ -35,6 +35,7 @@ Other scripts:
 | `npm run refresh:data` | Rebuild `public/data/maps.json` from the live cs2kz.org API (real maps only) |
 | `npm run top-times` | Fill CKZ and VNL top times in `maps.json` from cs2kz.org records |
 | `npm run steam:data` | Pull `kz_*` / `bkz_*` maps from the Steam Workshop into `public/data/maps_steam.json` |
+| `npm run steam:import` | Add every `maps_steam.json` map that isn't catalogued yet to the database and `maps.json`, flagged **Uncatalogued** (`-- --dry-run` to preview) |
 | `npm run apply:changes` | Apply an exported `maps_changes.json` delta to `public/data/maps.json` |
 
 > Node **22.5+** is required for the built-in `node:sqlite` driver. There are no native modules or
@@ -386,6 +387,7 @@ scripts/
   update-top-times.mjs    Fill CKZ/VNL top times from cs2kz.org records
   fetch-steam-maps.mjs    Crawl Steam Workshop for kz_/bkz_ maps
   apply-changes.mjs       Apply maps_changes.json deltas to maps.json
+  import-steam-maps.mjs   Add every maps_steam.json map not yet catalogued (as Uncatalogued)
   export-db.mjs           SQLite → public/data/maps.json
   pack-data.mjs           maps.json → maps.zip
   package-site.mjs        public/ → dist/ + findmykz-static.zip
