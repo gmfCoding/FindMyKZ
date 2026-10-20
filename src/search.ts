@@ -417,7 +417,6 @@ function mapCard(map: MapRecord): string {
   return `<article class="map-card" data-map-id="${escapeHtml(map.id)}" tabindex="0" role="button" aria-label="View details for ${escapeHtml(map.name)}">
     <div class="map-thumb" style="${thumbStyle(map.name)}">
       ${thumb}
-      <span class="map-initials" aria-hidden="true">${escapeHtml(mapInitials(map.name))}</span>
       <div class="map-badges">
         ${map.global === 'Yes' ? '<span class="badge badge-global">Global</span>' : ''}
         ${map.bonus === 'Yes' ? '<span class="badge badge-bonus">Bonus</span>' : ''}

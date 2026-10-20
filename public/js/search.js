@@ -89,7 +89,6 @@ function buildSidebar() {
     ${section('Global-ness', chipGroup('global', TRI_OPTIONS), 'Is the map on the global list?', true)}
     ${section('Catalogue', chipGroup('catalogued', CATALOGUE_STATES), 'Has every property of the map been verified?', true)}
     ${section('Material-ness', `${chipGroup('materials', MATERIALS)}
-       ${colourSelect('brickColour', 'Brick colour')}
        <div class="mode-row">
          <span class="field-label">Match</span>
          <div class="segmented" data-mode="materials">
@@ -254,15 +253,13 @@ function renderActiveFilters() {
         .map((chip) => `<button type="button" class="filter-chip${chip.subtle ? ' subtle' : ''}" data-chip-id="${escapeHtml(chip.id)}" title="Remove filter">${escapeHtml(chip.label)}<span class="filter-chip-x" aria-hidden="true">×</span></button>`)
         .join('')}<button type="button" class="link-btn active-clear" data-clear-all>Clear all</button>`;
 }
-function materialTag(material, label = material) {
+function materialTag(material) {
     const className = `mat-${slugify(material) || 'unknown'}`;
-    return `<span class="tag tag-material ${className}"><span class="mat-dot"></span>${escapeHtml(label)}</span>`;
+    return `<span class="tag tag-material ${className}"><span class="mat-dot"></span>${escapeHtml(material)}</span>`;
 }
 function cardTags(map) {
     const tags = [];
-    tags.push(...map.materials
-        .slice(0, 2)
-        .map((material) => materialTag(material, material === 'Brick' && map.brickColour ? `Brick · ${map.brickColour}` : material)));
+    tags.push(...map.materials.slice(0, 2).map(materialTag));
     if (map.tech.length)
         tags.push(`<span class="tag tag-tech">${escapeHtml(map.tech[0])}</span>`);
     if (map.special.length)
@@ -282,7 +279,6 @@ function mapCard(map) {
     return `<article class="map-card" data-map-id="${escapeHtml(map.id)}" tabindex="0" role="button" aria-label="View details for ${escapeHtml(map.name)}">
     <div class="map-thumb" style="${thumbStyle(map.name)}">
       ${thumb}
-      <span class="map-initials" aria-hidden="true">${escapeHtml(mapInitials(map.name))}</span>
       <div class="map-badges">
         ${map.global === 'Yes' ? '<span class="badge badge-global">Global</span>' : ''}
         ${map.bonus === 'Yes' ? '<span class="badge badge-bonus">Bonus</span>' : ''}
@@ -449,8 +445,6 @@ function hydrateFromUrl() {
             filters[key] = value.filter((item) => item !== 'Unknown');
         }
     }
-    if (filters.brickColour === 'Unknown')
-        filters.brickColour = null;
     if (filters.bhopColour === 'Unknown')
         filters.bhopColour = null;
     if (filters.multiColour === 'Unknown')
@@ -516,7 +510,7 @@ function openMap(map) {
           ${detailItem('Global', map.global)}
           ${detailItem('Bonus', map.bonus)}
           ${detailItem('Catalogue', map.catalogued)}
-          ${detailItem('Materials', joinList(map.materials.map((material) => (material === 'Brick' && map.brickColour ? `Brick (${map.brickColour})` : material))))}
+          ${detailItem('Materials', joinList(map.materials))}
           ${detailItem('Props', joinList(map.props))}
           ${detailItem('CKZ top time', formatTopTime(map.topTime))}
           ${detailItem('VNL top time', formatTopTime(map.vnlTopTime))}
@@ -757,22 +751,6 @@ function buildPaletteCommands() {
             children: [
                 ...materialCommands('materials', 'Add material (AND by default)'),
                 {
-                    id: 'materials-brick-colour',
-                    label: 'Brick colour',
-                    hint: 'Colour of the Brick material (adds Brick)',
-                    keywords: ['brick', 'color', 'colour'],
-                    children: COLOURS.map((value) => ({
-                        id: `brickColour:${value}`,
-                        label: value,
-                        run: () => {
-                            if (!filters.materials.includes('Brick'))
-                                toggleValue('materials', 'Brick');
-                            setColour('brickColour', value);
-                            onFiltersChanged();
-                        },
-                    })),
-                },
-                {
                     id: 'materials-mode',
                     label: 'Match mode',
                     hint: 'All of / Any of',
@@ -803,7 +781,6 @@ function buildPaletteCommands() {
                     hint: 'Remove material filters',
                     run: () => {
                         filters.materials = [];
-                        filters.brickColour = null;
                         onFiltersChanged();
                     },
                 },

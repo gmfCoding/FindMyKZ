@@ -82,10 +82,6 @@ export function filterMaps(maps, filters) {
                 return false;
             }
         }
-        if (filters.brickColour) {
-            if (!map.materials.includes('Brick') || map.brickColour !== filters.brickColour)
-                return false;
-        }
         if (!intersects(filters.props, map.props))
             return false;
         if (!inRange(map.topTime, topMinSeconds, topMaxSeconds))
@@ -171,7 +167,7 @@ export function countActiveFilters(filters) {
         count++;
     if (filters.global.length)
         count++;
-    if (filters.materials.length || filters.brickColour)
+    if (filters.materials.length)
         count++;
     if (filters.props.length)
         count++;
@@ -275,7 +271,6 @@ export function activeFilterChips(filters) {
         });
     }
     const colourFields = [
-        { key: 'brickColour', label: 'Brick colour' },
         { key: 'bhopColour', label: 'Bhop colour' },
         { key: 'multiColour', label: 'Multi colour' },
         { key: 'prekeepColour', label: 'Prekeep colour' },
@@ -334,7 +329,6 @@ export function removeFilterChip(filters, chip) {
         case 'basedOn':
             filters.basedOn = '';
             return;
-        case 'brickColour':
         case 'bhopColour':
         case 'multiColour':
         case 'prekeepColour':

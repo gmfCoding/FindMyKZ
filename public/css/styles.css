@@ -1185,19 +1185,6 @@ details[open] > summary .summary-mark::after {
   transform: scale(1.025);
 }
 
-.map-initials {
-  position: absolute;
-  left: 13px;
-  bottom: 9px;
-  z-index: 1;
-  font-family: var(--font-display);
-  font-size: 27px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.86);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-}
-
 .map-badges {
   position: absolute;
   top: 9px;
